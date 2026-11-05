@@ -1,0 +1,377 @@
+{
+  "id": "tp_20261019_048zql",
+  "created_at": "2026-10-19T11:44:50.255Z",
+  "template": {
+    "version": "workshop_v3",
+    "url": "/api/workshop/scene.babylon"
+  },
+  "tp": {
+    "title": "Réaction chimique : vinaigre et bicarbonate",
+    "domain": "chemical",
+    "duration_minutes": 10,
+    "steps": [
+      {
+        "order": 1,
+        "action": "Poser le bécher vide sur l’établi. Poser la coupelle de bicarbonate à côté du bécher sur l’établi. Inspecter la spatule.",
+        "safety": null
+      },
+      {
+        "order": 2,
+        "action": "Verser 50 mL de vinaigre blanc dans le bécher. Ajouter environ 5 g de bicarbonate de sodium dans le vinaigre à l’aide de la spatule.",
+        "safety": "Porter des lunettes de protection"
+      },
+      {
+        "order": 3,
+        "action": "Observer les bulles et la mousse qui apparaissent dans le bécher. Noter ce qui se passe et identifier le dégagement d’un gaz.",
+        "safety": "Ne pas fermer le bécher pendant la réaction"
+      }
+    ],
+    "safety_warnings": [
+      "Porter des lunettes de protection",
+      "Utiliser uniquement du vinaigre alimentaire et du bicarbonate alimentaire",
+      "Ne pas goûter le mélange",
+      "Ne pas fermer le bécher pendant la réaction",
+      "Prévoir un nettoyage après l’expérience"
+    ]
+  },
+  "color_scheme": {
+    "ambient": "#33CC33",
+    "key_light": "#FFFF00",
+    "material_base": "#FFFF00"
+  },
+  "assets": [
+    {
+      "asset_id": "a01_vinaigre_blanc_alimentai",
+      "name": "vinaigre blanc alimentaire",
+      "source": "placeholder",
+      "url": null,
+      "attribution": null,
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": -0.4,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": 2
+    },
+    {
+      "asset_id": "a02_bicarbonate_de_sodium_al",
+      "name": "bicarbonate de sodium alimentaire",
+      "source": "sketchfab",
+      "url": "/assets/models/b90b91f08bc4416f9898bfc14ec4127d/model.glb",
+      "attribution": {
+        "title": "baking soda пищевая сода",
+        "author": "TumkaPook",
+        "author_url": "https://sketchfab.com/TumkaPook",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/b90b91f08bc4416f9898bfc14ec4127d"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0.4,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": 1
+    },
+    {
+      "asset_id": "a03_becher_transparent_de_25",
+      "name": "bécher transparent de 250 mL",
+      "source": "sketchfab",
+      "url": "/assets/models/817f973607c04d5d86b71bb59a05c97e/model.glb",
+      "attribution": {
+        "title": "Glass Beaker",
+        "author": "tumble40",
+        "author_url": "https://sketchfab.com/tumble40",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/817f973607c04d5d86b71bb59a05c97e"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.095,
+      "size_source": "standard",
+      "size_note": "bécher (ISO 3819) 250 mL : hauteur nominale 95 mm",
+      "color_override": null,
+      "first_step": 1
+    },
+    {
+      "asset_id": "a04_petit_recipient",
+      "name": "petit récipient",
+      "source": "sketchfab",
+      "url": "/assets/models/7f629478d34c481b92a5e8a256780340/model.glb",
+      "attribution": {
+        "title": "Small Brass Container - free game-ready asset",
+        "author": "hazeh",
+        "author_url": "https://sketchfab.com/hazeh",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/7f629478d34c481b92a5e8a256780340"
+      },
+      "zone": "zone_shelf_left",
+      "slot": 0,
+      "position": {
+        "x": -9.7,
+        "y": 1.515,
+        "z": 0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": null
+    },
+    {
+      "asset_id": "a05_coupelle",
+      "name": "coupelle",
+      "source": "sketchfab",
+      "url": "/assets/models/2a897b8f738c456f976d0193fd423d82/model.glb",
+      "attribution": {
+        "title": "Crucible",
+        "author": "Professor_E12",
+        "author_url": "https://sketchfab.com/Professor_E12",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/2a897b8f738c456f976d0193fd423d82"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": -0.8,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": 1
+    },
+    {
+      "asset_id": "a06_spatule",
+      "name": "spatule",
+      "source": "sketchfab",
+      "url": "/assets/models/5dadbdeac97e40a395cdd13b9919dd60/model.glb",
+      "attribution": {
+        "title": "Soul Scraper",
+        "author": "Rysky",
+        "author_url": "https://sketchfab.com/Rysky",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/5dadbdeac97e40a395cdd13b9919dd60"
+      },
+      "zone": "zone_shelf_left",
+      "slot": 1,
+      "position": {
+        "x": -9.7,
+        "y": 0.815,
+        "z": 0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": 1
+    },
+    {
+      "asset_id": "a07_lunettes_de_protection",
+      "name": "lunettes de protection",
+      "source": "sketchfab",
+      "url": "/assets/models/355f1e119c33452ea9e2e8d306360435/model.glb",
+      "attribution": {
+        "title": "Safety Goggles",
+        "author": "microsoft",
+        "author_url": "https://sketchfab.com/microsoft",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/355f1e119c33452ea9e2e8d306360435"
+      },
+      "zone": "zone_shelf_right",
+      "slot": 0,
+      "position": {
+        "x": -9.7,
+        "y": 1.515,
+        "z": -0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": null
+    },
+    {
+      "asset_id": "a08_etabli",
+      "name": "établi",
+      "source": "sketchfab",
+      "url": "/assets/models/1ac2a62c52a848bbaf746146dc7253f8/model.glb",
+      "attribution": {
+        "title": "lab bench",
+        "author": "Konstantin_Keller",
+        "author_url": "https://sketchfab.com/Konstantin_Keller",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/1ac2a62c52a848bbaf746146dc7253f8"
+      },
+      "zone": "zone_floor",
+      "slot": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 2.5
+      },
+      "rotation_y": 0,
+      "target_size_m": 1.5,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": 1
+    }
+  ],
+  "safety_signs": [
+    {
+      "sign": "safety_sign_1",
+      "text": "PORTER DES LUNETTES",
+      "position": {
+        "x": 2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    },
+    {
+      "sign": "safety_sign_2",
+      "text": "NE PAS FERMER LE BÉCHER",
+      "position": {
+        "x": -2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    }
+  ],
+  "unplaced": [],
+  "warnings": [
+    "Aucun modèle 3D adapté pour « vinaigre blanc alimentaire » → boîte provisoire"
+  ],
+  "reasoning": "Primary objects like the beaker, bicarbonate, and spatule are placed on the workbench for easy access. The vinaigre and coupelle are also on the workbench, but slightly offset to avoid clutter. Secondary objects like the petit recipient and lunettes de protection are placed on the shelves, while the établi is placed on the floor due to its large size.",
+  "simulation": {
+    "kind": "generic",
+    "targets": [
+      {
+        "id": "t_a03_becher_transparent_de_25_sur_a08_etabli",
+        "label": "bécher transparent de 250 mL ici",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 2.5
+        },
+        "radius": 0.25,
+        "accepts": [
+          "a03_becher_transparent_de_25"
+        ],
+        "marker": "disc",
+        "anchor": {
+          "asset": "a08_etabli",
+          "mode": "top"
+        }
+      },
+      {
+        "id": "t_a05_coupelle_sur_a08_etabli",
+        "label": "coupelle ici",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 2.5
+        },
+        "radius": 0.25,
+        "accepts": [
+          "a05_coupelle"
+        ],
+        "marker": "disc",
+        "anchor": {
+          "asset": "a08_etabli",
+          "mode": "top"
+        }
+      }
+    ],
+    "rules": [
+      [
+        {
+          "type": "placed",
+          "asset": "a03_becher_transparent_de_25",
+          "target": "t_a03_becher_transparent_de_25_sur_a08_etabli",
+          "label": "bécher transparent de 250 mL sur établi"
+        },
+        {
+          "type": "placed",
+          "asset": "a05_coupelle",
+          "target": "t_a05_coupelle_sur_a08_etabli",
+          "label": "coupelle sur établi"
+        },
+        {
+          "type": "held",
+          "asset": "a06_spatule",
+          "seconds": 2,
+          "label": "spatule examiné en main (2 s)"
+        }
+      ],
+      [],
+      []
+    ],
+    "completion": "Toutes les manipulations vérifiables de ce TP ont été réalisées."
+  },
+  "interactions": {
+    "steps": [
+      {
+        "step": 1,
+        "coverage": "full",
+        "verified": [
+          "bécher transparent de 250 mL sur établi",
+          "coupelle sur établi",
+          "spatule examiné en main (2 s)"
+        ],
+        "unverified": []
+      },
+      {
+        "step": 2,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« Verser 50 mL de vinaigre blanc dans le bécher » — versement non pris en charge",
+          "« Ajouter environ 5 g de bicarbonate de sodium dans le vinaigre à l’aide de la spatule » — ajout non pris en charge"
+        ]
+      },
+      {
+        "step": 3,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« Observer les bulles et la mousse qui apparaissent dans le bécher » — observation de phénomène non prise en charge",
+          "« Noter ce qui se passe et identifier le dégagement d’un gaz » — notation et identification non prises en charge"
+        ]
+      }
+    ],
+    "issues": []
+  }
+}

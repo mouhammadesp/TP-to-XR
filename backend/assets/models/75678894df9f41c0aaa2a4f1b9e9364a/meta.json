@@ -1,0 +1,33 @@
+{
+  "uid": "75678894df9f41c0aaa2a4f1b9e9364a",
+  "entry": "model.glb",
+  "url": "/assets/models/75678894df9f41c0aaa2a4f1b9e9364a/model.glb",
+  "bytes": 402964,
+  "model": {
+    "uid": "75678894df9f41c0aaa2a4f1b9e9364a",
+    "name": "Water Bath",
+    "author": "veerubyinc",
+    "author_url": "https://sketchfab.com/veerubyinc",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/75678894df9f41c0aaa2a4f1b9e9364a",
+    "thumbnail_url": "https://media.sketchfab.com/models/75678894df9f41c0aaa2a4f1b9e9364a/thumbnails/5e9d822b26c649f489deccf5cc2e018b/2995845858d940408df57b19aa8b1b72.jpeg",
+    "face_count": 11224,
+    "download_size": 402964,
+    "tags": [
+      "lab",
+      "college",
+      "laboratory",
+      "equipment",
+      "physics",
+      "science",
+      "apparatus",
+      "model",
+      "experiement"
+    ]
+  },
+  "downloaded_at": "2026-10-19T11:32:06.890Z"
+}

@@ -1,0 +1,30 @@
+{
+  "uid": "1ac2a62c52a848bbaf746146dc7253f8",
+  "entry": "model.glb",
+  "url": "/assets/models/1ac2a62c52a848bbaf746146dc7253f8/model.glb",
+  "bytes": 1422508,
+  "model": {
+    "uid": "1ac2a62c52a848bbaf746146dc7253f8",
+    "name": "lab bench",
+    "author": "Konstantin_Keller",
+    "author_url": "https://sketchfab.com/Konstantin_Keller",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/1ac2a62c52a848bbaf746146dc7253f8",
+    "thumbnail_url": "https://media.sketchfab.com/models/1ac2a62c52a848bbaf746146dc7253f8/thumbnails/ba445bb981e44e7f8d28410365091ac9/7613f0aba2a644f4a02add7ec96a5e02.jpeg",
+    "face_count": 54480,
+    "download_size": 1422508,
+    "tags": [
+      "biology",
+      "laboratory",
+      "biological",
+      "biologie",
+      "laboratory-equipment",
+      "microbiology"
+    ]
+  },
+  "downloaded_at": "2026-10-19T11:44:37.564Z"
+}

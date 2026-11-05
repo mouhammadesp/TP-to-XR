@@ -1,0 +1,31 @@
+{
+  "uid": "817f973607c04d5d86b71bb59a05c97e",
+  "entry": "model.glb",
+  "url": "/assets/models/817f973607c04d5d86b71bb59a05c97e/model.glb",
+  "bytes": 1387624,
+  "model": {
+    "uid": "817f973607c04d5d86b71bb59a05c97e",
+    "name": "Glass Beaker",
+    "author": "tumble40",
+    "author_url": "https://sketchfab.com/tumble40",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/817f973607c04d5d86b71bb59a05c97e",
+    "thumbnail_url": "https://media.sketchfab.com/models/817f973607c04d5d86b71bb59a05c97e/thumbnails/1dbaa32064a14381816c8791c1f7438f/8ec671d9d0144176b26ae0ee2412f390.jpeg",
+    "face_count": 956,
+    "download_size": 3463688,
+    "tags": [
+      "school",
+      "lab",
+      "laboratory",
+      "testing",
+      "chemical",
+      "science",
+      "glass"
+    ]
+  },
+  "downloaded_at": "2026-10-19T11:44:36.050Z"
+}

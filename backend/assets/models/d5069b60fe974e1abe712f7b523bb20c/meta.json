@@ -1,0 +1,23 @@
+{
+  "uid": "d5069b60fe974e1abe712f7b523bb20c",
+  "entry": "model.glb",
+  "url": "/assets/models/d5069b60fe974e1abe712f7b523bb20c/model.glb",
+  "bytes": 19288,
+  "model": {
+    "uid": "d5069b60fe974e1abe712f7b523bb20c",
+    "name": "Cartridg Bar Magnet V2",
+    "author": "GaudiLabs",
+    "author_url": "https://sketchfab.com/GaudiLabs",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/d5069b60fe974e1abe712f7b523bb20c",
+    "thumbnail_url": "https://media.sketchfab.com/models/d5069b60fe974e1abe712f7b523bb20c/thumbnails/9c4425af262344c2a0a8756779abff62/2b602daa305545f79d7a2d8eb0da2d2d.jpeg",
+    "face_count": 468,
+    "download_size": 19288,
+    "tags": []
+  },
+  "downloaded_at": "2026-10-19T10:21:10.418Z"
+}

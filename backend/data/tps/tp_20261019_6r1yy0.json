@@ -1,0 +1,319 @@
+{
+  "id": "tp_20261019_6r1yy0",
+  "created_at": "2026-10-19T10:29:53.750Z",
+  "template": {
+    "version": "workshop_v3",
+    "url": "/api/workshop/scene.babylon"
+  },
+  "tp": {
+    "title": "TP de physique — Mise en évidence du champ magnétique d'un aimant droit",
+    "domain": "other",
+    "duration_minutes": 20,
+    "steps": [
+      {
+        "order": 1,
+        "action": "Poser la feuille blanche A4 sur la table, puis poser la boussole au centre de la feuille blanche",
+        "safety": null
+      },
+      {
+        "order": 2,
+        "action": "Inspecter l'aimant droit et repérer ses pôles nord et sud",
+        "safety": null
+      },
+      {
+        "order": 3,
+        "action": "Approcher lentement le pôle nord de l'aimant droit de la boussole",
+        "safety": "Tenir l'aimant éloigné des téléphones, cartes bancaires et appareils électroniques"
+      },
+      {
+        "order": 4,
+        "action": "Observer la déviation de l'aiguille de la boussole et noter son sens",
+        "safety": null
+      },
+      {
+        "order": 5,
+        "action": "Mesurer avec la règle graduée la distance à partir de laquelle l'aiguille commence à dévier",
+        "safety": null
+      }
+    ],
+    "safety_warnings": [
+      "Tenir l'aimant éloigné des téléphones, cartes bancaires et appareils électroniques",
+      "Ne pas laisser tomber l'aimant : il peut se briser"
+    ]
+  },
+  "color_scheme": {
+    "ambient": "#FFFFFF",
+    "key_light": "#FFFFFF",
+    "material_base": "#808080"
+  },
+  "assets": [
+    {
+      "asset_id": "a01_boussole",
+      "name": "Boussole",
+      "source": "sketchfab",
+      "url": "/assets/models/be95e308ecc046b4a39ca467d6015df6/model.glb",
+      "attribution": {
+        "title": "Magnetic Rock",
+        "author": "tauricity",
+        "author_url": "https://sketchfab.com/tauricity",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/be95e308ecc046b4a39ca467d6015df6"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": 1
+    },
+    {
+      "asset_id": "a03_feuille_blanche_a4",
+      "name": "Feuille blanche A4",
+      "source": "sketchfab",
+      "url": "/assets/models/11b4196070344c02867dcda8585fed78/model.glb",
+      "attribution": {
+        "title": "A4 White Paper 500 Sheet",
+        "author": "barsoomerian",
+        "author_url": "https://sketchfab.com/barsoomerian",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/11b4196070344c02867dcda8585fed78"
+      },
+      "zone": "zone_shelf_left",
+      "slot": 0,
+      "position": {
+        "x": -9.7,
+        "y": 1.515,
+        "z": 0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.297,
+      "size_source": "standard",
+      "size_note": "feuille A4 (ISO 216 : 297 mm)",
+      "color_override": null,
+      "first_step": 1
+    },
+    {
+      "asset_id": "a02_aimant_droit",
+      "name": "Aimant droit",
+      "source": "sketchfab",
+      "url": "/assets/models/d5069b60fe974e1abe712f7b523bb20c/model.glb",
+      "attribution": {
+        "title": "Cartridg Bar Magnet V2",
+        "author": "GaudiLabs",
+        "author_url": "https://sketchfab.com/GaudiLabs",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/d5069b60fe974e1abe712f7b523bb20c"
+      },
+      "zone": "zone_shelf_left",
+      "slot": 1,
+      "position": {
+        "x": -9.7,
+        "y": 0.815,
+        "z": 0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": 2
+    },
+    {
+      "asset_id": "a04_regle_graduee_de_30_cm",
+      "name": "Règle graduée de 30 cm",
+      "source": "sketchfab",
+      "url": "/assets/models/ab7ec42dd8ae4112bf3118e64a979789/model.glb",
+      "attribution": {
+        "title": "Metal Ruler",
+        "author": "RED2000",
+        "author_url": "https://sketchfab.com/RED2000",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/ab7ec42dd8ae4112bf3118e64a979789"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0.4,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.3,
+      "size_source": "tp_text",
+      "size_note": "dimension indiquée dans le TP (30 cm)",
+      "color_override": null,
+      "first_step": 5
+    }
+  ],
+  "safety_signs": [
+    {
+      "sign": "safety_sign_1",
+      "text": "TENIR AIMANT ÉLOIGNÉ",
+      "position": {
+        "x": 2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    },
+    {
+      "sign": "safety_sign_2",
+      "text": "NE PAS LAISSER TOMBER",
+      "position": {
+        "x": -2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    }
+  ],
+  "unplaced": [],
+  "warnings": [],
+  "reasoning": "Boussole and feuille blanche A4 at the workbench center for the main manipulation. Aimant droit on the top left shelf, used in step 2. Règle graduée de 30 cm on the workbench for measurement in step 5.",
+  "simulation": {
+    "kind": "generic",
+    "targets": [
+      {
+        "id": "t_a03_feuille_blanche_a4_etabli",
+        "label": "Feuille blanche A4 ici",
+        "position": {
+          "x": 0.049,
+          "y": 0.9,
+          "z": 0.349
+        },
+        "radius": 0.199,
+        "accepts": [
+          "a03_feuille_blanche_a4"
+        ],
+        "marker": "disc"
+      },
+      {
+        "id": "t_a01_boussole_sur_a03_feuille_blanche_a4",
+        "label": "Boussole ici",
+        "position": {
+          "x": -9.7,
+          "y": 1.515,
+          "z": 0.78
+        },
+        "radius": 0.179,
+        "accepts": [
+          "a01_boussole"
+        ],
+        "marker": "disc",
+        "anchor": {
+          "asset": "a03_feuille_blanche_a4",
+          "mode": "top"
+        }
+      },
+      {
+        "id": "t_pres_a01_boussole",
+        "label": "Approcher ici",
+        "position": {
+          "x": 0,
+          "y": 0.9,
+          "z": 0
+        },
+        "radius": 0.1,
+        "accepts": [],
+        "marker": "disc",
+        "anchor": {
+          "asset": "a01_boussole",
+          "mode": "base"
+        }
+      }
+    ],
+    "rules": [
+      [
+        {
+          "type": "placed",
+          "asset": "a03_feuille_blanche_a4",
+          "target": "t_a03_feuille_blanche_a4_etabli",
+          "label": "Feuille blanche A4 sur l'établi"
+        },
+        {
+          "type": "placed",
+          "asset": "a01_boussole",
+          "target": "t_a01_boussole_sur_a03_feuille_blanche_a4",
+          "label": "Boussole sur Feuille blanche A4"
+        }
+      ],
+      [
+        {
+          "type": "held",
+          "asset": "a02_aimant_droit",
+          "seconds": 2,
+          "label": "Aimant droit examiné en main (2 s)"
+        }
+      ],
+      [
+        {
+          "type": "near",
+          "asset": "a02_aimant_droit",
+          "target": "t_pres_a01_boussole",
+          "distance": 0.2,
+          "label": "Aimant droit approché de Boussole"
+        }
+      ],
+      [],
+      []
+    ],
+    "completion": "Toutes les manipulations vérifiables de ce TP ont été réalisées."
+  },
+  "interactions": {
+    "steps": [
+      {
+        "step": 1,
+        "coverage": "full",
+        "verified": [
+          "Feuille blanche A4 sur l'établi",
+          "Boussole sur Feuille blanche A4"
+        ],
+        "unverified": []
+      },
+      {
+        "step": 2,
+        "coverage": "partial",
+        "verified": [
+          "Aimant droit examiné en main (2 s)"
+        ],
+        "unverified": [
+          "« repérer ses pôles nord et sud » — observation non prise en charge"
+        ]
+      },
+      {
+        "step": 3,
+        "coverage": "full",
+        "verified": [
+          "Aimant droit approché de Boussole"
+        ],
+        "unverified": []
+      },
+      {
+        "step": 4,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« Observer la déviation de l'aiguille de la boussole et noter son sens » — observation et écriture non prises en charge"
+        ]
+      },
+      {
+        "step": 5,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« Mesurer avec la règle graduée la distance à partir de laquelle l'aiguille commence à dévier » — mesure non prise en charge"
+        ]
+      }
+    ],
+    "issues": []
+  }
+}

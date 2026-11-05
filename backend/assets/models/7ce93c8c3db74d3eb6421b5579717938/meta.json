@@ -1,0 +1,26 @@
+{
+  "uid": "7ce93c8c3db74d3eb6421b5579717938",
+  "entry": "model.glb",
+  "url": "/assets/models/7ce93c8c3db74d3eb6421b5579717938/model.glb",
+  "bytes": 429936,
+  "model": {
+    "uid": "7ce93c8c3db74d3eb6421b5579717938",
+    "name": "Classic wine bottle with label",
+    "author": "ilya.terekhin",
+    "author_url": "https://sketchfab.com/ilya.terekhin",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/7ce93c8c3db74d3eb6421b5579717938",
+    "thumbnail_url": "https://media.sketchfab.com/models/7ce93c8c3db74d3eb6421b5579717938/thumbnails/3abb4fa38d47448ab4a79f5aa283a113/256x144.jpeg",
+    "face_count": 6828,
+    "download_size": 730424,
+    "tags": [
+      "food",
+      "bottle-wine-drink"
+    ]
+  },
+  "downloaded_at": "2026-10-15T09:48:27.934Z"
+}

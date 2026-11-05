@@ -1,0 +1,30 @@
+{
+  "uid": "5dadbdeac97e40a395cdd13b9919dd60",
+  "entry": "model.glb",
+  "url": "/assets/models/5dadbdeac97e40a395cdd13b9919dd60/model.glb",
+  "bytes": 1201040,
+  "model": {
+    "uid": "5dadbdeac97e40a395cdd13b9919dd60",
+    "name": "Soul Scraper",
+    "author": "Rysky",
+    "author_url": "https://sketchfab.com/Rysky",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/5dadbdeac97e40a395cdd13b9919dd60",
+    "thumbnail_url": "https://media.sketchfab.com/models/5dadbdeac97e40a395cdd13b9919dd60/thumbnails/3c212cf9f50d4f918fee2c7b8322d26d/58d4bbf39fbb46be86bf04d45aac8f36.jpeg",
+    "face_count": 4321,
+    "download_size": 1201040,
+    "tags": [
+      "machine",
+      "prerendered",
+      "carcombat",
+      "minefield",
+      "blender",
+      "industrial"
+    ]
+  },
+  "downloaded_at": "2026-10-19T11:44:37.295Z"
+}

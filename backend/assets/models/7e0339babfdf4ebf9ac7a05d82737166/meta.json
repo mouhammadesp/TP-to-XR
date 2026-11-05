@@ -1,0 +1,30 @@
+{
+  "uid": "7e0339babfdf4ebf9ac7a05d82737166",
+  "entry": "model.glb",
+  "url": "/assets/models/7e0339babfdf4ebf9ac7a05d82737166/model.glb",
+  "bytes": 1899724,
+  "model": {
+    "uid": "7e0339babfdf4ebf9ac7a05d82737166",
+    "name": "Photo scales & rulers (low poly)",
+    "author": "xeofox",
+    "author_url": "https://sketchfab.com/xeofox",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/7e0339babfdf4ebf9ac7a05d82737166",
+    "thumbnail_url": "https://media.sketchfab.com/models/7e0339babfdf4ebf9ac7a05d82737166/thumbnails/06d59315b5d949258cb3f4c9b6f93f26/a07d6de84e434cbcb93256ff0f07b459.jpeg",
+    "face_count": 868,
+    "download_size": 1803560,
+    "tags": [
+      "photo",
+      "photography",
+      "scale",
+      "ruler",
+      "mesuring",
+      "archaeology"
+    ]
+  },
+  "downloaded_at": "2026-10-19T11:09:57.937Z"
+}

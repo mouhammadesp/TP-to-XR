@@ -1,0 +1,31 @@
+{
+  "uid": "7c154628ba114da78aea046c4f404aeb",
+  "entry": "model.glb",
+  "url": "/assets/models/7c154628ba114da78aea046c4f404aeb/model.glb",
+  "bytes": 2142052,
+  "model": {
+    "uid": "7c154628ba114da78aea046c4f404aeb",
+    "name": "Cotton Ball",
+    "author": "amhyde",
+    "author_url": "https://sketchfab.com/amhyde",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/7c154628ba114da78aea046c4f404aeb",
+    "thumbnail_url": "https://media.sketchfab.com/models/7c154628ba114da78aea046c4f404aeb/thumbnails/7d0621d0843a45c8aa2ae5d0b5748935/f846865a6da74166aabf031342c650cd.jpeg",
+    "face_count": 10000,
+    "download_size": 2142052,
+    "tags": [
+      "bathroom",
+      "bath",
+      "counter",
+      "cotton",
+      "restroom",
+      "hygeine",
+      "cottonball"
+    ]
+  },
+  "downloaded_at": "2026-10-15T09:48:27.368Z"
+}

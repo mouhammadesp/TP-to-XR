@@ -1,0 +1,30 @@
+{
+  "uid": "b90b91f08bc4416f9898bfc14ec4127d",
+  "entry": "model.glb",
+  "url": "/assets/models/b90b91f08bc4416f9898bfc14ec4127d/model.glb",
+  "bytes": 57980,
+  "model": {
+    "uid": "b90b91f08bc4416f9898bfc14ec4127d",
+    "name": "baking soda пищевая сода",
+    "author": "TumkaPook",
+    "author_url": "https://sketchfab.com/TumkaPook",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/b90b91f08bc4416f9898bfc14ec4127d",
+    "thumbnail_url": "https://media.sketchfab.com/models/b90b91f08bc4416f9898bfc14ec4127d/thumbnails/3ef76f72e12242449252a2840fe2920a/b599a237fef24c02a2fe35aff6ba08f8.jpeg",
+    "face_count": 12,
+    "download_size": 57980,
+    "tags": [
+      "food",
+      "baking",
+      "soda",
+      "box",
+      "food3dmodel",
+      "powder-box"
+    ]
+  },
+  "downloaded_at": "2026-10-19T11:44:35.663Z"
+}

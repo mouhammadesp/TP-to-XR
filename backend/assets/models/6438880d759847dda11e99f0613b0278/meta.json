@@ -1,0 +1,22 @@
+{
+  "uid": "6438880d759847dda11e99f0613b0278",
+  "entry": "model.glb",
+  "url": "/assets/models/6438880d759847dda11e99f0613b0278/model.glb",
+  "bytes": 47932,
+  "model": {
+    "uid": "6438880d759847dda11e99f0613b0278",
+    "name": "Simple Bridge",
+    "author": "spenspens",
+    "author_url": "https://sketchfab.com/spenspens",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/6438880d759847dda11e99f0613b0278",
+    "thumbnail_url": "https://media.sketchfab.com/models/6438880d759847dda11e99f0613b0278/thumbnails/55d4d169a3cd4d83bed297f26051aabd/67310d31193542f2b7372cef7a4b7029.jpeg",
+    "face_count": 172,
+    "download_size": 47932
+  },
+  "downloaded_at": "2026-10-14T10:22:16.617Z"
+}

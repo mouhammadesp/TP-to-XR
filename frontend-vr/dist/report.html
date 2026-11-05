@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Rapport de TP — TP-to-xR</title>
+  <style>
+    :root {
+      --bg: #f3f5f8; --card: #ffffff; --text: #17212b; --muted: #5b6b7b; --line: #e1e6ec;
+      --ok: #1b8a4f; --ok-bg: #e5f5ec; --warn: #a15c00; --warn-bg: #fff2dd; --bad: #b42318; --bad-bg: #fdecea;
+      --info: #1e5fb4; --info-bg: #e8f1fc; --neutral-bg: #eef1f4; --accent: #0b3d91; --radius: 14px;
+      color-scheme: light;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.5 system-ui, "Segoe UI", Roboto, sans-serif; }
+    main { max-width: 980px; margin: 0 auto; padding: 28px 18px 60px; }
+    .topbar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .brand { color: var(--muted); font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn { min-height: 46px; padding: 0 18px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--text);
+      font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+    .btn.primary { background: var(--accent); color: #fff; border-color: transparent; }
+    .btn:focus-visible { outline: 3px solid #7fc8ff; outline-offset: 2px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 16px; }
+    h1 { font-size: clamp(26px, 4vw, 34px); line-height: 1.15; margin: 4px 0 6px; letter-spacing: -0.01em; }
+    h2 { font-size: 20px; margin: 0 0 12px; }
+    .meta { color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+    .chip { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--neutral-bg); font-size: 14px; color: var(--text); }
+    .student { font-size: 20px; font-weight: 700; margin-top: 10px; }
+    .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+    .tile { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+    .tile .v { font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .tile .l { color: var(--muted); font-size: 14px; }
+    .tile.ok .v { color: var(--ok); } .tile.bad .v { color: var(--bad); } .tile.info .v { color: var(--info); }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 16px; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; font-size: 14px; }
+    td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 14px; font-weight: 600; white-space: nowrap; }
+    .s-validated { background: var(--ok-bg); color: var(--ok); }
+    .s-done { background: var(--info-bg); color: var(--info); }
+    .s-skipped, .s-incomplete { background: var(--warn-bg); color: var(--warn); }
+    .s-not_reached { background: var(--neutral-bg); color: var(--muted); }
+    .faults { color: var(--bad); font-size: 14px; margin-top: 4px; }
+    .unverified { color: var(--muted, #6B7280); font-size: 13px; margin-top: 4px; font-style: italic; }
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    ul.items { margin: 0; padding-left: 20px; } ul.items li { margin: 6px 0; }
+    .strengths h2 { color: var(--ok); } .difficulties h2 { color: var(--bad); } .reco h2 { color: var(--info); }
+    .empty { color: var(--muted); font-style: italic; }
+    .ai { border-left: 5px solid #7a5af8; }
+    .ai .note { color: var(--muted); font-size: 14px; margin-top: 10px; }
+    .ai .loading { color: var(--muted); }
+    .score { font-size: 15px; color: var(--muted); }
+    .error { padding: 16px; border-radius: 12px; background: var(--bad-bg); color: var(--bad); }
+    footer { color: var(--muted); font-size: 13px; margin-top: 24px; }
+    @media (max-width: 560px) { body { font-size: 16px; } .card { padding: 18px; } th:nth-child(4), td:nth-child(4) { display: none; } }
+    @media print {
+      body { background: #fff; font-size: 12pt; } main { padding: 0; max-width: none; } .no-print { display: none !important; }
+      .card, .tile { break-inside: avoid; border-color: #ccc; } .ai { border-left-color: #999; }
+    }
+  </style>
+</head>
+<body>
+  <main id="app" aria-live="polite">
+    <p class="empty">Chargement du rapport…</p>
+  </main>
+  <script type="module" src="./report.js"></script>
+</body>
+</html>

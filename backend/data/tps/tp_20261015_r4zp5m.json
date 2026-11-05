@@ -1,0 +1,310 @@
+{
+  "id": "tp_20261015_r4zp5m",
+  "created_at": "2026-10-15T14:24:01.809Z",
+  "template": {
+    "version": "workshop_v3",
+    "url": "/api/workshop/scene.babylon"
+  },
+  "tp": {
+    "title": "Étude de la germination des graines de haricot",
+    "domain": "biological",
+    "duration_minutes": 20,
+    "steps": [
+      {
+        "order": 1,
+        "action": "Placer une couche de coton au fond de chacun des deux gobelets.",
+        "safety": null
+      },
+      {
+        "order": 2,
+        "action": "Déposer trois graines de haricot sur le coton dans chaque gobelet.",
+        "safety": null
+      },
+      {
+        "order": 3,
+        "action": "Humidifier légèrement le coton du gobelet A. Laisser le coton du gobelet B sec.",
+        "safety": null
+      },
+      {
+        "order": 4,
+        "action": "Étiqueter les gobelets « A : avec eau » et « B : sans eau ».",
+        "safety": null
+      },
+      {
+        "order": 5,
+        "action": "Placer les deux gobelets au même endroit, à température ambiante et à la lumière indirecte.",
+        "safety": null
+      },
+      {
+        "order": 6,
+        "action": "Pendant sept jours, maintenir le coton du gobelet A humide sans le noyer et observer quotidiennement les graines.",
+        "safety": null
+      },
+      {
+        "order": 7,
+        "action": "Mesurer, si possible, la longueur de la racine puis de la jeune tige et noter les résultats.",
+        "safety": null
+      }
+    ],
+    "safety_warnings": [
+      "Ne pas consommer les graines utilisées.",
+      "Se laver les mains après la manipulation.",
+      "Éviter l’excès d’eau et nettoyer le matériel après le TP."
+    ]
+  },
+  "color_scheme": {
+    "ambient": "#FFFFFF",
+    "key_light": "#FFFFFF",
+    "material_base": "#FFFFFF"
+  },
+  "assets": [
+    {
+      "asset_id": "a01_graines_de_haricot",
+      "name": "graines de haricot",
+      "source": "sketchfab",
+      "url": "/assets/models/b204160d196c44028be0a898d0779de5/model.glb",
+      "attribution": {
+        "title": "Jelly Bean Kidneys",
+        "author": "yazmin100",
+        "author_url": "https://sketchfab.com/yazmin100",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/b204160d196c44028be0a898d0779de5"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": -0.4,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "color_override": null,
+      "first_step": 2
+    },
+    {
+      "asset_id": "a02_coton",
+      "name": "coton",
+      "source": "sketchfab",
+      "url": "/assets/models/a662d232dd3c49eebbc854e7fb8c7599/model.glb",
+      "attribution": {
+        "title": "Cotton Club",
+        "author": "UofA-CDH",
+        "author_url": "https://sketchfab.com/UofA-CDH",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/a662d232dd3c49eebbc854e7fb8c7599"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "color_override": null,
+      "first_step": 1
+    },
+    {
+      "asset_id": "a03_papier_absorbant",
+      "name": "papier absorbant",
+      "source": "sketchfab",
+      "url": "/assets/models/e10eb527561048b6bc1786c8c44cd0f5/model.glb",
+      "attribution": {
+        "title": "Paper Towel Roll",
+        "author": "hippostance",
+        "author_url": "https://sketchfab.com/hippostance",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/e10eb527561048b6bc1786c8c44cd0f5"
+      },
+      "zone": "zone_shelf_left",
+      "slot": 0,
+      "position": {
+        "x": -9.7,
+        "y": 1.515,
+        "z": 0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "color_override": null,
+      "first_step": null
+    },
+    {
+      "asset_id": "a04_eau",
+      "name": "eau",
+      "source": "sketchfab",
+      "url": "/assets/models/7e60577f9c234e59bf57b0d30b9374cc/model.glb",
+      "attribution": {
+        "title": "Water droplet",
+        "author": "Devcentral",
+        "author_url": "https://sketchfab.com/Devcentral",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/7e60577f9c234e59bf57b0d30b9374cc"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0.4,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "color_override": null,
+      "first_step": null
+    },
+    {
+      "asset_id": "a05_etiquettes",
+      "name": "étiquettes",
+      "source": "sketchfab",
+      "url": "/assets/models/7ce93c8c3db74d3eb6421b5579717938/model.glb",
+      "attribution": {
+        "title": "Classic wine bottle with label",
+        "author": "ilya.terekhin",
+        "author_url": "https://sketchfab.com/ilya.terekhin",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/7ce93c8c3db74d3eb6421b5579717938"
+      },
+      "zone": "zone_shelf_left",
+      "slot": 1,
+      "position": {
+        "x": -9.7,
+        "y": 0.815,
+        "z": 0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "color_override": null,
+      "first_step": 4
+    },
+    {
+      "asset_id": "a06_marqueur",
+      "name": "marqueur",
+      "source": "sketchfab",
+      "url": "/assets/models/4d8c2e7ca4a1434c994c140a72babe58/model.glb",
+      "attribution": {
+        "title": "Capped Permanent Marker Pens",
+        "author": "sandeia",
+        "author_url": "https://sketchfab.com/sandeia",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/4d8c2e7ca4a1434c994c140a72babe58"
+      },
+      "zone": "zone_shelf_left",
+      "slot": 2,
+      "position": {
+        "x": -9.7,
+        "y": 0.115,
+        "z": 0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "color_override": null,
+      "first_step": null
+    },
+    {
+      "asset_id": "a07_regle_graduee",
+      "name": "règle graduée",
+      "source": "sketchfab",
+      "url": "/assets/models/6ef95979598942cd8aa91922f35dc28f/model.glb",
+      "attribution": {
+        "title": "Ruler",
+        "author": "Artieee",
+        "author_url": "https://sketchfab.com/Artieee",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/6ef95979598942cd8aa91922f35dc28f"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": -0.7,
+        "y": 0.9,
+        "z": 0.3
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.3,
+      "color_override": null,
+      "first_step": null
+    },
+    {
+      "asset_id": "a08_gobelets_transparents",
+      "name": "gobelets transparents",
+      "source": "sketchfab",
+      "url": "/assets/models/15d29186a27644ba9669bd929e445e2c/model.glb",
+      "attribution": {
+        "title": "Simple plastic cups",
+        "author": "sousinho",
+        "author_url": "https://sketchfab.com/sousinho",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/15d29186a27644ba9669bd929e445e2c"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0.7,
+        "y": 0.9,
+        "z": 0.3
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "color_override": null,
+      "first_step": 1
+    },
+    {
+      "asset_id": "a09_petit_recipient_verseur",
+      "name": "petit récipient verseur",
+      "source": "sketchfab",
+      "url": "/assets/models/37c5813a3cdc4009b839cafc78ea7048/model.glb",
+      "attribution": {
+        "title": "Small Alien Plant Bed",
+        "author": "equinn1",
+        "author_url": "https://sketchfab.com/equinn1",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/37c5813a3cdc4009b839cafc78ea7048"
+      },
+      "zone": "zone_shelf_right",
+      "slot": 0,
+      "position": {
+        "x": -9.7,
+        "y": 1.515,
+        "z": -0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "color_override": null,
+      "first_step": null
+    }
+  ],
+  "safety_signs": [
+    {
+      "sign": "safety_sign_1",
+      "text": "NE PAS CONSOMMER",
+      "position": {
+        "x": 2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    },
+    {
+      "sign": "safety_sign_2",
+      "text": "LAVAGE DES MAINS",
+      "position": {
+        "x": -2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    }
+  ],
+  "unplaced": [],
+  "warnings": [],
+  "reasoning": "Primary objects like coton, graines de haricot, and eau are placed on the workbench for easy access. Secondary objects like papier absorbant, etiquettes, and marqueur are placed on the shelves. The gobelets transparents are placed near the center of the workbench, while the règle graduée is placed at a convenient distance for measurement."
+}

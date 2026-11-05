@@ -1,0 +1,23 @@
+{
+  "uid": "0f6ad0ae7870498a912d31acf5136e9c",
+  "entry": "model.glb",
+  "url": "/assets/models/0f6ad0ae7870498a912d31acf5136e9c/model.glb",
+  "bytes": 672704,
+  "model": {
+    "uid": "0f6ad0ae7870498a912d31acf5136e9c",
+    "name": "Hotel label",
+    "author": "grafgrial",
+    "author_url": "https://sketchfab.com/grafgrial",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/0f6ad0ae7870498a912d31acf5136e9c",
+    "thumbnail_url": "https://media.sketchfab.com/models/0f6ad0ae7870498a912d31acf5136e9c/thumbnails/e820d11c7eba410a9290c2f2d0b502db/d8318cf7c46b4b4dac1c42f8c59b7491.jpeg",
+    "face_count": 300,
+    "download_size": 672704,
+    "tags": []
+  },
+  "downloaded_at": "2026-10-19T11:23:45.710Z"
+}

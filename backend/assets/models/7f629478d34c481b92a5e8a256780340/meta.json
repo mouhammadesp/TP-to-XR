@@ -1,0 +1,32 @@
+{
+  "uid": "7f629478d34c481b92a5e8a256780340",
+  "entry": "model.glb",
+  "url": "/assets/models/7f629478d34c481b92a5e8a256780340/model.glb",
+  "bytes": 4788472,
+  "model": {
+    "uid": "7f629478d34c481b92a5e8a256780340",
+    "name": "Small Brass Container - free game-ready asset",
+    "author": "hazeh",
+    "author_url": "https://sketchfab.com/hazeh",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/7f629478d34c481b92a5e8a256780340",
+    "thumbnail_url": "https://media.sketchfab.com/models/7f629478d34c481b92a5e8a256780340/thumbnails/d42de3e65e2e49c490beca2746a896d5/797bf6b96d0f4a49b726c38f3b7ec8a1.jpeg",
+    "face_count": 120,
+    "download_size": 4788472,
+    "tags": [
+      "brass",
+      "metal",
+      "box",
+      "substance-designer",
+      "photogrammetry-photoscan",
+      "photogrammetry",
+      "container",
+      "gameready"
+    ]
+  },
+  "downloaded_at": "2026-10-19T11:44:36.942Z"
+}

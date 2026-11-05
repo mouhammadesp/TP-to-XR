@@ -1,0 +1,22 @@
+{
+  "uid": "217c6b059c584243893b36ab76472ddd",
+  "entry": "model.glb",
+  "url": "/assets/models/217c6b059c584243893b36ab76472ddd/model.glb",
+  "bytes": 332704,
+  "model": {
+    "uid": "217c6b059c584243893b36ab76472ddd",
+    "name": "Incandescent Light Bulb",
+    "author": "AleixoAlonso",
+    "author_url": "https://sketchfab.com/AleixoAlonso",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/217c6b059c584243893b36ab76472ddd",
+    "thumbnail_url": "https://media.sketchfab.com/models/217c6b059c584243893b36ab76472ddd/thumbnails/a2d0fc8ec36e46ccb302d7cf844747f8/e42eb8ca7f964b51b1aab5359fb92d69.jpeg",
+    "face_count": 10692,
+    "download_size": 332704
+  },
+  "downloaded_at": "2026-10-14T10:22:16.776Z"
+}

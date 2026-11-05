@@ -1,0 +1,23 @@
+{
+  "uid": "4e08c6af4e2a4b12b46ff45b347ebbf9",
+  "entry": "model.glb",
+  "url": "/assets/models/4e08c6af4e2a4b12b46ff45b347ebbf9/model.glb",
+  "bytes": 540076,
+  "model": {
+    "uid": "4e08c6af4e2a4b12b46ff45b347ebbf9",
+    "name": "SEED Sample Holder Assembly (VFinal)",
+    "author": "colinhodge17",
+    "author_url": "https://sketchfab.com/colinhodge17",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/4e08c6af4e2a4b12b46ff45b347ebbf9",
+    "thumbnail_url": "https://media.sketchfab.com/models/4e08c6af4e2a4b12b46ff45b347ebbf9/thumbnails/c88d6a0c03254cf284676157b37d625a/b4c5fac1e5cf4cb3bdab429c58da3bf6.jpeg",
+    "face_count": 17684,
+    "download_size": 540076,
+    "tags": []
+  },
+  "downloaded_at": "2026-10-19T11:06:36.514Z"
+}

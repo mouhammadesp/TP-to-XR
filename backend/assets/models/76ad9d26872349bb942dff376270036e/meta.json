@@ -1,0 +1,44 @@
+{
+  "uid": "76ad9d26872349bb942dff376270036e",
+  "entry": "model.glb",
+  "url": "/assets/models/76ad9d26872349bb942dff376270036e/model.glb",
+  "bytes": 740108,
+  "model": {
+    "uid": "76ad9d26872349bb942dff376270036e",
+    "name": "Metal Paper Clip",
+    "author": "risteralline",
+    "author_url": "https://sketchfab.com/risteralline",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/76ad9d26872349bb942dff376270036e",
+    "thumbnail_url": "https://media.sketchfab.com/models/76ad9d26872349bb942dff376270036e/thumbnails/a233397a08ae4a6081727c237926ca1e/497bc2a634454c538e03573746bb5411.jpeg",
+    "face_count": 15936,
+    "download_size": 1965848,
+    "tags": [
+      "office",
+      "virtual",
+      "product",
+      "desk",
+      "visualization",
+      "photorealistic",
+      "paper",
+      "holder",
+      "production",
+      "mid",
+      "detailed",
+      "clip",
+      "wire",
+      "accessory",
+      "metal",
+      "props",
+      "realistic",
+      "tool",
+      "mid-poly",
+      "document"
+    ]
+  },
+  "downloaded_at": "2026-10-14T12:26:43.924Z"
+}

@@ -1,0 +1,466 @@
+{
+  "id": "tp_20261019_n5z58z",
+  "created_at": "2026-10-19T11:06:47.481Z",
+  "template": {
+    "version": "workshop_v3",
+    "url": "/api/workshop/scene.babylon"
+  },
+  "tp": {
+    "title": "Étude de la germination des graines de haricot",
+    "domain": "biological",
+    "duration_minutes": 20,
+    "steps": [
+      {
+        "order": 1,
+        "action": "Placer une couche de coton au fond de chacun des deux gobelets.",
+        "safety": null
+      },
+      {
+        "order": 2,
+        "action": "Déposer trois graines de haricot sur le coton dans chaque gobelet.",
+        "safety": null
+      },
+      {
+        "order": 3,
+        "action": "Humidifier légèrement le coton du gobelet A. Laisser le coton du gobelet B sec.",
+        "safety": null
+      },
+      {
+        "order": 4,
+        "action": "Étiqueter les gobelets « A : avec eau » et « B : sans eau ».",
+        "safety": null
+      },
+      {
+        "order": 5,
+        "action": "Placer les deux gobelets au même endroit, à température ambiante et à la lumière indirecte.",
+        "safety": null
+      },
+      {
+        "order": 6,
+        "action": "Pendant sept jours, maintenir le coton du gobelet A humide sans le noyer et observer quotidiennement les graines.",
+        "safety": null
+      },
+      {
+        "order": 7,
+        "action": "Mesurer, si possible, la longueur de la racine puis de la jeune tige et noter les résultats.",
+        "safety": null
+      }
+    ],
+    "safety_warnings": [
+      "Ne pas consommer les graines utilisées.",
+      "Se laver les mains après la manipulation.",
+      "Éviter l’excès d’eau et nettoyer le matériel après le TP."
+    ]
+  },
+  "color_scheme": {
+    "ambient": "#FFFFFF",
+    "key_light": "#FFFFFF",
+    "material_base": "#FFFFFF"
+  },
+  "assets": [
+    {
+      "asset_id": "a01_graines_de_haricot",
+      "name": "graines de haricot",
+      "source": "sketchfab",
+      "url": "/assets/models/4e08c6af4e2a4b12b46ff45b347ebbf9/model.glb",
+      "attribution": {
+        "title": "SEED Sample Holder Assembly (VFinal)",
+        "author": "colinhodge17",
+        "author_url": "https://sketchfab.com/colinhodge17",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/4e08c6af4e2a4b12b46ff45b347ebbf9"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": -0.4,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": 2
+    },
+    {
+      "asset_id": "a02_coton",
+      "name": "coton",
+      "source": "placeholder",
+      "url": null,
+      "attribution": null,
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": 1
+    },
+    {
+      "asset_id": "a03_papier_absorbant",
+      "name": "papier absorbant",
+      "source": "sketchfab",
+      "url": "/assets/models/e10eb527561048b6bc1786c8c44cd0f5/model.glb",
+      "attribution": {
+        "title": "Paper Towel Roll",
+        "author": "hippostance",
+        "author_url": "https://sketchfab.com/hippostance",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/e10eb527561048b6bc1786c8c44cd0f5"
+      },
+      "zone": "zone_shelf_left",
+      "slot": 0,
+      "position": {
+        "x": -9.7,
+        "y": 1.515,
+        "z": 0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": null
+    },
+    {
+      "asset_id": "a04_eau",
+      "name": "eau",
+      "source": "sketchfab",
+      "url": "/assets/models/efa1c4c1f2a947659ded2e61e20eff31/model.glb",
+      "attribution": {
+        "title": "Plastic Water Bottle",
+        "author": "JeremyGrayson",
+        "author_url": "https://sketchfab.com/JeremyGrayson",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/efa1c4c1f2a947659ded2e61e20eff31"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0.4,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": null
+    },
+    {
+      "asset_id": "a05_etiquettes",
+      "name": "étiquettes",
+      "source": "sketchfab",
+      "url": "/assets/models/7ce93c8c3db74d3eb6421b5579717938/model.glb",
+      "attribution": {
+        "title": "Classic wine bottle with label",
+        "author": "ilya.terekhin",
+        "author_url": "https://sketchfab.com/ilya.terekhin",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/7ce93c8c3db74d3eb6421b5579717938"
+      },
+      "zone": "zone_shelf_left",
+      "slot": 1,
+      "position": {
+        "x": -9.7,
+        "y": 0.815,
+        "z": 0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": 4
+    },
+    {
+      "asset_id": "a06_marqueur",
+      "name": "marqueur",
+      "source": "sketchfab",
+      "url": "/assets/models/4d8c2e7ca4a1434c994c140a72babe58/model.glb",
+      "attribution": {
+        "title": "Capped Permanent Marker Pens",
+        "author": "sandeia",
+        "author_url": "https://sketchfab.com/sandeia",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/4d8c2e7ca4a1434c994c140a72babe58"
+      },
+      "zone": "zone_shelf_left",
+      "slot": 2,
+      "position": {
+        "x": -9.7,
+        "y": 0.115,
+        "z": 0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.12,
+      "size_source": "typical_range",
+      "size_note": "estimation 10 cm hors plage typique d'un(e) marqueur / stylo (12 cm–17 cm) → 12 cm",
+      "color_override": null,
+      "first_step": null
+    },
+    {
+      "asset_id": "a07_regle_graduee",
+      "name": "règle graduée",
+      "source": "sketchfab",
+      "url": "/assets/models/6ef95979598942cd8aa91922f35dc28f/model.glb",
+      "attribution": {
+        "title": "Ruler",
+        "author": "Artieee",
+        "author_url": "https://sketchfab.com/Artieee",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/6ef95979598942cd8aa91922f35dc28f"
+      },
+      "zone": "zone_shelf_right",
+      "slot": 0,
+      "position": {
+        "x": -9.7,
+        "y": 1.515,
+        "z": -0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.3,
+      "size_source": "estimate",
+      "size_note": "estimation (règle, plage typique respectée)",
+      "color_override": null,
+      "first_step": null
+    },
+    {
+      "asset_id": "a08_gobelets_transparents",
+      "name": "gobelets transparents",
+      "source": "sketchfab",
+      "url": "/assets/models/15d29186a27644ba9669bd929e445e2c/model.glb",
+      "attribution": {
+        "title": "Simple plastic cups",
+        "author": "sousinho",
+        "author_url": "https://sketchfab.com/sousinho",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/15d29186a27644ba9669bd929e445e2c"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": -0.7,
+        "y": 0.9,
+        "z": 0.5
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "size_source": "estimate",
+      "size_note": "estimation (gobelet, plage typique respectée)",
+      "color_override": null,
+      "first_step": 1
+    },
+    {
+      "asset_id": "a09_petit_recipient_verseur",
+      "name": "petit récipient verseur",
+      "source": "sketchfab",
+      "url": "/assets/models/317b49fe38844d039ac304eba6fae08e/model.glb",
+      "attribution": {
+        "title": "Alchemist's bottle",
+        "author": "fractalspace",
+        "author_url": "https://sketchfab.com/fractalspace",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/317b49fe38844d039ac304eba6fae08e"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0.7,
+        "y": 0.9,
+        "z": 0.5
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": null
+    }
+  ],
+  "safety_signs": [
+    {
+      "sign": "safety_sign_1",
+      "text": "NE PAS CONSOMMER",
+      "position": {
+        "x": 2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    },
+    {
+      "sign": "safety_sign_2",
+      "text": "LAVEZ VOS MAINS",
+      "position": {
+        "x": -2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    }
+  ],
+  "unplaced": [],
+  "warnings": [
+    "Aucun modèle 3D adapté pour « coton » → boîte provisoire",
+    "Interactions — Étape 3 — action non retenue (« Humidifier légèrement le coton du gobelet A. ») : aucun verbe d'action « approcher » dans la citation",
+    "Interactions — Étape 4 — action non retenue (« Étiqueter les gobelets « A : avec eau » et « B : sans eau ». ») : aucun verbe d'action « poser » dans la citation",
+    "Interactions — Étape 5 — action non retenue (« Placer les deux gobelets au même endroit, à température ambiante et à la lumière ») : support (établi / poste / table) non cité",
+    "Interactions — Étape 6 — action non retenue (« maintenir le coton du gobelet A humide ») : aucun verbe d'action « approcher » dans la citation",
+    "Interactions — Étape 7 — action non retenue (« Mesurer, si possible, la longueur de la racine puis de la jeune tige ») : aucun verbe d'action « inspecter » dans la citation"
+  ],
+  "reasoning": "Primary objects like coton, graines de haricot, and eau are placed on the workbench for easy access. Related objects like étiquettes and marqueur are grouped on the shelf. The règle graduée is placed on the right shelf for reference.",
+  "simulation": {
+    "kind": "generic",
+    "targets": [
+      {
+        "id": "t_a02_coton_sur_a08_gobelets_transparents",
+        "label": "coton ici",
+        "position": {
+          "x": -0.7,
+          "y": 0.9,
+          "z": 0.5
+        },
+        "radius": 0.08,
+        "accepts": [
+          "a02_coton"
+        ],
+        "marker": "disc",
+        "anchor": {
+          "asset": "a08_gobelets_transparents",
+          "mode": "top"
+        }
+      },
+      {
+        "id": "t_a01_graines_de_haricot_sur_a08_gobelets_transparents",
+        "label": "graines de haricot ici",
+        "position": {
+          "x": -0.7,
+          "y": 0.9,
+          "z": 0.5
+        },
+        "radius": 0.08,
+        "accepts": [
+          "a01_graines_de_haricot"
+        ],
+        "marker": "disc",
+        "anchor": {
+          "asset": "a08_gobelets_transparents",
+          "mode": "top"
+        }
+      }
+    ],
+    "rules": [
+      [
+        {
+          "type": "placed",
+          "asset": "a02_coton",
+          "target": "t_a02_coton_sur_a08_gobelets_transparents",
+          "label": "coton sur gobelets transparents"
+        }
+      ],
+      [
+        {
+          "type": "placed",
+          "asset": "a01_graines_de_haricot",
+          "target": "t_a01_graines_de_haricot_sur_a08_gobelets_transparents",
+          "label": "graines de haricot sur gobelets transparents"
+        }
+      ],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
+    "completion": "Toutes les manipulations vérifiables de ce TP ont été réalisées."
+  },
+  "interactions": {
+    "steps": [
+      {
+        "step": 1,
+        "coverage": "full",
+        "verified": [
+          "coton sur gobelets transparents"
+        ],
+        "unverified": []
+      },
+      {
+        "step": 2,
+        "coverage": "full",
+        "verified": [
+          "graines de haricot sur gobelets transparents"
+        ],
+        "unverified": []
+      },
+      {
+        "step": 3,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« Humidifier légèrement le coton du gobelet A. » — non vérifiable automatiquement (aucun verbe d'action « approcher » dans la citation)",
+          "« Laisser le coton du gobelet B sec. » — action non prise en charge"
+        ]
+      },
+      {
+        "step": 4,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« Étiqueter les gobelets « A : avec eau » et « B : sans eau ». » — non vérifiable automatiquement (aucun verbe d'action « poser » dans la citation)"
+        ]
+      },
+      {
+        "step": 5,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« Placer les deux gobelets au même endroit, à température ambiante et à la lumière indirecte. » — non vérifiable automatiquement (support (établi / poste / table) non cité)",
+          "« Placer les deux gobelets au même » — action non prise en charge"
+        ]
+      },
+      {
+        "step": 6,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« maintenir le coton du gobelet A humide » — non vérifiable automatiquement (aucun verbe d'action « approcher » dans la citation)",
+          "« observer quotidiennement les graines » — observation non prise en charge",
+          "« Pendant sept jours » — délai non pris en charge"
+        ]
+      },
+      {
+        "step": 7,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« Mesurer, si possible, la longueur de la racine puis de la jeune tige » — non vérifiable automatiquement (aucun verbe d'action « inspecter » dans la citation)",
+          "« noter les résultats » — enregistrement non pris en charge",
+          "« Mesurer » — action non prise en charge"
+        ]
+      }
+    ],
+    "issues": [
+      "Étape 3 — action non retenue (« Humidifier légèrement le coton du gobelet A. ») : aucun verbe d'action « approcher » dans la citation",
+      "Étape 4 — action non retenue (« Étiqueter les gobelets « A : avec eau » et « B : sans eau ». ») : aucun verbe d'action « poser » dans la citation",
+      "Étape 5 — action non retenue (« Placer les deux gobelets au même endroit, à température ambiante et à la lumière ») : support (établi / poste / table) non cité",
+      "Étape 6 — action non retenue (« maintenir le coton du gobelet A humide ») : aucun verbe d'action « approcher » dans la citation",
+      "Étape 7 — action non retenue (« Mesurer, si possible, la longueur de la racine puis de la jeune tige ») : aucun verbe d'action « inspecter » dans la citation"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "uid": "6ef95979598942cd8aa91922f35dc28f",
+  "entry": "model.glb",
+  "url": "/assets/models/6ef95979598942cd8aa91922f35dc28f/model.glb",
+  "bytes": 1369860,
+  "model": {
+    "uid": "6ef95979598942cd8aa91922f35dc28f",
+    "name": "Ruler",
+    "author": "Artieee",
+    "author_url": "https://sketchfab.com/Artieee",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/6ef95979598942cd8aa91922f35dc28f",
+    "thumbnail_url": "https://media.sketchfab.com/models/6ef95979598942cd8aa91922f35dc28f/thumbnails/d9062714a30f48b8b55cbe0e612b50d1/b5ba0d3b68474314a79d6ed64139e75b.jpeg",
+    "face_count": 20,
+    "download_size": 4726824,
+    "tags": [
+      "instrument",
+      "rust",
+      "chancery"
+    ]
+  },
+  "downloaded_at": "2026-10-15T09:48:28.636Z"
+}

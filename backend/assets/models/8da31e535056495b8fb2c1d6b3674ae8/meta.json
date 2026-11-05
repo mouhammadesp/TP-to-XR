@@ -1,0 +1,22 @@
+{
+  "uid": "8da31e535056495b8fb2c1d6b3674ae8",
+  "entry": "model.glb",
+  "url": "/assets/models/8da31e535056495b8fb2c1d6b3674ae8/model.glb",
+  "bytes": 1788884,
+  "model": {
+    "uid": "8da31e535056495b8fb2c1d6b3674ae8",
+    "name": "9V Battery",
+    "author": "The-Lost-Sock",
+    "author_url": "https://sketchfab.com/The-Lost-Sock",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/8da31e535056495b8fb2c1d6b3674ae8",
+    "thumbnail_url": "https://media.sketchfab.com/models/8da31e535056495b8fb2c1d6b3674ae8/thumbnails/2356ddf3321843968ab2f99d9ff6de25/3242d322d5e54c20a6f958fba80da211.jpeg",
+    "face_count": 936,
+    "download_size": 4503940
+  },
+  "downloaded_at": "2026-10-14T10:22:17.015Z"
+}

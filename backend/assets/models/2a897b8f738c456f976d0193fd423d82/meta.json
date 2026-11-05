@@ -1,0 +1,26 @@
+{
+  "uid": "2a897b8f738c456f976d0193fd423d82",
+  "entry": "model.glb",
+  "url": "/assets/models/2a897b8f738c456f976d0193fd423d82/model.glb",
+  "bytes": 5378804,
+  "model": {
+    "uid": "2a897b8f738c456f976d0193fd423d82",
+    "name": "Crucible",
+    "author": "Professor_E12",
+    "author_url": "https://sketchfab.com/Professor_E12",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/2a897b8f738c456f976d0193fd423d82",
+    "thumbnail_url": "https://media.sketchfab.com/models/2a897b8f738c456f976d0193fd423d82/thumbnails/6abe257a6e334d229797383108a27f20/7758ec13f89e4f9fb7a97a8dc42eebd4.jpeg",
+    "face_count": 28620,
+    "download_size": 14598652,
+    "tags": [
+      "skibiditoilet",
+      "skibidi_toliet"
+    ]
+  },
+  "downloaded_at": "2026-10-19T11:44:37.019Z"
+}

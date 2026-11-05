@@ -1,0 +1,23 @@
+{
+  "uid": "37c5813a3cdc4009b839cafc78ea7048",
+  "entry": "model.glb",
+  "url": "/assets/models/37c5813a3cdc4009b839cafc78ea7048/model.glb",
+  "bytes": 5525248,
+  "model": {
+    "uid": "37c5813a3cdc4009b839cafc78ea7048",
+    "name": "Small Alien Plant Bed",
+    "author": "equinn1",
+    "author_url": "https://sketchfab.com/equinn1",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/37c5813a3cdc4009b839cafc78ea7048",
+    "thumbnail_url": "https://media.sketchfab.com/models/37c5813a3cdc4009b839cafc78ea7048/thumbnails/66094f03783740c7baa1e59deede6d0e/c36ed675937b44e082f00a3eb95c47c6.jpeg",
+    "face_count": 39893,
+    "download_size": 5525248,
+    "tags": []
+  },
+  "downloaded_at": "2026-10-15T09:48:30.430Z"
+}

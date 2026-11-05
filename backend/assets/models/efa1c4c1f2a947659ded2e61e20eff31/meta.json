@@ -1,0 +1,29 @@
+{
+  "uid": "efa1c4c1f2a947659ded2e61e20eff31",
+  "entry": "model.glb",
+  "url": "/assets/models/efa1c4c1f2a947659ded2e61e20eff31/model.glb",
+  "bytes": 303304,
+  "model": {
+    "uid": "efa1c4c1f2a947659ded2e61e20eff31",
+    "name": "Plastic Water Bottle",
+    "author": "JeremyGrayson",
+    "author_url": "https://sketchfab.com/JeremyGrayson",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/efa1c4c1f2a947659ded2e61e20eff31",
+    "thumbnail_url": "https://media.sketchfab.com/models/efa1c4c1f2a947659ded2e61e20eff31/thumbnails/925fe460334543a28881338f80e25690/70a38b34986b46a19953b2aa4b92a21b.jpeg",
+    "face_count": 10296,
+    "download_size": 303304,
+    "tags": [
+      "water",
+      "waterbottle",
+      "bottle",
+      "plastic",
+      "plastic-water-bottle"
+    ]
+  },
+  "downloaded_at": "2026-10-19T11:06:36.323Z"
+}

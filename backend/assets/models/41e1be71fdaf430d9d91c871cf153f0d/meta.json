@@ -1,0 +1,44 @@
+{
+  "uid": "41e1be71fdaf430d9d91c871cf153f0d",
+  "entry": "model.glb",
+  "url": "/assets/models/41e1be71fdaf430d9d91c871cf153f0d/model.glb",
+  "bytes": 1965160,
+  "model": {
+    "uid": "41e1be71fdaf430d9d91c871cf153f0d",
+    "name": "Arc Lamp - Victorian Street Lamp",
+    "author": "i-m-a-kitty-cat",
+    "author_url": "https://sketchfab.com/i-m-a-kitty-cat",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/41e1be71fdaf430d9d91c871cf153f0d",
+    "thumbnail_url": "https://media.sketchfab.com/models/41e1be71fdaf430d9d91c871cf153f0d/thumbnails/028f24b3c131437bb00f485bed0f14aa/d8e7390fef3043318115e9a83a42b320.jpeg",
+    "face_count": 46802,
+    "download_size": 1965160,
+    "tags": [
+      "lamp",
+      "victorian",
+      "assets",
+      "high",
+      "british",
+      "simplified",
+      "antique",
+      "england",
+      "metal",
+      "props",
+      "old",
+      "streetlight",
+      "streetlamp",
+      "1920s",
+      "1910",
+      "1900s",
+      "principledbsdf",
+      "1910s",
+      "lighting",
+      "industrial"
+    ]
+  },
+  "downloaded_at": "2026-10-14T10:28:05.957Z"
+}

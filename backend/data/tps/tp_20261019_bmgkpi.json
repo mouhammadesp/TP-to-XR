@@ -1,0 +1,270 @@
+{
+  "id": "tp_20261019_bmgkpi",
+  "created_at": "2026-10-19T11:32:12.811Z",
+  "template": {
+    "version": "workshop_v3",
+    "url": "/api/workshop/scene.babylon"
+  },
+  "tp": {
+    "title": "Découverte du matériel de mesure du pH",
+    "domain": "chemical",
+    "duration_minutes": 10,
+    "steps": [
+      {
+        "order": 1,
+        "action": "Poser le bécher contenant de l’eau sur l’établi. Poser la coupelle à côté du bécher.",
+        "safety": null
+      },
+      {
+        "order": 2,
+        "action": "Inspecter la bandelette de papier indicateur de pH pendant quelques secondes.",
+        "safety": null
+      },
+      {
+        "order": 3,
+        "action": "Approcher la bandelette de papier indicateur du bécher contenant de l’eau, sans encore l’immerger.",
+        "safety": null
+      }
+    ],
+    "safety_warnings": [
+      "Utiliser uniquement de l’eau propre.",
+      "Ne pas goûter les substances.",
+      "Manipuler le matériel avec précaution et garder le poste propre."
+    ]
+  },
+  "color_scheme": {
+    "ambient": "#C6F5C9",
+    "key_light": "#FFFFFF",
+    "material_base": "#FFFF00"
+  },
+  "assets": [
+    {
+      "asset_id": "a01_eau",
+      "name": "eau",
+      "source": "sketchfab",
+      "url": "/assets/models/75678894df9f41c0aaa2a4f1b9e9364a/model.glb",
+      "attribution": {
+        "title": "Water Bath",
+        "author": "veerubyinc",
+        "author_url": "https://sketchfab.com/veerubyinc",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/75678894df9f41c0aaa2a4f1b9e9364a"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": -0.5,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": null
+    },
+    {
+      "asset_id": "a03_becher_de_100_ml",
+      "name": "bécher de 100 mL",
+      "source": "sketchfab",
+      "url": "/assets/models/0ec8afce877345f1acd95ceb24b7c6f3/model.glb",
+      "attribution": {
+        "title": "Beaker Collection",
+        "author": "3dlabwaremodels",
+        "author_url": "https://sketchfab.com/3dlabwaremodels",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/0ec8afce877345f1acd95ceb24b7c6f3"
+      },
+      "zone": "zone_shelf_left",
+      "slot": 0,
+      "position": {
+        "x": -9.7,
+        "y": 1.515,
+        "z": 0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.07,
+      "size_source": "standard",
+      "size_note": "bécher (ISO 3819) 100 mL : hauteur nominale 70 mm",
+      "color_override": null,
+      "first_step": 1
+    },
+    {
+      "asset_id": "a04_coupelle_de_laboratoire",
+      "name": "coupelle de laboratoire",
+      "source": "sketchfab",
+      "url": "/assets/models/24d052e572794d7ea67f7e4433cc8a1d/model.glb",
+      "attribution": {
+        "title": "Petri Dish",
+        "author": "C44t",
+        "author_url": "https://sketchfab.com/C44t",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/24d052e572794d7ea67f7e4433cc8a1d"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0.5,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": 1
+    },
+    {
+      "asset_id": "a02_bandelette_de_papier_ind",
+      "name": "bandelette de papier indicateur de pH",
+      "source": "placeholder",
+      "url": null,
+      "attribution": null,
+      "zone": "zone_shelf_left",
+      "slot": 1,
+      "position": {
+        "x": -9.7,
+        "y": 0.815,
+        "z": 0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.05,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": 2
+    }
+  ],
+  "safety_signs": [
+    {
+      "sign": "safety_sign_1",
+      "text": "NE PAS GOÛTER",
+      "position": {
+        "x": 2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    },
+    {
+      "sign": "safety_sign_2",
+      "text": "UTILISER EAU PROPRE",
+      "position": {
+        "x": -2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    }
+  ],
+  "unplaced": [],
+  "warnings": [
+    "Aucun modèle 3D adapté pour « bandelette de papier indicateur de pH » → boîte provisoire",
+    "Interactions — Étape 1 — action non retenue (« Poser la coupelle à côté du bécher ») : support (établi / poste / table) non cité"
+  ],
+  "reasoning": "Main objects on the workbench for easy access. The beaker and laboratory dish are placed at the center, with the water nearby. The pH indicator strip is placed on the top left shelf for later use. Color scheme follows chemical domain style with green and yellow safety colors.",
+  "simulation": {
+    "kind": "generic",
+    "targets": [
+      {
+        "id": "t_a03_becher_de_100_ml_etabli",
+        "label": "bécher de 100 mL ici",
+        "position": {
+          "x": 0.035,
+          "y": 0.9,
+          "z": 0.335
+        },
+        "radius": 0.085,
+        "accepts": [
+          "a03_becher_de_100_ml"
+        ],
+        "marker": "disc"
+      },
+      {
+        "id": "t_pres_a03_becher_de_100_ml",
+        "label": "Approcher ici",
+        "position": {
+          "x": -9.7,
+          "y": 1.515,
+          "z": 0.78
+        },
+        "radius": 0.1,
+        "accepts": [],
+        "marker": "disc",
+        "anchor": {
+          "asset": "a03_becher_de_100_ml",
+          "mode": "base"
+        }
+      }
+    ],
+    "rules": [
+      [
+        {
+          "type": "placed",
+          "asset": "a03_becher_de_100_ml",
+          "target": "t_a03_becher_de_100_ml_etabli",
+          "label": "bécher de 100 mL sur l'établi"
+        }
+      ],
+      [
+        {
+          "type": "held",
+          "asset": "a02_bandelette_de_papier_ind",
+          "seconds": 2,
+          "label": "bandelette de papier indicateur de pH examiné en main (2 s)"
+        }
+      ],
+      [
+        {
+          "type": "near",
+          "asset": "a02_bandelette_de_papier_ind",
+          "target": "t_pres_a03_becher_de_100_ml",
+          "distance": 0.185,
+          "label": "bandelette de papier indicateur de pH approché de bécher de 100 mL"
+        }
+      ]
+    ],
+    "completion": "Toutes les manipulations vérifiables de ce TP ont été réalisées."
+  },
+  "interactions": {
+    "steps": [
+      {
+        "step": 1,
+        "coverage": "partial",
+        "verified": [
+          "bécher de 100 mL sur l'établi"
+        ],
+        "unverified": [
+          "« Poser la coupelle à côté du bécher » — non vérifiable automatiquement (support (établi / poste / table) non cité)",
+          "« Poser la coupelle à côté du » — action non prise en charge"
+        ]
+      },
+      {
+        "step": 2,
+        "coverage": "partial",
+        "verified": [
+          "bandelette de papier indicateur de pH examiné en main (2 s)"
+        ],
+        "unverified": [
+          "« pendant quelques secondes » — délai non pris en charge"
+        ]
+      },
+      {
+        "step": 3,
+        "coverage": "partial",
+        "verified": [
+          "bandelette de papier indicateur de pH approché de bécher de 100 mL"
+        ],
+        "unverified": [
+          "« sans encore l’immerger » — action non prise en charge"
+        ]
+      }
+    ],
+    "issues": [
+      "Étape 1 — action non retenue (« Poser la coupelle à côté du bécher ») : support (établi / poste / table) non cité"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "uid": "be95e308ecc046b4a39ca467d6015df6",
+  "entry": "model.glb",
+  "url": "/assets/models/be95e308ecc046b4a39ca467d6015df6/model.glb",
+  "bytes": 3333268,
+  "model": {
+    "uid": "be95e308ecc046b4a39ca467d6015df6",
+    "name": "Magnetic Rock",
+    "author": "tauricity",
+    "author_url": "https://sketchfab.com/tauricity",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/be95e308ecc046b4a39ca467d6015df6",
+    "thumbnail_url": "https://media.sketchfab.com/models/be95e308ecc046b4a39ca467d6015df6/thumbnails/03d3b184a4564447b1e7634c80190406/256x144.jpeg",
+    "face_count": 50881,
+    "download_size": 14969056,
+    "tags": [
+      "magnet",
+      "monolith",
+      "iron",
+      "magnetite",
+      "agisoft",
+      "photoscan",
+      "photogrammetry",
+      "blender3d",
+      "scan",
+      "stone",
+      "rock"
+    ]
+  },
+  "downloaded_at": "2026-10-19T10:21:12.371Z"
+}

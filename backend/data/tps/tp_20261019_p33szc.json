@@ -1,0 +1,259 @@
+{
+  "id": "tp_20261019_p33szc",
+  "created_at": "2026-10-19T10:55:21.276Z",
+  "template": {
+    "version": "workshop_v3",
+    "url": "/api/workshop/scene.babylon"
+  },
+  "tp": {
+    "title": "TP d'électricité — Mesure de tension et test de continuité",
+    "domain": "biological",
+    "duration_minutes": 20,
+    "steps": [
+      {
+        "order": 1,
+        "action": "Préparer le multimètre (3 min) : brancher le cordon noir sur COM et le cordon rouge sur V/Ω, puis régler le sélecteur sur 20 V continu (V⎓).",
+        "safety": null
+      },
+      {
+        "order": 2,
+        "action": "Mesurer la tension de la pile (5 min) : poser la pointe rouge sur la borne + et la pointe noire sur la borne − de la pile 9 V. Noter la valeur. Une pile neuve affiche entre 9 et 9,6 V ; en dessous de 7,5 V, elle est usée.",
+        "safety": null
+      },
+      {
+        "order": 3,
+        "action": "Tester la continuité de l'ampoule (5 min) : débrancher la pile, régler le multimètre sur la position continuité (symbole ♪), puis toucher le plot central et le culot de l'ampoule avec les deux pointes. Un bip indique que le filament est intact.",
+        "safety": "Le test de continuité se fait toujours hors tension"
+      },
+      {
+        "order": 4,
+        "action": "Allumer l'ampoule (5 min) : relier l'ampoule à la pile avec les deux cordons à pinces crocodiles. L'ampoule s'allume faiblement : expliquer pourquoi (pile 9 V, ampoule 6 V, résistance interne de la pile).",
+        "safety": null
+      },
+      {
+        "order": 5,
+        "action": "Ranger le poste (2 min) : débrancher les cordons, éteindre le multimètre (position OFF) et ranger le matériel.",
+        "safety": null
+      }
+    ],
+    "safety_warnings": [
+      "Ne jamais relier directement les deux bornes de la pile (court-circuit)",
+      "Choisir le calibre du multimètre avant de toucher le circuit",
+      "Le test de continuité se fait toujours hors tension"
+    ]
+  },
+  "color_scheme": {
+    "ambient": "#FFFFFF",
+    "key_light": "#FFFFFF",
+    "material_base": "#FFFFFF"
+  },
+  "assets": [
+    {
+      "asset_id": "a01_pile_9_v",
+      "name": "Pile 9 V",
+      "source": "sketchfab",
+      "url": "/assets/models/8da31e535056495b8fb2c1d6b3674ae8/model.glb",
+      "attribution": {
+        "title": "9V Battery",
+        "author": "The-Lost-Sock",
+        "author_url": "https://sketchfab.com/The-Lost-Sock",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/8da31e535056495b8fb2c1d6b3674ae8"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": -0.4,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.0485,
+      "size_source": "standard",
+      "size_note": "pile 9 V (IEC 60086 6LR61 : 48,5 mm)",
+      "color_override": null,
+      "first_step": 2
+    },
+    {
+      "asset_id": "a02_ampoule_6_v_a_culot_e10",
+      "name": "Ampoule 6 V à culot E10",
+      "source": "sketchfab",
+      "url": "/assets/models/41e1be71fdaf430d9d91c871cf153f0d/model.glb",
+      "attribution": {
+        "title": "Arc Lamp - Victorian Street Lamp",
+        "author": "i-m-a-kitty-cat",
+        "author_url": "https://sketchfab.com/i-m-a-kitty-cat",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/41e1be71fdaf430d9d91c871cf153f0d"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0.4,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.045,
+      "size_source": "typical_range",
+      "size_note": "estimation 10 cm hors plage typique d'un(e) ampoule miniature à culot E10/E14 (20 mm–45 mm) → 45 mm",
+      "color_override": null,
+      "first_step": 3
+    },
+    {
+      "asset_id": "a03_cordons_a_pinces_crocodi",
+      "name": "Cordons à pinces crocodiles",
+      "source": "sketchfab",
+      "url": "/assets/models/205550e0468546ff9c69c237a6cfc7cb/model.glb",
+      "attribution": {
+        "title": "Cavalry soldier toy",
+        "author": "norgeotloic",
+        "author_url": "https://sketchfab.com/norgeotloic",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/205550e0468546ff9c69c237a6cfc7cb"
+      },
+      "zone": "zone_shelf_left",
+      "slot": 0,
+      "position": {
+        "x": -9.7,
+        "y": 1.515,
+        "z": 0.78
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "size_source": "estimate",
+      "size_note": "estimation (modèle exact inconnu)",
+      "color_override": null,
+      "first_step": 4
+    },
+    {
+      "asset_id": "a04_multimetre_numerique",
+      "name": "Multimètre numérique",
+      "source": "sketchfab",
+      "url": "/assets/models/48b4c9e70f7c4d16abc471be7b1bf1c2/model.glb",
+      "attribution": {
+        "title": "Digital Multimeter Model Free to use.",
+        "author": "chi3dmodel",
+        "author_url": "https://sketchfab.com/chi3dmodel",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/48b4c9e70f7c4d16abc471be7b1bf1c2"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "size_source": "estimate",
+      "size_note": "estimation (multimètre portable, plage typique respectée)",
+      "color_override": null,
+      "first_step": 1
+    }
+  ],
+  "safety_signs": [
+    {
+      "sign": "safety_sign_1",
+      "text": "NE PAS COURT-CIRCUITER",
+      "position": {
+        "x": 2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    },
+    {
+      "sign": "safety_sign_2",
+      "text": "TESTER HORS TENSION",
+      "position": {
+        "x": -2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    }
+  ],
+  "unplaced": [],
+  "warnings": [
+    "Domaine choisi : biological (le LLM proposait electrical)",
+    "Interactions — Étape 1 — action non retenue (« Préparer le multimètre ») : aucun verbe d'action « poser » dans la citation",
+    "Interactions — Étape 2 — action non retenue (« poser la pointe rouge sur la borne + et la pointe noire sur la borne − de la pil ») : support (établi / poste / table) non cité",
+    "Interactions — Étape 3 — action non retenue (« toucher le plot central et le culot de l'ampoule ») : aucun verbe d'action « poser » dans la citation",
+    "Interactions — Étape 4 — action non retenue (« relier l'ampoule à la pile avec les deux cordons à pinces crocodiles ») : aucun verbe d'action « approcher » dans la citation",
+    "Interactions — Étape 5 — action non retenue (« éteindre le multimètre (position OFF) ») : aucun verbe d'action « poser » dans la citation",
+    "Interactions — Aucune manipulation vérifiable automatiquement (poser, approcher, inspecter) : TP non interactif"
+  ],
+  "reasoning": "The main objects are placed on the workbench for easy access. The cordons à pinces crocodiles are placed on the top left shelf. The color scheme is neutral to fit the biological domain.",
+  "interactions": {
+    "steps": [
+      {
+        "step": 1,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« Préparer le multimètre » — non vérifiable automatiquement (aucun verbe d'action « poser » dans la citation)",
+          "« brancher le cordon noir sur COM et le cordon rouge sur V/Ω » — connexion non prise en charge",
+          "« régler le sélecteur sur 20 V continu (V⎓) » — réglage non pris en charge"
+        ]
+      },
+      {
+        "step": 2,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« poser la pointe rouge sur la borne + et la pointe noire sur la borne − de la pile 9 V » — non vérifiable automatiquement (support (établi / poste / table) non cité)",
+          "« poser la pointe rouge sur la borne + et la pointe noire sur la borne − de la pile 9 V » — connexion non prise en charge",
+          "« Noter la valeur » — écriture non prise en charge",
+          "« Mesurer la tension de la pile » — action non prise en charge"
+        ]
+      },
+      {
+        "step": 3,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« toucher le plot central et le culot de l'ampoule » — non vérifiable automatiquement (aucun verbe d'action « poser » dans la citation)",
+          "« débrancher la pile » — déconnexion non prise en charge",
+          "« régler le multimètre sur la position continuité (symbole ♪) » — réglage non pris en charge",
+          "« toucher le plot central et le culot de l'ampoule avec les deux pointes » — connexion non prise en charge",
+          "« Tester la continuité de l'ampoule (5 » — action non prise en charge"
+        ]
+      },
+      {
+        "step": 4,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« relier l'ampoule à la pile avec les deux cordons à pinces crocodiles » — non vérifiable automatiquement (aucun verbe d'action « approcher » dans la citation)",
+          "« relier l'ampoule à la pile avec les deux cordons à pinces crocodiles » — connexion non prise en charge",
+          "« expliquer pourquoi » — explication non prise en charge",
+          "« Allumer l'ampoule (5 min) » — action non prise en charge"
+        ]
+      },
+      {
+        "step": 5,
+        "coverage": "none",
+        "verified": [],
+        "unverified": [
+          "« éteindre le multimètre (position OFF) » — non vérifiable automatiquement (aucun verbe d'action « poser » dans la citation)",
+          "« débrancher les cordons » — déconnexion non prise en charge",
+          "« éteindre le multimètre (position OFF) » — éteindre non pris en charge",
+          "« ranger le matériel » — rangement non pris en charge",
+          "« Ranger le poste (2 min) » — action non prise en charge"
+        ]
+      }
+    ],
+    "issues": [
+      "Étape 1 — action non retenue (« Préparer le multimètre ») : aucun verbe d'action « poser » dans la citation",
+      "Étape 2 — action non retenue (« poser la pointe rouge sur la borne + et la pointe noire sur la borne − de la pil ») : support (établi / poste / table) non cité",
+      "Étape 3 — action non retenue (« toucher le plot central et le culot de l'ampoule ») : aucun verbe d'action « poser » dans la citation",
+      "Étape 4 — action non retenue (« relier l'ampoule à la pile avec les deux cordons à pinces crocodiles ») : aucun verbe d'action « approcher » dans la citation",
+      "Étape 5 — action non retenue (« éteindre le multimètre (position OFF) ») : aucun verbe d'action « poser » dans la citation",
+      "Aucune manipulation vérifiable automatiquement (poser, approcher, inspecter) : TP non interactif"
+    ]
+  }
+}

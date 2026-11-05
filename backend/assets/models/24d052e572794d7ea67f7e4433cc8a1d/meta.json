@@ -1,0 +1,23 @@
+{
+  "uid": "24d052e572794d7ea67f7e4433cc8a1d",
+  "entry": "model.glb",
+  "url": "/assets/models/24d052e572794d7ea67f7e4433cc8a1d/model.glb",
+  "bytes": 19744,
+  "model": {
+    "uid": "24d052e572794d7ea67f7e4433cc8a1d",
+    "name": "Petri Dish",
+    "author": "C44t",
+    "author_url": "https://sketchfab.com/C44t",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/24d052e572794d7ea67f7e4433cc8a1d",
+    "thumbnail_url": "https://media.sketchfab.com/models/24d052e572794d7ea67f7e4433cc8a1d/thumbnails/d5a6cc4dd82c4a9e88c1e89e4bdb4bac/3d1bab58cea842bbbff70d1e06cae59e.jpeg",
+    "face_count": 504,
+    "download_size": 19744,
+    "tags": []
+  },
+  "downloaded_at": "2026-10-19T11:32:06.786Z"
+}

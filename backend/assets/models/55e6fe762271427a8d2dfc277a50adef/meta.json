@@ -1,0 +1,31 @@
+{
+  "uid": "55e6fe762271427a8d2dfc277a50adef",
+  "entry": "model.glb",
+  "url": "/assets/models/55e6fe762271427a8d2dfc277a50adef/model.glb",
+  "bytes": 314072,
+  "model": {
+    "uid": "55e6fe762271427a8d2dfc277a50adef",
+    "name": "Cotton Swab",
+    "author": "amhyde",
+    "author_url": "https://sketchfab.com/amhyde",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/55e6fe762271427a8d2dfc277a50adef",
+    "thumbnail_url": "https://media.sketchfab.com/models/55e6fe762271427a8d2dfc277a50adef/thumbnails/ca969f76d07646589d86f25ca3602fcb/009d71aca6e949beb51a239388c1daad.jpeg",
+    "face_count": 1472,
+    "download_size": 1165300,
+    "tags": [
+      "bathroom",
+      "bath",
+      "counter",
+      "cotton",
+      "swab",
+      "restroom",
+      "house"
+    ]
+  },
+  "downloaded_at": "2026-10-20T13:22:53.898Z"
+}

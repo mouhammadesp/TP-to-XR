@@ -1,0 +1,23 @@
+{
+  "uid": "ff59cc4f886f4f82b17c8c112a125380",
+  "entry": "model.glb",
+  "url": "/assets/models/ff59cc4f886f4f82b17c8c112a125380/model.glb",
+  "bytes": 32520,
+  "model": {
+    "uid": "ff59cc4f886f4f82b17c8c112a125380",
+    "name": "Lab Flask",
+    "author": "Ermakow",
+    "author_url": "https://sketchfab.com/Ermakow",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/ff59cc4f886f4f82b17c8c112a125380",
+    "thumbnail_url": "https://media.sketchfab.com/models/ff59cc4f886f4f82b17c8c112a125380/thumbnails/c9f2af3dcb2b4b82aa0f159e1ce53df0/b9be9070737f418088612cb4ef400512.jpeg",
+    "face_count": 956,
+    "download_size": 32520,
+    "tags": []
+  },
+  "downloaded_at": "2026-10-20T13:25:26.964Z"
+}

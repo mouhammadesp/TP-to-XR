@@ -1,0 +1,44 @@
+{
+  "uid": "205550e0468546ff9c69c237a6cfc7cb",
+  "entry": "model.glb",
+  "url": "/assets/models/205550e0468546ff9c69c237a6cfc7cb/model.glb",
+  "bytes": 2673832,
+  "model": {
+    "uid": "205550e0468546ff9c69c237a6cfc7cb",
+    "name": "Cavalry soldier toy",
+    "author": "norgeotloic",
+    "author_url": "https://sketchfab.com/norgeotloic",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/205550e0468546ff9c69c237a6cfc7cb",
+    "thumbnail_url": "https://media.sketchfab.com/models/205550e0468546ff9c69c237a6cfc7cb/thumbnails/32937a4799ed4264934cbab7cef301a5/dc6421e6c1464cd6be9a0b82d3af2104.jpeg",
+    "face_count": 53806,
+    "download_size": 9488532,
+    "tags": [
+      "world",
+      "lead",
+      "toy",
+      "spear",
+      "warrior",
+      "flag",
+      "empire",
+      "soldier",
+      "hunter",
+      "army",
+      "figurine",
+      "statue",
+      "remeshing",
+      "cavalry",
+      "hussar",
+      "openmvs",
+      "colmap",
+      "mmgs",
+      "photoscan",
+      "photogrammetry"
+    ]
+  },
+  "downloaded_at": "2026-10-19T10:55:15.765Z"
+}

@@ -1,0 +1,27 @@
+{
+  "uid": "7e60577f9c234e59bf57b0d30b9374cc",
+  "entry": "model.glb",
+  "url": "/assets/models/7e60577f9c234e59bf57b0d30b9374cc/model.glb",
+  "bytes": 1295732,
+  "model": {
+    "uid": "7e60577f9c234e59bf57b0d30b9374cc",
+    "name": "Water droplet",
+    "author": "Devcentral",
+    "author_url": "https://sketchfab.com/Devcentral",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/7e60577f9c234e59bf57b0d30b9374cc",
+    "thumbnail_url": "https://media.sketchfab.com/models/7e60577f9c234e59bf57b0d30b9374cc/thumbnails/d05d9b19ae944a7aa571c89d8b5699f2/d95ef30148c94ce3b5bbc0e54cced733.jpeg",
+    "face_count": 27430,
+    "download_size": 2381632,
+    "tags": [
+      "water",
+      "drop",
+      "droplet"
+    ]
+  },
+  "downloaded_at": "2026-10-15T09:48:27.597Z"
+}

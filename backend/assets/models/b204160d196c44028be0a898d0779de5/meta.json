@@ -1,0 +1,28 @@
+{
+  "uid": "b204160d196c44028be0a898d0779de5",
+  "entry": "model.glb",
+  "url": "/assets/models/b204160d196c44028be0a898d0779de5/model.glb",
+  "bytes": 1876892,
+  "model": {
+    "uid": "b204160d196c44028be0a898d0779de5",
+    "name": "Jelly Bean Kidneys",
+    "author": "yazmin100",
+    "author_url": "https://sketchfab.com/yazmin100",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/b204160d196c44028be0a898d0779de5",
+    "thumbnail_url": "https://media.sketchfab.com/models/b204160d196c44028be0a898d0779de5/thumbnails/45face42360049e1a5950aaf58f63a4b/5a5bfcd5d17e444c86d67e3288bdf7f6.jpeg",
+    "face_count": 78128,
+    "download_size": 1876892,
+    "tags": [
+      "anatomy",
+      "kidneys",
+      "jellybean",
+      "3dmodel"
+    ]
+  },
+  "downloaded_at": "2026-10-15T09:48:26.695Z"
+}

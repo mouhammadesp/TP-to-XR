@@ -1,0 +1,33 @@
+{
+  "uid": "317b49fe38844d039ac304eba6fae08e",
+  "entry": "model.glb",
+  "url": "/assets/models/317b49fe38844d039ac304eba6fae08e/model.glb",
+  "bytes": 1295620,
+  "model": {
+    "uid": "317b49fe38844d039ac304eba6fae08e",
+    "name": "Alchemist's bottle",
+    "author": "fractalspace",
+    "author_url": "https://sketchfab.com/fractalspace",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/317b49fe38844d039ac304eba6fae08e",
+    "thumbnail_url": "https://media.sketchfab.com/models/317b49fe38844d039ac304eba6fae08e/thumbnails/2fa91eecbd3e4b52ba7140b9aaf13211/f59749a27f4444d78e5e5f5c378122cd.jpeg",
+    "face_count": 1284,
+    "download_size": 4299816,
+    "tags": [
+      "lab",
+      "potion",
+      "liquid",
+      "alchemy",
+      "essence",
+      "elixir",
+      "hermetic",
+      "bottle",
+      "magic"
+    ]
+  },
+  "downloaded_at": "2026-10-19T11:06:36.501Z"
+}

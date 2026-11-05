@@ -1,0 +1,26 @@
+{
+  "uid": "a662d232dd3c49eebbc854e7fb8c7599",
+  "entry": "model.glb",
+  "url": "/assets/models/a662d232dd3c49eebbc854e7fb8c7599/model.glb",
+  "bytes": 4140652,
+  "model": {
+    "uid": "a662d232dd3c49eebbc854e7fb8c7599",
+    "name": "Cotton Club",
+    "author": "UofA-CDH",
+    "author_url": "https://sketchfab.com/UofA-CDH",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/a662d232dd3c49eebbc854e7fb8c7599",
+    "thumbnail_url": "https://media.sketchfab.com/models/a662d232dd3c49eebbc854e7fb8c7599/thumbnails/62a904734ddb4c858cf5044802d2567e/04d0f68425114ce58aeb034b0662cca7.jpeg",
+    "face_count": 3230,
+    "download_size": 11902912,
+    "tags": [
+      "virtual",
+      "harlem"
+    ]
+  },
+  "downloaded_at": "2026-10-15T14:23:53.706Z"
+}

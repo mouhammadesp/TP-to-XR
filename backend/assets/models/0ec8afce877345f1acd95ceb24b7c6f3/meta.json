@@ -1,0 +1,31 @@
+{
+  "uid": "0ec8afce877345f1acd95ceb24b7c6f3",
+  "entry": "model.glb",
+  "url": "/assets/models/0ec8afce877345f1acd95ceb24b7c6f3/model.glb",
+  "bytes": 1786936,
+  "model": {
+    "uid": "0ec8afce877345f1acd95ceb24b7c6f3",
+    "name": "Beaker Collection",
+    "author": "3dlabwaremodels",
+    "author_url": "https://sketchfab.com/3dlabwaremodels",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/0ec8afce877345f1acd95ceb24b7c6f3",
+    "thumbnail_url": "https://media.sketchfab.com/models/0ec8afce877345f1acd95ceb24b7c6f3/thumbnails/1349190a9617449e828b4d613de93acc/7b3cf5e3c8734931abcbbdc6f0ff9411.jpeg",
+    "face_count": 55296,
+    "download_size": 1786936,
+    "tags": [
+      "archviz",
+      "lab",
+      "visualization",
+      "textures",
+      "tools",
+      "laboratory",
+      "3dlabware"
+    ]
+  },
+  "downloaded_at": "2026-10-19T11:23:45.926Z"
+}

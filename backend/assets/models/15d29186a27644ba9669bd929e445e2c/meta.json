@@ -1,0 +1,39 @@
+{
+  "uid": "15d29186a27644ba9669bd929e445e2c",
+  "entry": "model.glb",
+  "url": "/assets/models/15d29186a27644ba9669bd929e445e2c/model.glb",
+  "bytes": 2120828,
+  "model": {
+    "uid": "15d29186a27644ba9669bd929e445e2c",
+    "name": "Simple plastic cups",
+    "author": "sousinho",
+    "author_url": "https://sketchfab.com/sousinho",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/15d29186a27644ba9669bd929e445e2c",
+    "thumbnail_url": "https://media.sketchfab.com/models/15d29186a27644ba9669bd929e445e2c/thumbnails/b01bd525923141dc91d009d8ec306302/d7218402d9694012a975bb48fcace952.jpeg",
+    "face_count": 15168,
+    "download_size": 4096968,
+    "tags": [
+      "drink",
+      "cute",
+      "camping",
+      "prop",
+      "reusable",
+      "gameassets",
+      "gameprops",
+      "watercooler",
+      "crushed",
+      "plasticcup",
+      "clearcoatchallenge",
+      "plastic",
+      "waterdispenser",
+      "reusablecup",
+      "noai"
+    ]
+  },
+  "downloaded_at": "2026-10-15T09:48:29.663Z"
+}

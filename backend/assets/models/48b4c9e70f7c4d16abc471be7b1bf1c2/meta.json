@@ -1,0 +1,22 @@
+{
+  "uid": "48b4c9e70f7c4d16abc471be7b1bf1c2",
+  "entry": "model.glb",
+  "url": "/assets/models/48b4c9e70f7c4d16abc471be7b1bf1c2/model.glb",
+  "bytes": 1524056,
+  "model": {
+    "uid": "48b4c9e70f7c4d16abc471be7b1bf1c2",
+    "name": "Digital Multimeter Model Free to use.",
+    "author": "chi3dmodel",
+    "author_url": "https://sketchfab.com/chi3dmodel",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/48b4c9e70f7c4d16abc471be7b1bf1c2",
+    "thumbnail_url": "https://media.sketchfab.com/models/48b4c9e70f7c4d16abc471be7b1bf1c2/thumbnails/14bf36cf73844f31aa6182b03d714406/62a65cde2b2b4d3088aaf2d10c3efac5.jpeg",
+    "face_count": 2841,
+    "download_size": 4001112
+  },
+  "downloaded_at": "2026-10-14T10:22:17.251Z"
+}

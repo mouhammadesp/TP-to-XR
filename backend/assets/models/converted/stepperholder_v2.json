@@ -1,0 +1,19 @@
+{
+  "slug": "stepperholder_v2",
+  "url": "/assets/models/converted/stepperholder_v2.glb",
+  "bytes": 46828,
+  "triangles": 636,
+  "dimensions_m": {
+    "x": 0.0615,
+    "y": 0.022,
+    "z": 0.041
+  },
+  "attribution": {
+    "title": "Stepper Motor Mount / Holder",
+    "author": "OT12345",
+    "license": "CC Attribution - Share Alike",
+    "source_url": "https://www.thingiverse.com/thing:746258"
+  },
+  "source_file": "StepperHolder_V2.STL",
+  "converted_at": "2026-10-13T18:28:03.547Z"
+}

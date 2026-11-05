@@ -1,0 +1,23 @@
+{
+  "uid": "355f1e119c33452ea9e2e8d306360435",
+  "entry": "model.glb",
+  "url": "/assets/models/355f1e119c33452ea9e2e8d306360435/model.glb",
+  "bytes": 379496,
+  "model": {
+    "uid": "355f1e119c33452ea9e2e8d306360435",
+    "name": "Safety Goggles",
+    "author": "microsoft",
+    "author_url": "https://sketchfab.com/microsoft",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/355f1e119c33452ea9e2e8d306360435",
+    "thumbnail_url": "https://media.sketchfab.com/models/355f1e119c33452ea9e2e8d306360435/thumbnails/b678aad320134d0aa3fda0b6a371814f/8ae3b948c6a2429d94708384ef6c6fb2.jpeg",
+    "face_count": 5706,
+    "download_size": 379496,
+    "tags": []
+  },
+  "downloaded_at": "2026-10-19T11:44:37.377Z"
+}

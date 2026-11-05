@@ -1,0 +1,26 @@
+{
+  "uid": "a1abf645cfc94c37abb05874aaf473be",
+  "entry": "model.glb",
+  "url": "/assets/models/a1abf645cfc94c37abb05874aaf473be/model.glb",
+  "bytes": 1563752,
+  "model": {
+    "uid": "a1abf645cfc94c37abb05874aaf473be",
+    "name": "Marker - 6MB -",
+    "author": "ahmagh2e",
+    "author_url": "https://sketchfab.com/ahmagh2e",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/a1abf645cfc94c37abb05874aaf473be",
+    "thumbnail_url": "https://media.sketchfab.com/models/a1abf645cfc94c37abb05874aaf473be/thumbnails/31413951ca8a47d593b5c919ae2dc216/f5208de2c6534aceb137636365faf3fe.jpeg",
+    "face_count": 3888,
+    "download_size": 3367804,
+    "tags": [
+      "pen",
+      "marker"
+    ]
+  },
+  "downloaded_at": "2026-10-19T11:09:58.039Z"
+}

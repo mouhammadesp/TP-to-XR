@@ -1,0 +1,32 @@
+{
+  "uid": "4d8c2e7ca4a1434c994c140a72babe58",
+  "entry": "model.glb",
+  "url": "/assets/models/4d8c2e7ca4a1434c994c140a72babe58/model.glb",
+  "bytes": 1831540,
+  "model": {
+    "uid": "4d8c2e7ca4a1434c994c140a72babe58",
+    "name": "Capped Permanent Marker Pens",
+    "author": "sandeia",
+    "author_url": "https://sketchfab.com/sandeia",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/4d8c2e7ca4a1434c994c140a72babe58",
+    "thumbnail_url": "https://media.sketchfab.com/models/4d8c2e7ca4a1434c994c140a72babe58/thumbnails/19019a23716d4e0cb69e2ee25fd9eb93/6e39ea10e3b14cc29340597dc7c56d4e.jpeg",
+    "face_count": 37728,
+    "download_size": 5506896,
+    "tags": [
+      "pen",
+      "generic",
+      "4k",
+      "marker",
+      "realistic",
+      "4ktextures",
+      "unbranded",
+      "noai"
+    ]
+  },
+  "downloaded_at": "2026-10-15T09:48:28.356Z"
+}

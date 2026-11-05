@@ -1,0 +1,30 @@
+{
+  "uid": "e10eb527561048b6bc1786c8c44cd0f5",
+  "entry": "model.glb",
+  "url": "/assets/models/e10eb527561048b6bc1786c8c44cd0f5/model.glb",
+  "bytes": 998512,
+  "model": {
+    "uid": "e10eb527561048b6bc1786c8c44cd0f5",
+    "name": "Paper Towel Roll",
+    "author": "hippostance",
+    "author_url": "https://sketchfab.com/hippostance",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/e10eb527561048b6bc1786c8c44cd0f5",
+    "thumbnail_url": "https://media.sketchfab.com/models/e10eb527561048b6bc1786c8c44cd0f5/thumbnails/49ec2f3b23c243228fc0e364ae4b53f2/95da738646734a67beae4dd2f7c60035.jpeg",
+    "face_count": 4216,
+    "download_size": 998512,
+    "tags": [
+      "roll",
+      "paper",
+      "holder",
+      "towel",
+      "kitchen",
+      "cleaning"
+    ]
+  },
+  "downloaded_at": "2026-10-15T09:48:27.283Z"
+}

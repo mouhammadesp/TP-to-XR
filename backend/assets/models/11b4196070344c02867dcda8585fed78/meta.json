@@ -1,0 +1,29 @@
+{
+  "uid": "11b4196070344c02867dcda8585fed78",
+  "entry": "model.glb",
+  "url": "/assets/models/11b4196070344c02867dcda8585fed78/model.glb",
+  "bytes": 129040,
+  "model": {
+    "uid": "11b4196070344c02867dcda8585fed78",
+    "name": "A4 White Paper 500 Sheet",
+    "author": "barsoomerian",
+    "author_url": "https://sketchfab.com/barsoomerian",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/11b4196070344c02867dcda8585fed78",
+    "thumbnail_url": "https://media.sketchfab.com/models/11b4196070344c02867dcda8585fed78/thumbnails/b823a6c12dfe43d1ab9f677dc7d5efa2/3f01cb7ce4c24a21b03ad9864ba7d6a4.jpeg",
+    "face_count": 108,
+    "download_size": 310872,
+    "tags": [
+      "paper",
+      "white-paper",
+      "a4_paper",
+      "500-sheet",
+      "500-paper"
+    ]
+  },
+  "downloaded_at": "2026-10-19T10:21:10.645Z"
+}

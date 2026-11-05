@@ -1,0 +1,170 @@
+{
+  "id": "tp_20261014_d8uwde",
+  "created_at": "2026-10-14T13:34:26.928Z",
+  "template": {
+    "version": "workshop_v3",
+    "url": "/api/workshop/scene.babylon"
+  },
+  "tp": {
+    "title": "TP d'électricité — Mesure de tension et test de continuité",
+    "domain": "electrical",
+    "duration_minutes": 20,
+    "steps": [
+      {
+        "order": 1,
+        "action": "Préparer le multimètre",
+        "safety": null
+      },
+      {
+        "order": 2,
+        "action": "Mesurer la tension de la pile",
+        "safety": null
+      },
+      {
+        "order": 3,
+        "action": "Tester la continuité de l'ampoule",
+        "safety": "Le test de continuité se fait toujours hors tension"
+      },
+      {
+        "order": 4,
+        "action": "Allumer l'ampoule",
+        "safety": null
+      },
+      {
+        "order": 5,
+        "action": "Ranger le poste",
+        "safety": null
+      }
+    ],
+    "safety_warnings": [
+      "Ne jamais relier directement les deux bornes de la pile (court-circuit)",
+      "Choisir le calibre du multimètre avant de toucher le circuit",
+      "Le test de continuité se fait toujours hors tension"
+    ]
+  },
+  "color_scheme": {
+    "ambient": "#0064C8",
+    "key_light": "#FFFFFF",
+    "material_base": "#0064C8"
+  },
+  "assets": [
+    {
+      "asset_id": "a04_multimetre_numerique",
+      "name": "Multimètre numérique",
+      "source": "sketchfab",
+      "url": "/assets/models/48b4c9e70f7c4d16abc471be7b1bf1c2/model.glb",
+      "attribution": {
+        "title": "Digital Multimeter Model Free to use.",
+        "author": "chi3dmodel",
+        "author_url": "https://sketchfab.com/chi3dmodel",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/48b4c9e70f7c4d16abc471be7b1bf1c2"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.2,
+      "color_override": null,
+      "first_step": 1
+    },
+    {
+      "asset_id": "a01_pile_9_v",
+      "name": "Pile 9 V",
+      "source": "sketchfab",
+      "url": "/assets/models/8da31e535056495b8fb2c1d6b3674ae8/model.glb",
+      "attribution": {
+        "title": "9V Battery",
+        "author": "The-Lost-Sock",
+        "author_url": "https://sketchfab.com/The-Lost-Sock",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/8da31e535056495b8fb2c1d6b3674ae8"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": -0.5,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "color_override": null,
+      "first_step": 2
+    },
+    {
+      "asset_id": "a02_ampoule_6_v_a_culot_e10",
+      "name": "Ampoule 6 V à culot E10",
+      "source": "sketchfab",
+      "url": "/assets/models/217c6b059c584243893b36ab76472ddd/model.glb",
+      "attribution": {
+        "title": "Incandescent Light Bulb",
+        "author": "AleixoAlonso",
+        "author_url": "https://sketchfab.com/AleixoAlonso",
+        "license": "CC Attribution",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_url": "https://sketchfab.com/3d-models/217c6b059c584243893b36ab76472ddd"
+      },
+      "zone": "zone_workbench",
+      "slot": null,
+      "position": {
+        "x": 0.5,
+        "y": 0.9,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "color_override": null,
+      "first_step": 3
+    },
+    {
+      "asset_id": "a03_cordons_a_pinces_crocodi",
+      "name": "Cordons à pinces crocodiles",
+      "source": "placeholder",
+      "url": null,
+      "attribution": null,
+      "zone": "zone_shelf_left",
+      "slot": 0,
+      "position": {
+        "x": -8.5,
+        "y": 1.525,
+        "z": 0
+      },
+      "rotation_y": 0,
+      "target_size_m": 0.1,
+      "color_override": null,
+      "first_step": 5
+    }
+  ],
+  "safety_signs": [
+    {
+      "sign": "safety_sign_1",
+      "text": "NE PAS RELIER DIRECT",
+      "position": {
+        "x": 2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    },
+    {
+      "sign": "safety_sign_2",
+      "text": "TESTER HORS TENSION",
+      "position": {
+        "x": -2.5,
+        "y": 1.6,
+        "z": -7.36
+      }
+    }
+  ],
+  "unplaced": [],
+  "warnings": [
+    "Aucun modèle 3D adapté pour « Cordons à pinces crocodiles » → boîte provisoire"
+  ],
+  "reasoning": "Multimeter at the workbench center for the main manipulation. Pile and ampoule nearby for easy access. Crocodile clips on the top left shelf, used in later steps. Color scheme and warnings are domain-specific for electrical experiments."
+}

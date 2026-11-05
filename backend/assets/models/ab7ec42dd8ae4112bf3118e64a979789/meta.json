@@ -1,0 +1,29 @@
+{
+  "uid": "ab7ec42dd8ae4112bf3118e64a979789",
+  "entry": "model.glb",
+  "url": "/assets/models/ab7ec42dd8ae4112bf3118e64a979789/model.glb",
+  "bytes": 464552,
+  "model": {
+    "uid": "ab7ec42dd8ae4112bf3118e64a979789",
+    "name": "Metal Ruler",
+    "author": "RED2000",
+    "author_url": "https://sketchfab.com/RED2000",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/ab7ec42dd8ae4112bf3118e64a979789",
+    "thumbnail_url": "https://media.sketchfab.com/models/ab7ec42dd8ae4112bf3118e64a979789/thumbnails/195a4a1fb7c6449795facdcaae998a38/dc45952cfab44832930e473bb5247060.jpeg",
+    "face_count": 128,
+    "download_size": 613460,
+    "tags": [
+      "drawing",
+      "metal",
+      "ruler",
+      "architecture",
+      "art"
+    ]
+  },
+  "downloaded_at": "2026-10-19T10:21:11.302Z"
+}

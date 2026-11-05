@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>TP — Mesure de tension et test de continuité</title>
+<style>
+  @page { size: A4; margin: 18mm 18mm 20mm; }
+  body { font-family: "Segoe UI", Arial, sans-serif; font-size: 11pt; line-height: 1.45; color: #111; }
+  h1 { font-size: 18pt; margin: 0 0 4pt; }
+  .meta { color: #444; margin-bottom: 14pt; }
+  h2 { font-size: 13pt; margin: 16pt 0 6pt; border-bottom: 1px solid #999; padding-bottom: 2pt; }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { border: 1px solid #999; padding: 4pt 6pt; text-align: left; }
+  .safety { border: 2px solid #b00020; padding: 6pt 10pt; background: #fdecea; }
+  li { margin-bottom: 4pt; }
+  .note { color: #555; font-size: 9pt; margin-top: 20pt; }
+</style>
+</head>
+<body>
+  <h1>TP d'électricité — Mesure de tension et test de continuité</h1>
+  <div class="meta">Niveau : initiation · Durée : 20 minutes · Travail individuel</div>
+
+  <h2>Objectif</h2>
+  <p>Savoir utiliser un multimètre pour mesurer la tension d'une pile et vérifier qu'une ampoule n'est pas grillée (test de continuité).</p>
+
+  <h2>Matériel</h2>
+  <table>
+    <tr><th>Désignation</th><th>Quantité</th></tr>
+    <tr><td>Multimètre numérique</td><td>1</td></tr>
+    <tr><td>Pile 9 V</td><td>1</td></tr>
+    <tr><td>Ampoule 6 V à culot E10</td><td>1</td></tr>
+    <tr><td>Cordons à pinces crocodiles</td><td>2</td></tr>
+  </table>
+
+  <h2>Consignes de sécurité</h2>
+  <div class="safety">
+    <ul>
+      <li>Ne jamais relier directement les deux bornes de la pile (court-circuit).</li>
+      <li>Choisir le calibre du multimètre <strong>avant</strong> de toucher le circuit.</li>
+      <li>Le test de continuité se fait toujours <strong>hors tension</strong>.</li>
+    </ul>
+  </div>
+
+  <h2>Déroulement</h2>
+  <ol>
+    <li><strong>Préparer le multimètre</strong> (3 min) : brancher le cordon noir sur COM et le cordon rouge sur V/Ω, puis régler le sélecteur sur 20 V continu (V⎓).</li>
+    <li><strong>Mesurer la tension de la pile</strong> (5 min) : poser la pointe rouge sur la borne + et la pointe noire sur la borne − de la pile 9 V. Noter la valeur. Une pile neuve affiche entre 9 et 9,6 V ; en dessous de 7,5 V, elle est usée.</li>
+    <li><strong>Tester la continuité de l'ampoule</strong> (5 min) : débrancher la pile, régler le multimètre sur la position continuité (symbole ♪), puis toucher le plot central et le culot de l'ampoule avec les deux pointes. Un bip indique que le filament est intact.</li>
+    <li><strong>Allumer l'ampoule</strong> (5 min) : relier l'ampoule à la pile avec les deux cordons à pinces crocodiles. L'ampoule s'allume faiblement : expliquer pourquoi (pile 9 V, ampoule 6 V, résistance interne de la pile).</li>
+    <li><strong>Ranger le poste</strong> (2 min) : débrancher les cordons, éteindre le multimètre (position OFF) et ranger le matériel.</li>
+  </ol>
+
+  <h2>Questions</h2>
+  <ol>
+    <li>Quelle tension avez-vous mesurée ? La pile est-elle neuve ?</li>
+    <li>Pourquoi le test de continuité doit-il se faire hors tension ?</li>
+  </ol>
+
+  <p class="note">Document d'exemple créé pour tester la plateforme TP-to-xR.</p>
+</body>
+</html>

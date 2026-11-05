@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+*.log
+backend/assets/
+backend/data/
+frontend-vr/dist/
+frontend-vr/dist-tests/

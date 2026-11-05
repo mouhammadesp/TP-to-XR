@@ -1,0 +1,22 @@
+{
+  "name": "tp-to-xr-frontend-vr",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WebXR student view (Quest 3 + desktop) for TP-to-xR scenes",
+  "scripts": {
+    "build": "node build.mjs",
+    "watch": "node build.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "node build.mjs --tests && node --test \"dist-tests/**/*.test.mjs\""
+  },
+  "dependencies": {
+    "@babylonjs/core": "7.54.3",
+    "@babylonjs/loaders": "7.54.3",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "esbuild": "0.28.1",
+    "typescript": "^5.6.3"
+  }
+}

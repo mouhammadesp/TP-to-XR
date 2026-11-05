@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>TP → XR Learning</title>
+  <style>
+    :root {
+      --bg: rgba(12, 16, 22, 0.82);
+      --panel: rgba(18, 23, 31, 0.9);
+      --line: rgba(255, 255, 255, 0.12);
+      --text: #f2f4f7;
+      --muted: #9aa6b2;
+      --accent: #2e8b57;
+      --accent-strong: #3aa86b;
+      --danger: #e5484d;
+      --warn: #f5b84b;
+      --radius: 14px;
+      color-scheme: dark;
+    }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #1a1d21; color: var(--text);
+      font-family: system-ui, "Segoe UI", Roboto, sans-serif; }
+    #renderCanvas { width: 100%; height: 100%; display: block; touch-action: none; outline: none; }
+    [hidden] { display: none !important; }
+    button { font: inherit; color: inherit; cursor: pointer; }
+    button:focus-visible, [tabindex]:focus-visible { outline: 3px solid #7fc8ff; outline-offset: 2px; }
+
+    /* ---------- in-TP HUD ---------- */
+    .card { position: absolute; padding: 8px 12px; background: rgba(10, 14, 20, 0.72); color: #fff; border-radius: 8px; font-size: 13px; line-height: 1.5; }
+    #hud { top: max(12px, env(safe-area-inset-top)); left: 12px; max-width: min(440px, calc(100% - 48px)); max-height: 45vh; overflow: auto; }
+    #hud a { color: #8cf; }
+    #hud ul { margin: 4px 0; padding-left: 18px; }
+    #warnings { color: #fc6; }
+    #timer { top: max(12px, env(safe-area-inset-top)); right: 12px; font-size: 22px; font-variant-numeric: tabular-nums; font-weight: 600; }
+    #score { bottom: max(12px, env(safe-area-inset-bottom)); left: 12px; font-size: 15px; }
+    #credits { top: 50%; left: 50%; transform: translate(-50%, -50%); width: min(720px, calc(100% - 48px)); max-height: 70vh; overflow: auto; background: rgba(250, 250, 248, 0.97); color: #222; font-size: 14px; }
+    #credits a { color: #0b5ed7; }
+    #credits button { float: right; font-size: 18px; border: 0; background: none; }
+    body.mode-menu #hud, body.mode-menu #timer, body.mode-menu #score { display: none; }
+
+    /* ---------- boot splash ---------- */
+    #boot { position: fixed; inset: 0; display: grid; place-items: center; background: #14181d; color: var(--muted); font-size: 15px; z-index: 5; }
+
+    /* ---------- menu overlay ---------- */
+    #menu { position: fixed; inset: 0; display: grid; place-items: center; padding: 24px 16px;
+      background: radial-gradient(ellipse at center, rgba(10,14,20,0.25), rgba(10,14,20,0.7)); overflow: auto; }
+    body.mode-vr #menu { display: none; }
+    .view { width: min(760px, 100%); background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: clamp(20px, 4vw, 40px); box-shadow: 0 20px 60px rgba(0,0,0,0.45); backdrop-filter: blur(6px); }
+    .view h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1.05; margin: 8px 0 12px; letter-spacing: -0.02em; }
+    .view h1 small { display: block; font-size: 0.42em; font-weight: 500; color: var(--muted); letter-spacing: 0; margin-top: 6px; }
+    .view h2 { font-size: clamp(22px, 3.5vw, 30px); margin: 4px 0 18px; }
+    .lead { color: var(--muted); font-size: 17px; line-height: 1.5; margin: 0 0 28px; max-width: 52ch; }
+    .brand { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .brand img { height: 44px; width: auto; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .primary, .secondary, .back { min-height: 52px; padding: 0 26px; border-radius: 10px; font-size: 18px; font-weight: 600; border: 1px solid transparent; }
+    .primary { background: var(--accent); color: #fff; }
+    .primary:hover:not(:disabled) { background: var(--accent-strong); }
+    .primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    .secondary { background: transparent; border-color: var(--line); }
+    .secondary:hover { background: rgba(255,255,255,0.06); }
+    .back { min-height: 40px; padding: 0 14px; font-size: 15px; background: transparent; border-color: var(--line); color: var(--muted); margin-bottom: 14px; }
+    .muted { color: var(--muted); }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; pointer-events: none; }
+    .inbox-title { margin: 18px 0 8px; font-size: 15px; }
+    #inbox-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+    .inbox-row { width: 100%; text-align: left; display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px;
+      border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,0.05); font-size: 16px; }
+    .inbox-row:hover { background: rgba(255,255,255,0.1); }
+    .inbox-row.selected { border-color: #5fd394; background: rgba(46,139,87,0.28); }
+    #upload-hint { margin-top: 10px; font-size: 15px; }
+    .demo-block { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); display: grid; gap: 12px; font-size: 15px; }
+    .demo { min-height: 46px; padding: 0 18px; border-radius: 10px; font-size: 16px; font-weight: 600; border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--accent) 22%, transparent); }
+    .demo:hover { background: color-mix(in srgb, var(--accent) 40%, transparent); }
+    .error { color: var(--danger); }
+    .chip { display: inline-block; padding: 4px 12px; border-radius: 999px; background: rgba(255,255,255,0.08); font-size: 15px; margin-left: 8px; vertical-align: middle; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; }
+    .domain-card { min-height: 130px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+      border-radius: 12px; border: 1px solid var(--line); background: color-mix(in srgb, var(--accent) 22%, transparent);
+      transition: transform 0.12s, background 0.12s; }
+    .domain-card:hover, .domain-card:focus-visible { transform: translateY(-2px); background: color-mix(in srgb, var(--accent) 40%, transparent); }
+    .domain-card .icon { font-size: 40px; }
+    .domain-card .name { font-size: 18px; font-weight: 600; }
+
+    #dropzone { display: grid; place-items: center; text-align: center; min-height: 220px; padding: 20px; border: 2px dashed rgba(58,168,107,0.7);
+      border-radius: 12px; background: rgba(46,139,87,0.08); transition: background 0.12s, border-color 0.12s; cursor: pointer; }
+    #dropzone.over { background: rgba(46,139,87,0.25); border-color: #5fd394; }
+    #dropzone .big { font-size: 44px; }
+    #dropzone p { margin: 6px 0; font-size: 18px; }
+    #file-card { display: flex; align-items: center; gap: 14px; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,0.04); }
+    #file-card .big { font-size: 36px; }
+    #file-card .grow { flex: 1; min-width: 0; }
+    #file-name { font-weight: 600; overflow-wrap: anywhere; }
+    #upload-error, #loading-error { margin-top: 12px; padding: 10px 14px; border-radius: 10px; background: rgba(229,72,77,0.15); color: #ffb4b6; }
+    .upload-actions { margin-top: 20px; display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
+
+    #progress { height: 12px; border-radius: 999px; background: rgba(255,255,255,0.1); overflow: hidden; margin: 6px 0 4px; }
+    #progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), #5fd394); transition: width 0.4s ease; }
+    .progress-meta { display: flex; justify-content: space-between; color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+    #steps-list { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 6px; }
+    #steps-list li { display: grid; grid-template-columns: 28px 1fr; column-gap: 10px; padding: 7px 12px; border-radius: 10px; background: rgba(255,255,255,0.03); color: var(--muted); }
+    #steps-list li .icon { grid-row: span 2; font-weight: 700; text-align: center; font-size: 18px; }
+    #steps-list li .detail { font-size: 13px; color: var(--muted); grid-column: 2; min-height: 0; }
+    #steps-list li.running { color: var(--text); background: rgba(245,184,75,0.12); }
+    #steps-list li.running .icon { color: var(--warn); animation: spin 1s linear infinite; display: inline-block; }
+    #steps-list li.done { color: var(--text); }
+    #steps-list li.done .icon { color: #5fd394; }
+    #steps-list li.skipped .icon { color: var(--muted); }
+    #steps-list li.error { color: #ffb4b6; background: rgba(229,72,77,0.12); }
+    #loading-warnings { margin: 12px 0 0; padding-left: 20px; color: var(--warn); font-size: 14px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { #steps-list li.running .icon { animation: none; } .domain-card { transition: none; } }
+
+    #library-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .tp-row { width: 100%; text-align: left; display: grid; gap: 4px; padding: 14px 16px; border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,0.04); font-size: 16px; }
+    .tp-row:hover { background: rgba(255,255,255,0.08); }
+    .tp-row .muted { font-size: 14px; }
+    /* ---------- student identity ---------- */
+    .identity-form { display: grid; gap: 16px; margin-top: 6px; }
+    .identity-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .field { display: grid; gap: 6px; font-size: 15px; color: var(--muted); }
+    .field input { min-height: 52px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,0.06);
+      color: var(--text); font: inherit; font-size: 19px; }
+    .field input:focus { outline: 3px solid #7fc8ff; outline-offset: 1px; border-color: transparent; }
+    .field input[aria-invalid="true"] { border-color: var(--danger); }
+    .field .err { color: #ffb4b6; font-size: 14px; min-height: 0; }
+    .field .opt { font-weight: 400; opacity: 0.8; }
+    .privacy { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 10px; background: rgba(127,200,255,0.08);
+      color: var(--muted); font-size: 14px; line-height: 1.45; }
+    #identity-tp { color: var(--text); font-weight: 600; }
+  </style>
+</head>
+<body class="mode-menu">
+  <canvas id="renderCanvas"></canvas>
+  <div id="boot">Chargement de l'atelier…</div>
+
+  <!-- ===== Menu (2D overlay: works in the Quest browser before entering VR) ===== -->
+  <div id="menu">
+    <section id="view-home" class="view" aria-labelledby="home-title">
+      <div class="brand">
+        <img src="logos/ucad.png" alt="Université Cheikh Anta Diop" />
+        <img src="logos/curi.png" alt="CURI" />
+        <span>UCAD · CURI — Dakar</span>
+      </div>
+      <h1 id="home-title">TP → XR <small>Learning Platform</small></h1>
+      <p class="lead">Importez un énoncé de TP en PDF : l'atelier virtuel est préparé automatiquement, puis réalisez le TP en réalité virtuelle.</p>
+      <div class="actions">
+        <button id="btn-start" class="primary" data-autofocus>Démarrer</button>
+        <button id="btn-library" class="secondary">TPs déjà générés</button>
+      </div>
+      <div id="demo-block" class="demo-block" hidden>
+        <div class="muted">Tester sans clé API (TP de démonstration, objets provisoires) :</div>
+        <div id="demo-buttons" class="actions"></div>
+      </div>
+    </section>
+
+    <section id="view-domain" class="view" hidden aria-labelledby="domain-title">
+      <button class="back" data-back="home">← Retour</button>
+      <h2 id="domain-title">Choisissez le domaine du TP</h2>
+      <div id="domain-grid" class="grid"></div>
+    </section>
+
+    <section id="view-identity" class="view" hidden aria-labelledby="identity-title">
+      <button class="back" id="identity-back">← Retour</button>
+      <h2 id="identity-title">Qui réalise ce TP ?</h2>
+      <p class="lead" id="identity-lead">Votre nom apparaîtra sur votre rapport de fin de TP. <span id="identity-tp"></span></p>
+      <form id="identity-form" class="identity-form" novalidate autocomplete="off">
+        <div class="identity-row">
+          <label class="field">Prénom
+            <input id="id-first" name="first_name" maxlength="60" required data-autofocus autocapitalize="words" spellcheck="false" />
+            <span class="err" id="id-first-err" hidden></span>
+          </label>
+          <label class="field">Nom
+            <input id="id-last" name="last_name" maxlength="60" required autocapitalize="characters" spellcheck="false" />
+            <span class="err" id="id-last-err" hidden></span>
+          </label>
+        </div>
+        <label class="field">Matricule <span class="opt">(facultatif)</span>
+          <input id="id-matricule" name="matricule" maxlength="30" autocapitalize="characters" spellcheck="false" />
+          <span class="err" id="id-matricule-err" hidden></span>
+        </label>
+        <div class="privacy"><span aria-hidden="true">🔒</span><span>Seuls ces champs sont demandés. Ils restent associés à cette séance de TP et ne figurent que dans votre rapport.</span></div>
+        <div class="upload-actions"><button id="btn-identity" type="submit" class="primary">Continuer →</button></div>
+      </form>
+    </section>
+
+    <section id="view-upload" class="view" hidden aria-labelledby="upload-title">
+      <button class="back" data-back="identity">← Retour</button>
+      <h2 id="upload-title">Importer le TP <span id="upload-domain" class="chip"></span></h2>
+      <div id="dropzone" role="button" tabindex="0" aria-label="Choisir un fichier PDF" data-autofocus>
+        <div>
+          <div class="big">📄</div>
+          <p><strong>Glissez le PDF du TP ici</strong></p>
+          <p class="muted">ou cliquez pour choisir un fichier · PDF, 20 Mo max</p>
+        </div>
+      </div>
+      <div id="file-card" hidden>
+        <div class="big">📄</div>
+        <div class="grow"><div id="file-name"></div><div id="file-size" class="muted"></div></div>
+        <button id="btn-change-file" class="secondary">Changer</button>
+      </div>
+      <!-- Visually hidden but NOT display:none: some VR browsers refuse to open the picker of a display:none input. -->
+      <input id="pdf-input" type="file" accept="application/pdf,.pdf" class="visually-hidden" tabindex="-1" />
+      <div id="inbox-block" hidden>
+        <div id="inbox-title" class="muted inbox-title">Ou choisissez un PDF déposé sur le PC (dossier backend/data/pdf-inbox) :</div>
+        <ul id="inbox-list"></ul>
+      </div>
+      <div id="upload-error" role="alert" hidden></div>
+      <div id="upload-hint" class="muted">Sélectionnez un PDF, puis cliquez « Importer ».</div>
+      <div class="upload-actions">
+        <button id="btn-upload" class="primary" disabled>🚀 Importer et préparer l'atelier</button>
+      </div>
+    </section>
+
+    <section id="view-loading" class="view" hidden aria-labelledby="loading-title" aria-live="polite">
+      <h2 id="loading-title">Préparation de l'atelier…</h2>
+      <div class="muted" id="loading-file"></div>
+      <div id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progress-fill"></div></div>
+      <div class="progress-meta"><span id="progress-pct">0 %</span><span id="loading-elapsed">0 s</span></div>
+      <ol id="steps-list"></ol>
+      <ul id="loading-warnings"></ul>
+      <div id="loading-error" role="alert" hidden></div>
+      <div class="upload-actions">
+        <button id="btn-cancel" class="secondary">Annuler</button>
+        <span id="loading-actions-error" hidden><button id="btn-retry" class="primary">Réessayer</button></span>
+      </div>
+    </section>
+
+    <section id="view-library" class="view" hidden aria-labelledby="library-title">
+      <button class="back" data-back="home">← Retour</button>
+      <h2 id="library-title">TPs déjà générés</h2>
+      <ul id="library-list"></ul>
+    </section>
+  </div>
+
+  <!-- ===== In-TP HUD (desktop; VR uses the 3D panels) ===== -->
+  <div id="hud" class="card">
+    <a href="./">← Menu</a> · <strong id="title">Atelier TP-to-xR</strong> — <span id="status">démarrage…</span><br />
+    Souris + ZQSD/WASD · clic-glisser un objet pour le déplacer · <b>N</b>/<b>P</b> étapes · <b>C</b> crédits · <b>L</b> étiquettes · <b>I</b> loupe · <b>M</b> son
+    <div id="warnings"></div>
+  </div>
+  <div id="timer" class="card">⏱ 00:00</div>
+  <div id="score" class="card">Étapes 0/0 · Précision —</div>
+  <div id="credits" class="card" hidden>
+    <button id="credits-close" aria-label="Fermer">✕</button>
+    <strong>Crédits des modèles 3D (licences Creative Commons)</strong>
+    <ul id="credits-list"></ul>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

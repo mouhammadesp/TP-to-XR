@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TP-to-xR — Workshop Viewer</title>
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; font-family: system-ui, sans-serif; }
+    #renderCanvas { width: 100%; height: 100%; display: block; touch-action: none; }
+    #hud {
+      position: absolute; top: 12px; left: 12px; max-width: min(420px, calc(100% - 48px)); max-height: calc(100% - 48px);
+      overflow: auto; padding: 8px 12px; background: rgba(0, 0, 0, 0.65); color: #fff;
+      border-radius: 6px; font-size: 13px; line-height: 1.5;
+    }
+    #hud a { color: #8cf; }
+    #hud ul { margin: 4px 0; padding-left: 18px; }
+    #hud .warn { color: #fc6; }
+  </style>
+  <script src="/vendor/babylonjs/babylon.js"></script>
+  <script src="/vendor/babylonjs-loaders/babylonjs.loaders.min.js"></script>
+</head>
+<body>
+  <canvas id="renderCanvas"></canvas>
+  <div id="hud">
+    <strong id="title">Workshop template</strong> — <span id="status">chargement…</span><br />
+    Souris + ZQSD/WASD · <b>V</b> zones · <b>L</b> étiquettes · <b>N</b>/<b>P</b> étape suivante/précédente
+    <div id="details"></div>
+  </div>
+  <script>
+    "use strict";
+    const PANEL_FONT = "system-ui, Arial, sans-serif";
+
+    /** Small DOM helper: element with text content (never innerHTML → no injection). */
+    function el(tag, text, attrs) {
+      const e = document.createElement(tag);
+      if (text !== undefined) e.textContent = text;
+      Object.assign(e, attrs || {});
+      return e;
+    }
+
+    /** Wraps text into lines that fit maxWidth on a 2D canvas context. */
+    function wrap(ctx, text, maxWidth) {
+      const lines = [];
+      for (const para of String(text).split("\n")) {
+        let line = "";
+        for (const word of para.split(/\s+/)) {
+          const test = line ? line + " " + word : word;
+          if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line = word; }
+          else line = test;
+        }
+        lines.push(line);
+      }
+      return lines;
+    }
+
+    /** Replaces a mesh's material with a DynamicTexture drawn by `draw(ctx, w, h)`. */
+    function paintMesh(scene, mesh, w, h, draw) {
+      const tex = new BABYLON.DynamicTexture(mesh.name + "_tex", { width: w, height: h }, scene, true);
+      const ctx = tex.getContext();
+      draw(ctx, w, h);
+      tex.update();
+      const mat = new BABYLON.StandardMaterial(mesh.name + "_textMat", scene);
+      mat.diffuseTexture = tex;
+      mat.emissiveTexture = tex;
+      mat.disableLighting = true;
+      mesh.material = mat;
+      return tex;
+    }
+
+    /** Draws a yellow safety sign with wrapped text. */
+    function drawSign(ctx, w, h, text) {
+      ctx.fillStyle = "#FFD400"; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = "#111"; ctx.lineWidth = 24; ctx.strokeRect(12, 12, w - 24, h - 24);
+      ctx.fillStyle = "#111"; ctx.textAlign = "center";
+      ctx.font = "bold 150px " + PANEL_FONT; ctx.fillText("⚠", w / 2, 210);
+      ctx.font = "bold 58px " + PANEL_FONT;
+      wrap(ctx, text.toUpperCase(), w - 80).slice(0, 6).forEach((l, i) => ctx.fillText(l, w / 2, 340 + i * 68));
+    }
+
+    /** Draws the instruction whiteboard: title + steps, current step highlighted. */
+    function drawInstructions(ctx, w, h, tp, current) {
+      ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = "#123"; ctx.textAlign = "left";
+      ctx.font = "bold 44px " + PANEL_FONT;
+      ctx.fillText(wrap(ctx, tp.title, w - 80)[0], 40, 64);
+      ctx.font = "26px " + PANEL_FONT; ctx.fillStyle = "#567";
+      ctx.fillText(`${tp.domain} · ${tp.duration_minutes} min · étape ${current + 1}/${tp.steps.length}`, 40, 104);
+      let y = 150;
+      tp.steps.forEach((s, i) => {
+        if (y > h - 40) return;
+        const active = i === current;
+        ctx.font = (active ? "bold 30px " : "26px ") + PANEL_FONT;
+        const lines = wrap(ctx, `${s.order}. ${s.action}`, w - 110);
+        const blockH = lines.length * 36 + (active && s.safety ? 36 : 0) + 10;
+        if (active) { ctx.fillStyle = "#E8F1FF"; ctx.fillRect(24, y - 30, w - 48, blockH); }
+        ctx.fillStyle = active ? "#0B3D91" : (i < current ? "#99A" : "#222");
+        lines.forEach((l, j) => ctx.fillText(l, 44, y + j * 36));
+        y += lines.length * 36;
+        if (active && s.safety) {
+          ctx.fillStyle = "#B00020"; ctx.font = "bold 26px " + PANEL_FONT;
+          ctx.fillText("⚠ " + wrap(ctx, s.safety, w - 140)[0], 44, y); y += 36;
+        }
+        y += 14;
+      });
+    }
+
+    /** Draws the CC credits board. */
+    function drawCredits(ctx, w, h, credits) {
+      ctx.fillStyle = "#F4F4F4"; ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = "#222"; ctx.textAlign = "left";
+      ctx.font = "bold 36px " + PANEL_FONT; ctx.fillText("Crédits des modèles 3D", 32, 56);
+      ctx.font = "22px " + PANEL_FONT;
+      let y = 100;
+      credits.forEach((c) => {
+        wrap(ctx, `• "${c.title}" — ${c.author} — ${c.license} — ${c.source_url}`, w - 64).forEach((l) => {
+          if (y < h - 16) ctx.fillText(l, 32, y); y += 30;
+        });
+      });
+    }
+
+    /** Floating name label above an asset (billboard). */
+    function makeLabel(scene, name, parent, height) {
+      const plane = BABYLON.MeshBuilder.CreatePlane(parent.name + "_label", { width: 0.5, height: 0.1 }, scene);
+      plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+      plane.position = new BABYLON.Vector3(parent.position.x, parent.position.y + height + 0.12, parent.position.z);
+      plane.isPickable = false;
+      paintMesh(scene, plane, 512, 102, (ctx, w, h) => {
+        ctx.fillStyle = "rgba(0,0,0,0.75)"; ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = "#FFF"; ctx.font = "bold 40px " + PANEL_FONT; ctx.textAlign = "center";
+        ctx.fillText(wrap(ctx, name, w - 20)[0], w / 2, 66);
+      });
+      plane.material.alpha = 0.95;
+      return plane;
+    }
+
+    /**
+     * Loads one asset (GLB/glTF or placeholder), normalizes it so its largest
+     * dimension equals target_size_m, sets its base on `position`, applies rotation.
+     */
+    async function placeAsset(scene, a, fallbackColor) {
+      const root = new BABYLON.TransformNode("asset_" + a.asset_id, scene);
+      const pivot = new BABYLON.TransformNode("pivot_" + a.asset_id, scene);
+      pivot.parent = root;
+      let loaded = false;
+
+      if (a.url) {
+        try {
+          const cut = a.url.lastIndexOf("/") + 1;
+          const res = await BABYLON.SceneLoader.ImportMeshAsync("", a.url.slice(0, cut), a.url.slice(cut), scene);
+          res.meshes.filter((m) => !m.parent).forEach((m) => (m.parent = pivot));
+          res.transformNodes.filter((t) => !t.parent).forEach((t) => (t.parent = pivot));
+          res.animationGroups.forEach((g) => g.stop());
+          loaded = res.meshes.some((m) => m.getTotalVertices() > 0);
+        } catch (err) {
+          console.warn("⚠️ Model failed, using placeholder:", a.name, err);
+        }
+      }
+      if (!loaded) {
+        const box = BABYLON.MeshBuilder.CreateBox("placeholder_" + a.asset_id, { size: 1 }, scene);
+        const mat = new BABYLON.StandardMaterial("placeholderMat_" + a.asset_id, scene);
+        mat.diffuseColor = BABYLON.Color3.FromHexString(a.color_override || fallbackColor || "#4A90D9");
+        mat.alpha = 0.85;
+        box.material = mat;
+        box.parent = pivot;
+      }
+
+      // Normalize: bounds measured with root at the origin, then scale + recenter the pivot.
+      const { min, max } = pivot.getHierarchyBoundingVectors(true);
+      const ext = max.subtract(min);
+      const largest = Math.max(ext.x, ext.y, ext.z) || 1;
+      const s = a.target_size_m / largest;
+      pivot.scaling = new BABYLON.Vector3(s, s, s);
+      pivot.position = new BABYLON.Vector3(-(min.x + max.x) / 2 * s, -min.y * s, -(min.z + max.z) / 2 * s);
+
+      root.position = new BABYLON.Vector3(a.position.x, a.position.y, a.position.z);
+      root.rotation.y = a.rotation_y || 0;
+      return { root, height: ext.y * s, loaded };
+    }
+
+    /** Applies the domain color scheme to the template lights. */
+    function applyColorScheme(scene, scheme) {
+      if (!scheme) return;
+      const key = scene.getLightByName("keyLight");
+      const amb = scene.getLightByName("ambientLight");
+      if (key && scheme.key_light) key.diffuse = BABYLON.Color3.FromHexString(scheme.key_light);
+      if (amb && scheme.ambient) amb.groundColor = BABYLON.Color3.FromHexString(scheme.ambient);
+    }
+
+    /** Fills the HUD with TP info, credits, warnings (DOM-safe). */
+    function renderHud(manifest, results) {
+      const d = document.getElementById("details");
+      d.replaceChildren();
+      const ok = results.filter((r) => r.loaded).length;
+      d.append(el("div", `${manifest.assets.length} objets (${ok} modèles 3D, ${manifest.assets.length - ok} boîtes provisoires)`));
+      const ul = el("ul");
+      manifest.assets.forEach((a) => {
+        const li = el("li", `${a.name} → ${a.zone}${a.slot !== null ? " #" + a.slot : ""} · ${a.target_size_m} m `);
+        if (a.attribution) {
+          li.append(el("a", "(" + a.attribution.author + ", " + a.attribution.license + ")",
+            { href: a.attribution.source_url, target: "_blank", rel: "noopener" }));
+        }
+        ul.append(li);
+      });
+      d.append(ul);
+      [...manifest.unplaced.map((u) => `Non placé : ${u.name} (${u.reason})`), ...manifest.warnings]
+        .forEach((w) => d.append(el("div", "⚠ " + w, { className: "warn" })));
+    }
+
+    /** Lists saved TPs when no ?tp= is given. */
+    async function renderTpList() {
+      const d = document.getElementById("details");
+      try {
+        const { tps } = await (await fetch("/api/tp")).json();
+        if (!tps.length) { d.append(el("div", "Aucun TP généré pour l'instant (POST /api/pipeline).")); return; }
+        d.append(el("div", "TPs disponibles :"));
+        const ul = el("ul");
+        tps.forEach((t) => {
+          const li = el("li"); li.append(el("a", `${t.title} (${t.domain}, ${t.assets} objets)`, { href: "?tp=" + encodeURIComponent(t.id) }));
+          ul.append(li);
+        });
+        d.append(ul);
+      } catch (e) { console.warn(e); }
+    }
+
+    (async function main() {
+      const status = document.getElementById("status");
+      const canvas = document.getElementById("renderCanvas");
+      const engine = new BABYLON.Engine(canvas, true);
+      // Parallel imports race on Babylon's loading overlay and leave it stuck; the HUD shows progress instead.
+      BABYLON.SceneLoader.ShowLoadingScreen = false;
+      const tpId = new URLSearchParams(location.search).get("tp");
+
+      try {
+        const scene = await BABYLON.SceneLoader.LoadAsync("/api/workshop/", "scene.babylon", engine);
+        // Render immediately: assets pop in as they load, and a slow XR check never blocks the display.
+        engine.runRenderLoop(() => scene.render());
+        window.addEventListener("resize", () => engine.resize());
+
+        const camera = scene.getCameraByName("spawnCamera") || scene.activeCamera;
+        camera.keysUp.push(87, 90); camera.keysDown.push(83); camera.keysLeft.push(65, 81); camera.keysRight.push(68);
+        camera.attachControl(canvas, true);
+
+        const zoneMat = new BABYLON.StandardMaterial("zoneDebugMat", scene);
+        zoneMat.emissiveColor = new BABYLON.Color3(0, 0.8, 1);
+        zoneMat.alpha = 0.35;
+        const zones = scene.meshes.filter((m) => m.metadata && m.metadata.role === "placement_zone");
+        zones.forEach((m) => (m.material = zoneMat));
+
+        const labels = [];
+        let summary = `${zones.length} zones`;
+
+        if (tpId) {
+          const res = await fetch("/api/tp/" + encodeURIComponent(tpId));
+          if (!res.ok) throw new Error((await res.json()).error || "TP introuvable");
+          const manifest = await res.json();
+          document.getElementById("title").textContent = manifest.tp.title;
+          document.title = "TP-to-xR — " + manifest.tp.title;
+          applyColorScheme(scene, manifest.color_scheme);
+          status.textContent = `chargement de ${manifest.assets.length} objets…`;
+
+          const results = await Promise.all(manifest.assets.map(async (a) => {
+            const r = await placeAsset(scene, a, manifest.color_scheme && manifest.color_scheme.material_base);
+            labels.push(makeLabel(scene, a.name, r.root, r.height));
+            return r;
+          }));
+
+          // Safety signs
+          manifest.safety_signs.forEach((s) => {
+            const mesh = scene.getMeshByName(s.sign);
+            if (mesh) paintMesh(scene, mesh, 512, 716, (ctx, w, h) => drawSign(ctx, w, h, s.text));
+          });
+
+          // Instruction panel with step navigation
+          const panel = scene.getMeshByName("instructionPanel");
+          let current = 0;
+          const panelTex = panel && paintMesh(scene, panel, 1024, 768, (ctx, w, h) => drawInstructions(ctx, w, h, manifest.tp, current));
+          const redraw = () => { const ctx = panelTex.getContext(); drawInstructions(ctx, 1024, 768, manifest.tp, current); panelTex.update(); };
+          window.addEventListener("keydown", (e) => {
+            if (!panelTex) return;
+            if (e.key === "n" || e.key === "N") { current = Math.min(current + 1, manifest.tp.steps.length - 1); redraw(); }
+            if (e.key === "p" || e.key === "P") { current = Math.max(current - 1, 0); redraw(); }
+          });
+
+          // Credits board (CC-BY requires attribution, visible in VR too)
+          const credits = manifest.assets.filter((a) => a.attribution).map((a) => a.attribution);
+          if (credits.length) {
+            const board = BABYLON.MeshBuilder.CreatePlane("creditsBoard", { width: 2, height: 1.2 }, scene);
+            board.position = new BABYLON.Vector3(5, 2.4, panel ? panel.position.z : -7.38);
+            board.rotation.y = Math.PI;
+            paintMesh(scene, board, 1024, 614, (ctx, w, h) => drawCredits(ctx, w, h, credits));
+          }
+
+          renderHud(manifest, results);
+          summary = `${results.filter((r) => r.loaded).length}/${manifest.assets.length} modèles 3D`;
+        } else {
+          await renderTpList();
+        }
+
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "v" || e.key === "V") zones.forEach((m) => (m.isVisible = !m.isVisible));
+          if (e.key === "l" || e.key === "L") labels.forEach((m) => m.setEnabled(!m.isEnabled()));
+        });
+
+        status.textContent = `${summary} · vérification WebXR…`;
+        console.log("✅ Viewer ready", { tp: tpId, meshes: scene.meshes.length });
+
+        const ground = scene.getMeshByName("ground");
+        const xrSupported = navigator.xr
+          ? await Promise.race([
+              navigator.xr.isSessionSupported("immersive-vr").catch(() => false),
+              new Promise((r) => setTimeout(() => r(false), 3000)),
+            ])
+          : false;
+        if (xrSupported) await scene.createDefaultXRExperienceAsync({ floorMeshes: ground ? [ground] : [] });
+        status.textContent = `${summary} · ${xrSupported ? "WebXR prêt" : "WebXR indisponible"}`;
+      } catch (err) {
+        status.textContent = "erreur : " + (err && err.message ? err.message : err);
+        console.error("❌ Viewer failed", err);
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -10,6 +10,7 @@ par défaut, définir la variable d'environnement `CHROME`.
 | Script | Ce qu'il vérifie | Commande |
 |---|---|---|
 | `e2e-demos.mjs` | Les **23 contrôles de référence** des deux démos (circuit, courroie) : non-régression | `node tools/e2e/e2e-demos.mjs http://localhost:3000 <dossier-captures>` |
+| `e2e-engine.mjs` | **Démo moteur automobile** (scan Audi TFSI) : découverte au survol, 5 questions par vrais survols / clics souris sur les zones, mauvaises réponses + indices progressifs, bilan, suivi (21 contrôles) | `node tools/e2e/e2e-engine.mjs http://localhost:3000 <dossier-captures>` |
 | `e2e-p1.mjs` | **Palier P1** : nouveau PDF → pipeline automatique (vraie IA + Sketchfab) → règles générées → manipulations dans la salle → validation par le moteur → rapport (25 contrôles) | `node tools/e2e/e2e-p1.mjs http://localhost:3000 docs/screenshots docs/tp-exemples/TP_aimant_boussole.pdf other` |
 
 `e2e-p1.mjs` exige `TOGETHER_API_KEY` dans `backend/.env`, et `SKETCHFAB_API_KEY` pour de vrais

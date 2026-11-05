@@ -102,6 +102,9 @@ function startSession(world: World, manifest: Manifest, assets: PlacedAsset[], p
     const mins = Math.floor(session.elapsedSec() / 60);
     const secs = String(session.elapsedSec() % 60).padStart(2, "0");
     const unchecked = d.filter((x) => x.status === "done").length;
+    // Demos with their own result (e.g. identification quiz: parts found, attempts).
+    const own = sim?.behavior.summary?.();
+    if (own) return [...own, `⏱ Durée : ${mins} min ${secs} s`];
     return [
       session.interactive
         ? `✓ ${d.filter((x) => x.status === "validated").length}/${d.length} étapes validées par vos actions`
@@ -249,19 +252,23 @@ function startSession(world: World, manifest: Manifest, assets: PlacedAsset[], p
       onChecklistChanged: refresh,
       // Safety faults / damage detected by the engine → "Action incorrecte" card.
       toast: (text, kind) => (kind === "danger" ? feedback.error("Action incorrecte", text.replace(/^[⚠✖]\s*/u, "")) : toast.show(text, kind)),
+      notify: (kind, title, text) => feedback[kind](title, text),
       refreshShadows: () => textures.refreshShadows(),
       // Called by the engine only once every condition of the step holds.
       onStepValidated: (index, isLast) => {
         const labels = sim?.checklist().filter((c) => c.done).map((c) => c.label) ?? [];
+        // Behavior's own message (e.g. "Bonne réponse !" + what the part does), else the checklist.
+        const own = sim?.behavior.validationMessage?.(index) ?? null;
         refresh();
         if (isLast) {
           const title = manifest.simulation!.kind === "generic" ? "Dernière étape validée !" : "TP réussi !";
-          feedback.success(title, `${confirmationSentence(labels)} ${manifest.simulation!.completion}`, "finish");
+          feedback.success(own?.title ?? title, `${own?.text ?? confirmationSentence(labels)} ${manifest.simulation!.completion}`, "finish");
           if (session.finish()) void finishUpload();
           refresh();
           return;
         }
-        feedback.success("Étape validée !", confirmationSentence(labels, { index, total: session.stepsTotal }));
+        if (own) feedback.success(own.title, own.text);
+        else feedback.success("Étape validée !", confirmationSentence(labels, { index, total: session.stepsTotal }));
         // Short pause to read the feedback, then move on (unless the student already did).
         setTimeout(() => {
           if (session.step === index && !session.finished) changeStep(() => session.next("auto"));
@@ -274,10 +281,12 @@ function startSession(world: World, manifest: Manifest, assets: PlacedAsset[], p
       sim?.tick(Math.min(0.1, (now - last) / 1000));
       last = now;
     });
+    const pose = sim.behavior.feedbackPose;
+    if (pose) feedback.placeAt(pose.position, pose.viewer);
     toast.show(
       manifest.simulation.kind === "generic"
         ? `TP généré : ${session.verifiable?.filter(Boolean).length ?? 0}/${session.stepsTotal} étapes se valident par vos actions (repères verts).`
-        : "TP interactif : suivez les repères verts, les étapes se valident par vos actions.",
+        : sim.behavior.intro ?? "TP interactif : suivez les repères verts, les étapes se valident par vos actions.",
       "info"
     );
   }

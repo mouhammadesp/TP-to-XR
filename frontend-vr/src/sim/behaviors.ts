@@ -5,6 +5,7 @@
  * CircuitBehavior   — battery, switch, resistors, LEDs, multimeter (Ohm's law, LED burn-out).
  * BeltDriveBehavior — lockout/tagout isolator, pulleys, V-belt mounting, tension,
  *                     bolt torque, test run with the speed ratio of the pulleys.
+ * EngineQuizBehavior — engine-bay scan: find components with the laser (engineQuiz.ts).
  *
  * Asset ids are those of backend/src/services/demoTps.ts.
  */
@@ -13,6 +14,7 @@ import { drawLcd } from "../models/builtin";
 import { PlacedAsset } from "../scenes/TPScene";
 import { SimTarget } from "./conditions";
 import { computeCircuit, fr } from "./circuit";
+import { EngineQuizBehavior } from "./engineQuiz";
 import type { Simulation } from "./Simulation";
 
 export interface Behavior {
@@ -22,6 +24,16 @@ export interface Behavior {
   onRelease?(a: PlacedAsset, snappedOn: SimTarget | null): void;
   onGrabStart?(a: PlacedAsset): void;
   onClick?(a: PlacedAsset): void;
+  /** Step changed (after the simulation's own reset). */
+  onStepChanged?(): void;
+  /** Message of the "step validated" card, instead of the generic checklist sentence. */
+  validationMessage?(index: number): { title: string; text: string } | null;
+  /** Lines of the final summary (board), instead of the generic step counts. */
+  summary?(): string[];
+  /** Opening toast, instead of the generic "follow the green markers". */
+  readonly intro?: string;
+  /** Where the notification card goes when the activity is far from the monitor. */
+  readonly feedbackPose?: { position: Vector3; viewer: { x: number; z: number } };
 }
 
 /**
@@ -34,12 +46,14 @@ export class GenericBehavior implements Behavior {
 }
 
 /** Behavior module for a simulation kind (demos: authored modules; generated TPs: generic). */
-export function createBehavior(kind: "circuit" | "belt_drive" | "generic", sim: Simulation): Behavior {
+export function createBehavior(kind: "circuit" | "belt_drive" | "engine_quiz" | "generic", sim: Simulation): Behavior {
   switch (kind) {
     case "circuit":
       return new CircuitBehavior(sim);
     case "belt_drive":
       return new BeltDriveBehavior(sim);
+    case "engine_quiz":
+      return new EngineQuizBehavior(sim);
     case "generic":
       return new GenericBehavior();
   }

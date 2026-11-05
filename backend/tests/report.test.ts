@@ -96,3 +96,13 @@ test("AI facts carry no personal data; AI answers quoting invented numbers are r
   assert.match(checkAiFeedback(invented, facts, true) ?? "", /12.6, 35|12,6|nombres absents/);
   assert.match(checkAiFeedback(good, facts, false) ?? "", /validation automatique/);
 });
+
+test("identification quiz (engine demo): wrong answers are reported as answers, not manipulations", () => {
+  const quiz: ReportManifest = { ...manifest, id: "tp_demo_engine", simulation: { kind: "engine_quiz" } };
+  const r = buildReport(session(), quiz);
+  assert.ok(r.difficulties.some((d) => /Étape 2 — 1 réponse incorrecte avant de trouver le composant/.test(d)), r.difficulties.join(" | "));
+  assert.ok(!r.difficulties.some((d) => /manipulation/.test(d)));
+  assert.ok(r.recommendations.some((x) => /indices/.test(x)));
+  // Other TPs keep their wording.
+  assert.ok(buildReport(session(), manifest).difficulties.some((d) => /manipulation d'objets non cités/.test(d)));
+});

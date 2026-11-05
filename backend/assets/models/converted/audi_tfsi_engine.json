@@ -1,0 +1,19 @@
+{
+  "slug": "audi_tfsi_engine",
+  "url": "/assets/models/converted/audi_tfsi_engine.glb",
+  "bytes": 9990504,
+  "triangles": 150414,
+  "dimensions_m": {
+    "x": 1.798,
+    "y": 0.483,
+    "z": 1.061
+  },
+  "attribution": {
+    "title": "TFSI engine",
+    "author": "SPLEEN VISION",
+    "license": "CC Attribution",
+    "source_url": "https://sketchfab.com/models/1ee66fed927c4aa68afaea4fd5dfc782"
+  },
+  "source_file": "tfsi.obj (tfsi-engine.zip, Sketchfab) — tools/engine/build_engine_glb.py",
+  "converted_at": "2026-11-05T08:08:57.991508Z"
+}

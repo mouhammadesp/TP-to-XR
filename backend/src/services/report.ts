@@ -28,6 +28,8 @@ export interface ReportManifest {
   tp: { title: string; domain: string; steps: { order: number; action: string; safety: string | null }[] };
   /** Optional grading scale. No scale → no score (the report says so). */
   grading?: { per_validated_step: number; per_safety_fault: number; max: number };
+  /** Interactive TPs: kind of simulation (an identification quiz counts answers, not manipulations). */
+  simulation?: { kind: string };
   /** Generated TPs: what the engine checks in each step (services/interactions.ts). */
   interactions?: { steps: { step: number; coverage: "full" | "partial" | "none"; verified: string[]; unverified: string[] }[] };
 }
@@ -123,6 +125,8 @@ export function buildReport(s: SessionRecord, m: ReportManifest): Report {
   const strengths: string[] = [];
   const difficulties: string[] = [];
   const recommendations: string[] = [];
+  /** Identification quiz: a wrong "object" is a wrong answer (component selected with the laser). */
+  const quiz = m.simulation?.kind === "engine_quiz";
 
   if (s.interactive) {
     const ok = steps.filter((x) => x.status === "validated").map((x) => x.n);
@@ -150,7 +154,9 @@ export function buildReport(s: SessionRecord, m: ReportManifest): Report {
     for (const d of x.damages) difficulties.push(`Étape ${x.n} — dommage : ${d}.`);
     if (x.status === "skipped") difficulties.push(`Étape ${x.n} quittée avant d'être validée (« ${short(x.action)} »).`);
     if (x.status === "incomplete") difficulties.push(`Étape ${x.n} non terminée (« ${short(x.action)} »).`);
-    if (x.wrong_objects > 0)
+    if (x.wrong_objects > 0 && quiz)
+      difficulties.push(`Étape ${x.n} — ${x.wrong_objects} réponse${x.wrong_objects > 1 ? "s" : ""} incorrecte${x.wrong_objects > 1 ? "s" : ""} avant de trouver le composant.`);
+    else if (x.wrong_objects > 0)
       difficulties.push(`Étape ${x.n} — ${x.wrong_objects} manipulation${x.wrong_objects > 1 ? "s" : ""} d'objets non cités par la consigne.`);
   }
   const notReached = steps.filter((x) => x.status === "not_reached").map((x) => x.n);
@@ -168,7 +174,12 @@ export function buildReport(s: SessionRecord, m: ReportManifest): Report {
     }
     if (x.damages.length) recommendations.push(`À l'étape ${x.n}, comparez votre montage à la consigne avant la mise en service.`);
     if (x.status === "skipped" || x.status === "incomplete") recommendations.push(`Reprenez l'étape ${x.n} : ${short(x.action, 120)}`);
-    if (x.wrong_objects > 0) recommendations.push(`À l'étape ${x.n}, repérez d'abord les objets cités par la consigne avant de manipuler.`);
+    if (x.wrong_objects > 0)
+      recommendations.push(
+        quiz
+          ? `À l'étape ${x.n}, observez la forme, la couleur et les symboles du composant (indices) avant de le sélectionner.`
+          : `À l'étape ${x.n}, repérez d'abord les objets cités par la consigne avant de manipuler.`
+      );
   }
   if (notReached.length) recommendations.push("Refaites le TP jusqu'à la dernière étape pour en voir l'ensemble de la démarche.");
   if (!recommendations.length) recommendations.push("Continuez ainsi : refaire le TP en autonomie vous aidera à consolider la démarche.");

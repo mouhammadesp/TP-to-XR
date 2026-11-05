@@ -22,6 +22,8 @@ export interface SimHost {
   /** All conditions of step `index` hold. */
   onStepValidated(index: number, isLast: boolean): void;
   toast(text: string, kind: ToastKind): void;
+  /** Notification card (title + text), with its sound / vibration for "success". */
+  notify?(kind: "success" | "error" | "info", title: string, text: string): void;
   refreshShadows(): void;
 }
 
@@ -42,7 +44,8 @@ export class Simulation implements WorldView {
   private readonly byId = new Map<string, PlacedAsset>();
   private readonly targets = new Map<string, SimTarget>();
   private readonly markers: Marker[] = [];
-  private readonly behavior: Behavior;
+  /** Behavior module of the TP (its optional hooks are read by the session: messages, summary). */
+  public readonly behavior: Behavior;
   /** Anchored targets (generated TPs): anchor object and its height above its base point. */
   private readonly anchors: { target: SimTarget; asset: PlacedAsset; height: number; mode: "top" | "base" }[] = [];
   /** Where the objects of the current step's "near" conditions were when the step started. */
@@ -160,6 +163,7 @@ export class Simulation implements WorldView {
     this.near.clear();
     this.recordNearStarts();
     this.lastChecklistKey = "";
+    this.behavior.onStepChanged?.();
     this.updateMarkers();
     this.evaluateNow();
   }
@@ -179,6 +183,12 @@ export class Simulation implements WorldView {
 
   public toast(text: string, kind: ToastKind): void {
     this.host.toast(text, kind);
+  }
+
+  /** Notification card; falls back to a toast when the host has no card. */
+  public notify(kind: "success" | "error" | "info", title: string, text: string): void {
+    if (this.host.notify) this.host.notify(kind, title, text);
+    else this.toast(`${title} ${text}`, kind === "success" ? "ok" : kind === "error" ? "danger" : "info");
   }
 
   public record(kind: SimEventKind, detail: string): void {

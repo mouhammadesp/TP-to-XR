@@ -96114,7 +96114,7 @@ var VertexData = class _VertexData {
    * @returns the VertexData of the Polygon
    * @deprecated use CreatePolygonVertexData instead
    */
-  static CreatePolygon(polygon, sideOrientation, fUV, fColors, frontUVs, backUVs, wrap) {
+  static CreatePolygon(polygon, sideOrientation, fUV, fColors, frontUVs, backUVs, wrap2) {
     throw _WarnImport("polygonBuilder");
   }
   /**
@@ -135411,7 +135411,7 @@ function CreateBoxVertexData(options) {
   const width = options.width || options.size || 1;
   const height = options.height || options.size || 1;
   const depth = options.depth || options.size || 1;
-  const wrap = options.wrap || false;
+  const wrap2 = options.wrap || false;
   let topBaseAt = options.topBaseAt === void 0 ? 1 : options.topBaseAt;
   let bottomBaseAt = options.bottomBaseAt === void 0 ? 0 : options.bottomBaseAt;
   topBaseAt = (topBaseAt + 4) % 4;
@@ -135494,7 +135494,7 @@ function CreateBoxVertexData(options) {
     -1,
     1
   ];
-  if (wrap) {
+  if (wrap2) {
     indices = [2, 3, 0, 2, 0, 1, 4, 5, 6, 4, 6, 7, 9, 10, 11, 9, 11, 8, 12, 14, 15, 12, 13, 14];
     basePositions = [
       -1,
@@ -138545,7 +138545,7 @@ function CreatePolygonVertexData(polygon, sideOrientation, fUV, fColors, frontUV
   const faceUV = fUV || new Array(3);
   const faceColors = fColors;
   const colors = [];
-  const wrap = wrp || false;
+  const wrap2 = wrp || false;
   for (let f = 0; f < 3; f++) {
     if (faceUV[f] === void 0) {
       faceUV[f] = new Vector4(0, 0, 1, 1);
@@ -138565,7 +138565,7 @@ function CreatePolygonVertexData(polygon, sideOrientation, fUV, fColors, frontUV
   let dist = 0;
   let totalLen = 0;
   const cumulate = [0];
-  if (wrap) {
+  if (wrap2) {
     for (let idx2 = startIndex; idx2 < positions.length / 3; idx2 += 4) {
       distX = positions[3 * (idx2 + 2)] - positions[3 * idx2];
       distZ = positions[3 * (idx2 + 2) + 2] - positions[3 * idx2 + 2];
@@ -138590,13 +138590,13 @@ function CreatePolygonVertexData(polygon, sideOrientation, fUV, fColors, frontUV
     if (face === 1) {
       disp = idx - startIndex;
       if (disp % 4 < 1.5) {
-        if (wrap) {
+        if (wrap2) {
           uvs[2 * idx] = faceUV[face].x + (faceUV[face].z - faceUV[face].x) * cumulate[Math.floor(disp / 4)] / totalLen;
         } else {
           uvs[2 * idx] = faceUV[face].x;
         }
       } else {
-        if (wrap) {
+        if (wrap2) {
           uvs[2 * idx] = faceUV[face].x + (faceUV[face].z - faceUV[face].x) * cumulate[Math.floor(disp / 4) + 1] / totalLen;
         } else {
           uvs[2 * idx] = faceUV[face].z;
@@ -209764,10 +209764,10 @@ var MultiRenderTarget = class extends RenderTargetTexture {
    * Set the wrapping mode on U of all the textures we are rendering to.
    * Can be any of the Texture. (CLAMP_ADDRESSMODE, MIRROR_ADDRESSMODE or WRAP_ADDRESSMODE)
    */
-  set wrapU(wrap) {
+  set wrapU(wrap2) {
     if (this._textures) {
       for (let i = 0; i < this._textures.length; i++) {
-        this._textures[i].wrapU = wrap;
+        this._textures[i].wrapU = wrap2;
       }
     }
   }
@@ -209775,10 +209775,10 @@ var MultiRenderTarget = class extends RenderTargetTexture {
    * Set the wrapping mode on V of all the textures we are rendering to.
    * Can be any of the Texture. (CLAMP_ADDRESSMODE, MIRROR_ADDRESSMODE or WRAP_ADDRESSMODE)
    */
-  set wrapV(wrap) {
+  set wrapV(wrap2) {
     if (this._textures) {
       for (let i = 0; i < this._textures.length; i++) {
-        this._textures[i].wrapV = wrap;
+        this._textures[i].wrapV = wrap2;
       }
     }
   }
@@ -276278,6 +276278,23 @@ function anchoredPosition(base, height, mode) {
 
 // src/ui/textCanvas.ts
 var FONT = "system-ui, 'Segoe UI', Arial, sans-serif";
+function wrap(ctx, text, maxWidth) {
+  const lines = [];
+  for (const para of String(text).split("\n")) {
+    let line = "";
+    for (const word of para.split(/\s+/)) {
+      const test2 = line ? `${line} ${word}` : word;
+      if (ctx.measureText(test2).width > maxWidth && line) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = test2;
+      }
+    }
+    lines.push(line);
+  }
+  return lines;
+}
 function paintMesh(scene, mesh, width, height, draw, pixelRatio = 2) {
   const texture = new DynamicTexture(
     `${mesh.name}_tex`,
@@ -276300,6 +276317,15 @@ function paintMesh(scene, mesh, width, height, draw, pixelRatio = 2) {
   };
   redraw();
   return { texture, redraw };
+}
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
 }
 
 // src/models/builtin.ts
@@ -276357,6 +276383,405 @@ function fr(n, digits) {
 var round1 = (n) => Math.round(n * 10) / 10;
 var round2 = (n) => Math.round(n * 100) / 100;
 
+// src/sim/engineQuiz.ts
+var COMPONENTS = [
+  {
+    id: "oil_cap",
+    name: "Bouchon de remplissage d'huile",
+    tag: "Bouchon d'huile",
+    system: "Lubrification du moteur",
+    role: "C'est par ici qu'on ajoute l'huile moteur. L'huile lubrifie les pi\xE8ces en mouvement pour limiter l'usure et l'\xE9chauffement.",
+    hints: [
+      "Il se trouve sur le dessus du moteur, tout pr\xE8s du cache noir qui porte les anneaux Audi.",
+      "C'est un bouchon noir et rond, marqu\xE9 du petit symbole d'une burette d'huile."
+    ]
+  },
+  {
+    id: "dipstick",
+    name: "Jauge \xE0 huile",
+    system: "Lubrification du moteur",
+    role: "Cette tige plonge dans le r\xE9servoir d'huile du moteur : on la retire pour lire le niveau entre les rep\xE8res mini et maxi, moteur arr\xEAt\xE9.",
+    hints: [
+      "Elle sort du moteur, du c\xF4t\xE9 de l'avant de la voiture (le c\xF4t\xE9 le plus proche de vous).",
+      "Cherchez une petite poign\xE9e orange en forme d'anneau, juste devant le cache moteur."
+    ]
+  },
+  {
+    id: "coolant_tank",
+    name: "Vase d'expansion du liquide de refroidissement",
+    tag: "Vase d'expansion",
+    system: "Refroidissement du moteur",
+    role: "Il contient la r\xE9serve de liquide de refroidissement, qui circule dans le moteur et le radiateur pour \xE9vacuer la chaleur. Ne jamais l'ouvrir moteur chaud : il est sous pression.",
+    hints: [
+      "C'est un r\xE9servoir en plastique translucide, sur le c\xF4t\xE9 du compartiment oppos\xE9 \xE0 la batterie.",
+      "Il est blanch\xE2tre, avec un gros bouchon bleu rond \u2014 ce n'est pas le petit bouchon bleu du lave-glace."
+    ]
+  },
+  {
+    id: "air_filter",
+    name: "Bo\xEEtier du filtre \xE0 air",
+    tag: "Filtre \xE0 air",
+    system: "Admission d'air du moteur",
+    role: "Il contient le filtre qui arr\xEAte poussi\xE8res et insectes : le moteur a besoin d'air propre pour br\xFBler le carburant.",
+    hints: [
+      "Il se trouve \xE0 l'avant du compartiment, du m\xEAme c\xF4t\xE9 que la batterie.",
+      "C'est un bo\xEEtier noir au couvercle nervur\xE9, reli\xE9 au moteur par un gros tuyau annel\xE9."
+    ]
+  },
+  {
+    id: "battery",
+    name: "Batterie",
+    system: "Circuit \xE9lectrique du v\xE9hicule (ne fait pas partie du moteur)",
+    role: "Elle fournit le courant qui fait tourner le d\xE9marreur pour lancer le moteur, et alimente l'\xE9lectronique quand le moteur est arr\xEAt\xE9.",
+    hints: [
+      "Elle est rang\xE9e sous un capot de protection noir, pr\xE8s du pare-brise.",
+      "Son couvercle noir porte un petit symbole rectangulaire avec un \xAB + \xBB et un \xAB \u2212 \xBB."
+    ]
+  },
+  {
+    id: "engine_cover",
+    name: "Cache moteur",
+    system: "Moteur",
+    role: "Capot en plastique qui prot\xE8ge le dessus du moteur et att\xE9nue le bruit. TFSI : moteur essence \xE0 turbocompresseur et injection directe.",
+    hints: ["", ""]
+  },
+  {
+    id: "intake_duct",
+    name: "Conduit d'admission d'air",
+    tag: "Conduit d'admission",
+    system: "Admission d'air du moteur",
+    role: "Ce tuyau annel\xE9 am\xE8ne l'air filtr\xE9 du bo\xEEtier de filtre vers le turbocompresseur, puis le moteur.",
+    hints: ["", ""]
+  },
+  {
+    id: "washer_cap",
+    name: "Bouchon du r\xE9servoir de lave-glace",
+    tag: "Bouchon de lave-glace",
+    system: "Nettoyage du pare-brise (ne fait pas partie du moteur)",
+    role: "On y verse le liquide qui nettoie le pare-brise. Son bouchon bleu porte le symbole d'un pare-brise.",
+    hints: ["", ""]
+  },
+  {
+    id: "brake_fluid",
+    name: "R\xE9servoir de liquide de frein",
+    tag: "Liquide de frein",
+    system: "Freinage (ne fait pas partie du moteur)",
+    role: "Il contient le liquide qui transmet l'effort de la p\xE9dale de frein jusqu'aux freins des roues.",
+    hints: ["", ""]
+  }
+];
+var QUIZ = ["oil_cap", "dipstick", "coolant_tank", "air_filter", "battery"];
+var EXPLORE_GOAL = 3;
+var EXPLORE_DWELL = 0.4;
+var PULSE_AFTER_ERRORS = 3;
+var ENGINE_ASSET = "x_moteur";
+var LABEL_RISE = 0.12;
+var PANEL = { y: 1.36, back: 0.66, width: 1.1, height: 0.42 };
+var COLORS = {
+  hover: new Color3(0.35, 0.8, 1),
+  found: new Color3(0.25, 0.95, 0.5),
+  hint: new Color3(1, 0.72, 0.15)
+};
+function hintFor(c, errors) {
+  if (errors <= 0) return "";
+  const hint = c.hints[Math.min(errors, 2) - 1];
+  return errors >= PULSE_AFTER_ERRORS ? `${hint} Le composant clignote en orange.` : hint;
+}
+function wrongAnswerText(picked, asked, errors) {
+  const not = picked.system.includes("ne fait pas partie") ? ` (${picked.system.replace(/^.*\(|\)$/g, "")})` : "";
+  return `Ceci est : ${picked.name}${not}. ${hintFor(asked, errors)}`.trim();
+}
+var EngineQuizBehavior = class {
+  constructor(sim) {
+    this.sim = sim;
+    this.stateTargets = {};
+    this.zones = /* @__PURE__ */ new Map();
+    this.byBox = /* @__PURE__ */ new Map();
+    /** Zone under each pointer (mouse, left / right controller). */
+    this.hoveredBy = /* @__PURE__ */ new Map();
+    this.explored = /* @__PURE__ */ new Set();
+    this.found = /* @__PURE__ */ new Set();
+    /** Per question: attempts and wrong answers. */
+    this.attempts = QUIZ.map(() => 0);
+    this.errors = QUIZ.map(() => 0);
+    this.dwell = null;
+    this.justFound = null;
+    this.time = 0;
+    this.panel = null;
+    this.panelKey = "";
+    const engine = sim.asset(ENGINE_ASSET);
+    this.scene = engine?.handle.getScene() ?? null;
+    if (!engine || !this.scene) {
+      console.warn("\u26A0\uFE0F engine_quiz: engine asset missing");
+      return;
+    }
+    this.buildZones(engine);
+    const at = engine.handle.position;
+    this.feedbackPose = { position: new Vector3(at.x - (PANEL.width / 2 + 0.45), PANEL.y, at.z - PANEL.back + 0.06), viewer: { x: at.x, z: at.z + 1.4 } };
+    this.buildPanel(engine);
+    this.scene.onPointerObservable.add((pi) => this.onPointer(pi));
+    console.log(`\u{1F527} engine_quiz: ${this.zones.size} zones`);
+  }
+  /* ---------------------------------------------------------------- hooks */
+  get intro() {
+    return "D\xE9monstration : pointez les composants du moteur avec le laser (ou la souris) pour les d\xE9couvrir.";
+  }
+  update(dt) {
+    this.time += dt;
+    if (this.dwell && this.step === 0) {
+      this.dwell.t += dt;
+      if (this.dwell.t >= EXPLORE_DWELL) this.explore(this.dwell.zone);
+    }
+    this.paintZones();
+    this.redrawPanel();
+  }
+  onStepChanged() {
+    this.dwell = null;
+    for (const z of this.zones.values()) this.setLabel(z, this.found.has(z.component.id) ? "found" : "off");
+  }
+  validationMessage(index) {
+    if (index === 0) return { title: "D\xE9couverte termin\xE9e !", text: `Le quiz commence : ${QUIZ.length} composants \xE0 retrouver. Les noms ne s'affichent plus au survol.` };
+    const c = this.component(QUIZ[index - 1]);
+    return c ? { title: "Bonne r\xE9ponse !", text: `${c.name} \u2014 ${c.role}` } : null;
+  }
+  summary() {
+    const tries = this.attempts.reduce((a, b) => a + b, 0);
+    const errs = this.errors.reduce((a, b) => a + b, 0);
+    return [
+      `\u2713 ${this.foundAsked()}/${QUIZ.length} composants identifi\xE9s`,
+      `\u{1F3AF} ${tries} tentative${tries > 1 ? "s" : ""} (${errs} erreur${errs > 1 ? "s" : ""})`
+    ];
+  }
+  /* ---------------------------------------------------------------- input */
+  get step() {
+    return this.sim.step;
+  }
+  onPointer(pi) {
+    const ev = pi.event;
+    const id = ev.pointerId ?? 0;
+    const zone = pi.pickInfo?.hit && pi.pickInfo.pickedMesh ? this.byBox.get(pi.pickInfo.pickedMesh) ?? null : null;
+    const xr = String(ev.pointerType ?? "").startsWith("xr");
+    if (pi.type === PointerEventTypes.POINTERMOVE) this.setHover(id, zone);
+    const select = xr && pi.type === PointerEventTypes.POINTERDOWN || !xr && pi.type === PointerEventTypes.POINTERTAP;
+    if (select && zone) {
+      this.setHover(id, zone);
+      this.select(zone, xr ? { hand: "none", gesture: "grab" } : { hand: "none", gesture: "mouse" });
+    }
+  }
+  setHover(pointerId, zone) {
+    const before = this.hoveredBy.get(pointerId) ?? null;
+    if (before === zone) return;
+    if (zone) this.hoveredBy.set(pointerId, zone);
+    else this.hoveredBy.delete(pointerId);
+    this.dwell = zone ? { zone, t: 0 } : null;
+    const naming = this.step === 0 || this.sim.session.finished;
+    if (before && before.labelMode === "name" && ![...this.hoveredBy.values()].includes(before)) this.setLabel(before, "off");
+    if (zone && naming && zone.labelMode === "off") this.setLabel(zone, "name");
+  }
+  select(zone, src) {
+    const s = this.sim.session;
+    if (s.finished) return;
+    if (this.step === 0) {
+      this.explore(zone);
+      this.sim.notify("info", zone.component.name, `${zone.component.system}. ${zone.component.role}`);
+      return;
+    }
+    const q = this.step - 1;
+    const asked = this.component(QUIZ[q]);
+    if (!asked || this.sim.stepValidated) return;
+    const correct = zone.component.id === asked.id;
+    this.attempts[q]++;
+    s.recordAnswer({ ...src, target: zone.component.id, correct });
+    if (correct) {
+      this.found.add(asked.id);
+      this.justFound = { zone, t: this.time };
+      this.setLabel(zone, "found");
+      this.sim.setFlag(`found_${asked.id}`, true);
+    } else {
+      this.errors[q]++;
+      this.sim.notify("info", "Pas tout \xE0 fait\u2026", wrongAnswerText(zone.component, asked, this.errors[q]));
+    }
+    this.panelKey = "";
+  }
+  explore(zone) {
+    if (this.explored.has(zone.component.id)) return;
+    this.explored.add(zone.component.id);
+    this.panelKey = "";
+    if (this.explored.size >= EXPLORE_GOAL) this.sim.setFlag("explored", true);
+  }
+  /* ---------------------------------------------------------------- visuals */
+  /** Hover (cyan), answer just found (green pulse, 2.5 s), hint after 3 errors (orange pulse). */
+  paintZones() {
+    const hovered = new Set(this.hoveredBy.values());
+    const q = this.step - 1;
+    const pulseId = q >= 0 && q < QUIZ.length && this.errors[q] >= PULSE_AFTER_ERRORS && !this.sim.stepValidated ? QUIZ[q] : null;
+    const wave = 0.5 + 0.5 * Math.sin(this.time * 5);
+    for (const z of this.zones.values()) {
+      let color = null;
+      let alpha = 0;
+      if (this.justFound?.zone === z && this.time - this.justFound.t < 2.5) {
+        color = COLORS.found;
+        alpha = 0.12 + 0.16 * wave;
+      } else if (z.component.id === pulseId) {
+        color = COLORS.hint;
+        alpha = 0.06 + 0.2 * wave;
+      } else if (hovered.has(z)) {
+        color = COLORS.hover;
+        alpha = 0.2;
+      }
+      if (color) z.mat.emissiveColor.copyFrom(color);
+      z.box.visibility = alpha;
+    }
+  }
+  setLabel(z, mode) {
+    if (z.labelMode === mode) return;
+    z.labelMode = mode;
+    z.label.setEnabled(mode !== "off");
+    z.leader.setEnabled(mode !== "off");
+    if (mode !== "off") z.labelSurface.redraw();
+  }
+  /* ---------------------------------------------------------------- construction */
+  component(id) {
+    return COMPONENTS.find((c) => c.id === id);
+  }
+  foundAsked() {
+    return QUIZ.filter((id) => this.found.has(id)).length;
+  }
+  /** One invisible, pickable box per "zone__<id>" node of the GLB, plus its name tag. */
+  buildZones(engine) {
+    const nodes = engine.handle.getChildTransformNodes(false).filter((n) => n.name.startsWith("zone__"));
+    engine.handle.computeWorldMatrix(true);
+    for (const node of nodes) {
+      const c = this.component(node.name.slice("zone__".length));
+      if (!c) continue;
+      const box = MeshBuilder.CreateBox(`engine_zone_${c.id}`, { size: 1 }, this.scene);
+      box.parent = node;
+      const mat = new StandardMaterial(`engine_zone_mat_${c.id}`, this.scene);
+      mat.disableLighting = true;
+      mat.emissiveColor = COLORS.hover.clone();
+      mat.diffuseColor = Color3.Black();
+      mat.specularColor = Color3.Black();
+      box.material = mat;
+      box.visibility = 0;
+      box.isPickable = true;
+      box.enablePointerMoveEvents = true;
+      box.metadata = { role: "engine_zone", component: c.id };
+      box.computeWorldMatrix(true);
+      const bb = box.getBoundingInfo().boundingBox;
+      const top = new Vector3(bb.centerWorld.x, bb.maximumWorld.y - 0.01, bb.centerWorld.z);
+      const tagAt = top.add(new Vector3(0, LABEL_RISE, 0));
+      const leader = MeshBuilder.CreateLines(`engine_leader_${c.id}`, { points: [top, tagAt.subtract(new Vector3(0, 0.028, 0))] }, this.scene);
+      leader.color = new Color3(0.92, 0.95, 1);
+      leader.isPickable = false;
+      leader.setEnabled(false);
+      let ref = null;
+      const zone = { component: c, box, mat, leader, labelMode: "off", ...this.makeLabel(c, tagAt, () => ref?.labelMode ?? "off") };
+      ref = zone;
+      this.zones.set(c.id, zone);
+      this.byBox.set(box, zone);
+    }
+    const missing = COMPONENTS.filter((c) => !this.zones.has(c.id)).map((c) => c.id);
+    if (missing.length) console.warn(`\u26A0\uFE0F engine_quiz: zones missing in the model: ${missing.join(", ")}`);
+  }
+  /** Name tag above a component: dark while discovering, green once found. */
+  makeLabel(c, at, mode) {
+    const label = MeshBuilder.CreatePlane(`engine_label_${c.id}`, { width: 0.3, height: 0.055 }, this.scene);
+    label.billboardMode = Mesh.BILLBOARDMODE_ALL;
+    label.position = at;
+    label.isPickable = false;
+    const labelSurface = paintMesh(this.scene, label, 600, 110, (ctx, w, h) => {
+      const found = mode() === "found";
+      ctx.fillStyle = found ? "rgba(19,105,60,0.92)" : "rgba(15,20,30,0.85)";
+      roundRect(ctx, 2, 2, w - 4, h - 4, 22);
+      ctx.fill();
+      ctx.fillStyle = "#fff";
+      ctx.textAlign = "center";
+      let px = 44;
+      const text = `${found ? "\u2713 " : ""}${c.tag ?? c.name}`;
+      do
+        ctx.font = `bold ${px}px ${FONT}`;
+      while (ctx.measureText(text).width > w - 30 && --px > 24);
+      ctx.fillText(text, w / 2, h / 2 + px * 0.36);
+    });
+    labelSurface.texture.hasAlpha = true;
+    label.setEnabled(false);
+    return { label, labelSurface };
+  }
+  /** Question board behind the plinth, facing the visitor (readable in the headset). */
+  buildPanel(engine) {
+    const at = engine.handle.position;
+    const plane = MeshBuilder.CreatePlane("engine_quiz_panel", { width: PANEL.width, height: PANEL.height }, this.scene);
+    plane.position = new Vector3(at.x, PANEL.y, at.z - PANEL.back);
+    plane.rotation.y = Math.PI;
+    plane.isPickable = false;
+    this.panel = paintMesh(this.scene, plane, 1100, 420, (ctx, w, h) => this.drawPanel(ctx, w, h));
+    this.panel.texture.hasAlpha = true;
+  }
+  redrawPanel() {
+    const s = this.sim.session;
+    const q = this.step - 1;
+    const key = [this.step, s.finished, this.explored.size, this.foundAsked(), q >= 0 ? this.errors[q] : 0, this.sim.stepValidated].join("|");
+    if (key === this.panelKey) return;
+    this.panelKey = key;
+    this.panel?.redraw();
+  }
+  drawPanel(ctx, w, h) {
+    const s = this.sim.session;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(18,24,32,0.9)";
+    roundRect(ctx, 4, 4, w - 8, h - 8, 28);
+    ctx.fill();
+    ctx.fillStyle = "#7B4FB0";
+    ctx.fillRect(4, 26, 10, h - 52);
+    const pad = 44;
+    const head = (text, color = "#B9C4CF") => {
+      ctx.fillStyle = color;
+      ctx.font = `bold 30px ${FONT}`;
+      ctx.textAlign = "left";
+      ctx.fillText(text, pad, 62);
+    };
+    const body = (text, y2, px, color, max) => {
+      ctx.fillStyle = color;
+      ctx.font = `${px === 44 ? "bold " : ""}${px}px ${FONT}`;
+      const lines = wrap(ctx, text, w - 2 * pad).slice(0, max);
+      lines.forEach((l, i) => ctx.fillText(l, pad, y2 + i * px * 1.22));
+      return y2 + lines.length * px * 1.22;
+    };
+    if (s.finished) {
+      const mins = Math.floor(s.elapsedSec() / 60);
+      const secs = String(s.elapsedSec() % 60).padStart(2, "0");
+      const tries = this.attempts.reduce((a, b) => a + b, 0);
+      head("BILAN DE LA D\xC9MONSTRATION", "#7FE0A6");
+      let y2 = body(`Bravo ! ${this.foundAsked()}/${QUIZ.length} composants identifi\xE9s en ${tries} tentative${tries > 1 ? "s" : ""} \xB7 ${mins} min ${secs} s`, 122, 40, "#FFFFFF", 2);
+      y2 = body("Fonctions d\xE9couvertes :", y2 + 14, 32, "#B9C4CF", 1);
+      const systems = /* @__PURE__ */ new Map();
+      for (const id of QUIZ) {
+        const c = this.component(id);
+        if (!this.found.has(id)) continue;
+        const sys = c.system.replace(/ \(.*\)$/, "");
+        systems.set(sys, [...systems.get(sys) ?? [], (c.tag ?? c.name).toLowerCase()]);
+      }
+      for (const [sys, names] of systems) y2 = body(`\u2022 ${sys} : ${names.join(", ")}`, y2 + 4, 30, "#E3E8ED", 1);
+      return;
+    }
+    if (this.step === 0) {
+      head(`D\xC9COUVERTE LIBRE \xB7 ${Math.min(this.explored.size, EXPLORE_GOAL)}/${EXPLORE_GOAL} composants point\xE9s`);
+      const y2 = body("Observez le moteur, approchez-vous et pointez les composants avec le laser (ou la souris) : leur nom s'affiche.", 122, 40, "#FFFFFF", 3);
+      body("G\xE2chette / clic sur un composant : sa fonction.", y2 + 16, 30, "#9FB0C0", 1);
+      return;
+    }
+    const q = this.step - 1;
+    const asked = this.component(QUIZ[q]);
+    if (!asked) return;
+    head(`QUESTION ${q + 1}/${QUIZ.length} \xB7 ${this.foundAsked()} trouv\xE9${this.foundAsked() > 1 ? "s" : ""}`);
+    const question = this.sim.stepValidated ? `\u2713 ${asked.name}` : `O\xF9 se trouve : ${asked.name.toLowerCase().replace(/ \(.*\)$/, "")} ?`;
+    let y = body(question, 128, 44, this.sim.stepValidated ? "#7FE0A6" : "#FFFFFF", 2);
+    if (!this.sim.stepValidated) y = body("Pointez-le, puis g\xE2chette (ou clic).", y + 6, 30, "#9FB0C0", 1);
+    const hint = hintFor(asked, this.errors[q]);
+    if (hint && !this.sim.stepValidated) body(`\u{1F4A1} ${hint}`, y + 18, 32, "#FFD27A", 3);
+  }
+};
+
 // src/sim/behaviors.ts
 var GenericBehavior = class {
   constructor() {
@@ -276371,6 +276796,8 @@ function createBehavior(kind, sim) {
       return new CircuitBehavior(sim);
     case "belt_drive":
       return new BeltDriveBehavior(sim);
+    case "engine_quiz":
+      return new EngineQuizBehavior(sim);
     case "generic":
       return new GenericBehavior();
   }
@@ -276743,6 +277170,7 @@ var Simulation = class {
     this.near.clear();
     this.recordNearStarts();
     this.lastChecklistKey = "";
+    this.behavior.onStepChanged?.();
     this.updateMarkers();
     this.evaluateNow();
   }
@@ -276758,6 +277186,11 @@ var Simulation = class {
   }
   toast(text, kind) {
     this.host.toast(text, kind);
+  }
+  /** Notification card; falls back to a toast when the host has no card. */
+  notify(kind, title, text) {
+    if (this.host.notify) this.host.notify(kind, title, text);
+    else this.toast(`${title} ${text}`, kind === "success" ? "ok" : kind === "error" ? "danger" : "info");
   }
   record(kind, detail) {
     this.host.session.recordSim(kind, detail);
@@ -277057,6 +277490,31 @@ var TPSession = class {
       duration_ms: Math.round(e.durationMs),
       step: this.current + 1,
       correct
+    };
+    this.push(event);
+    return event;
+  }
+  /**
+   * Records an answer of an identification quiz (component selected with the laser / a click):
+   * one attempt of the step, scored like a grab (accuracy, wrong objects of the step).
+   */
+  recordAnswer(e) {
+    if (!this.finished) {
+      const p = this.perStep[this.current];
+      p.manipulations++;
+      this.scored++;
+      if (e.correct) this.correct++;
+      else p.wrong++;
+    }
+    const event = {
+      timestamp: this.now(),
+      event: "hand_interaction",
+      hand: e.hand,
+      gesture: e.gesture,
+      target_object: e.target,
+      duration_ms: 0,
+      step: this.current + 1,
+      correct: e.correct
     };
     this.push(event);
     return event;
@@ -281248,7 +281706,7 @@ var ConditionSchema = external_exports.discriminatedUnion("type", [
   external_exports.object({ type: external_exports.literal("state"), key: external_exports.string(), label: external_exports.string() })
 ]);
 var SimulationSchema = external_exports.object({
-  kind: external_exports.enum(["circuit", "belt_drive", "generic"]),
+  kind: external_exports.enum(["circuit", "belt_drive", "engine_quiz", "generic"]),
   targets: external_exports.array(TargetSchema),
   rules: external_exports.array(external_exports.array(ConditionSchema)),
   completion: external_exports.string()

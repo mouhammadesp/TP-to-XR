@@ -13,7 +13,7 @@
  * - breadboard: 0.18 × 0.009 × 0.11 m (top at y = 0.009).
  */
 import { Domain } from "../schemas/tp";
-import { SceneAsset, SimulationSpec, TEMPLATE_REF, TPSceneManifest } from "./tpStore";
+import { Attribution, SceneAsset, SimulationSpec, TEMPLATE_REF, TPSceneManifest } from "./tpStore";
 import { PANELS } from "../config/workshopLayout";
 
 const BENCH_Y = 0.9;
@@ -21,7 +21,10 @@ const BENCH_Y = 0.9;
 interface DemoObject {
   id: string;
   name: string;
+  /** Builtin model kind, or "converted" with `url` (GLB of the model cache). */
   model: string;
+  url?: string;
+  attribution?: Attribution;
   /** Initial base position (absolute, m). */
   at: { x: number; z: number; y?: number };
   rotation_y?: number;
@@ -35,6 +38,8 @@ interface DemoDefinition {
   id: string;
   title: string;
   domain: Domain;
+  /** Menu button text, when the domain alone is ambiguous (several demos of one domain). */
+  menu_label?: string;
   duration_minutes: number;
   steps: { order: number; action: string; safety: string | null }[];
   safety_warnings: string[];
@@ -169,19 +174,88 @@ const MECHANICAL: DemoDefinition = {
   },
 };
 
-const DEMOS: DemoDefinition[] = [MECHANICAL, ELECTRICAL];
+/* ------------------------------------------------------------------ */
+/* Mechanical: engine-bay component identification (laser quiz)         */
+/* ------------------------------------------------------------------ */
+/**
+ * Real photogrammetry scan of an Audi A3 (8P) engine bay with its TFSI engine
+ * (single mesh: the parts are NOT separate objects). The selection zones are
+ * invisible boxes embedded in the GLB (nodes "zone__<id>", built by
+ * tools/engine/build_engine_glb.py); the viewer's "engine_quiz" behavior turns
+ * them into laser targets. Each step validates when its flag is set:
+ *   explored        — at least 3 components pointed at during the discovery phase;
+ *   found_<zone id> — the right component selected with the trigger / a click.
+ */
+const ENGINE_AT = { x: 0, z: 2.3 };
+/** Top of the display plinth = base of the (cropped) scan; puts the parts at ≈ 1 m. */
+const PLINTH_TOP = 0.68;
+
+const ENGINE: DemoDefinition = {
+  id: "tp_demo_engine",
+  title: "À la découverte d'un moteur automobile — identifiez ses composants en réalité virtuelle",
+  domain: "mechanical",
+  menu_label: "Démo moteur automobile",
+  duration_minutes: 5,
+  steps: [
+    { order: 1, action: "Découverte libre : observez le compartiment moteur, approchez-vous, et pointez au moins 3 composants avec le laser (ou la souris) pour afficher leur nom.", safety: null },
+    { order: 2, action: "Où se trouve le bouchon de remplissage d'huile du moteur ? Pointez-le, puis appuyez sur la gâchette (ou cliquez).", safety: null },
+    { order: 3, action: "Où se trouve la jauge à huile, qui sert à vérifier le niveau d'huile ? Pointez-la, puis sélectionnez-la.", safety: null },
+    { order: 4, action: "Où se trouve le vase d'expansion du liquide de refroidissement ? Pointez-le, puis sélectionnez-le.", safety: null },
+    { order: 5, action: "Où se trouve le boîtier du filtre à air, par lequel le moteur aspire son air ? Pointez-le, puis sélectionnez-le.", safety: null },
+    { order: 6, action: "Où se trouve la batterie du véhicule ? Pointez-la, puis sélectionnez-la.", safety: null },
+  ],
+  safety_warnings: ["Démonstration d'observation : aucune intervention sur le moteur", "Dans un vrai véhicule : ne jamais ouvrir le vase d'expansion moteur chaud"],
+  signs: ["Moteur chaud : ne pas toucher", "Observation uniquement"],
+  key_light: "#FFFFFF",
+  objects: [
+    { id: "x_socle", name: "Socle d'exposition", model: "engine_plinth", at: { x: ENGINE_AT.x, z: ENGINE_AT.z, y: 0 }, size_m: 1.9, first_step: null, fixed: true },
+    {
+      id: "x_moteur",
+      name: "Compartiment moteur Audi A3 — TFSI (scan 3D)",
+      model: "converted",
+      url: "/assets/models/converted/audi_tfsi_engine.glb",
+      attribution: {
+        title: "TFSI engine",
+        author: "SPLEEN VISION",
+        author_url: "https://sketchfab.com/spleen.vision",
+        license: "CC Attribution 4.0",
+        license_url: "https://creativecommons.org/licenses/by/4.0/",
+        source_url: "https://sketchfab.com/models/1ee66fed927c4aa68afaea4fd5dfc782",
+      },
+      at: { x: ENGINE_AT.x, z: ENGINE_AT.z, y: PLINTH_TOP },
+      // Largest dimension of the scan (car width, m): the model keeps its real scale.
+      size_m: 1.798,
+      first_step: 1,
+      fixed: true,
+    },
+  ],
+  simulation: {
+    kind: "engine_quiz",
+    targets: [],
+    rules: [
+      [{ type: "state", key: "explored", label: "3 composants explorés au laser" }],
+      [{ type: "state", key: "found_oil_cap", label: "Bouchon de remplissage d'huile identifié" }],
+      [{ type: "state", key: "found_dipstick", label: "Jauge à huile identifiée" }],
+      [{ type: "state", key: "found_coolant_tank", label: "Vase d'expansion identifié" }],
+      [{ type: "state", key: "found_air_filter", label: "Boîtier du filtre à air identifié" }],
+      [{ type: "state", key: "found_battery", label: "Batterie identifiée" }],
+    ],
+    completion: "Vous avez identifié les 5 composants : lubrification, refroidissement, admission d'air et alimentation électrique n'ont plus de secret pour vous !",
+  },
+};
+
+const DEMOS: DemoDefinition[] = [MECHANICAL, ELECTRICAL, ENGINE];
 
 /** Builds the manifest of one demo. */
 function buildDemo(def: DemoDefinition): TPSceneManifest {
   const assets: SceneAsset[] = def.objects.map((o) => ({
     asset_id: o.id,
     name: o.name,
-    source: "builtin",
-    builtin_model: o.model,
+    ...(o.model === "converted" ? { source: "converted" as const } : { source: "builtin" as const, builtin_model: o.model }),
     ...(o.fixed ? { fixed: true } : {}),
     ...(o.clickable ? { clickable: true } : {}),
-    url: null,
-    attribution: null,
+    url: o.url ?? null,
+    attribution: o.attribution ?? null,
     zone: "zone_workbench",
     slot: null,
     position: { x: o.at.x, y: o.at.y ?? BENCH_Y, z: o.at.z },
@@ -229,11 +303,12 @@ export function getDemoByDomain(domain: string): TPSceneManifest | undefined {
 }
 
 /** Short list for the menu. */
-export function listDemos(): { id: string; title: string; domain: Domain; assets: number; steps: number }[] {
+export function listDemos(): { id: string; title: string; domain: Domain; label: string | null; assets: number; steps: number }[] {
   return [...demos().values()].map((m) => ({
     id: m.id,
     title: m.tp.title,
     domain: m.tp.domain,
+    label: DEMOS.find((d) => d.id === m.id)?.menu_label ?? null,
     assets: m.assets.length,
     steps: m.tp.steps.length,
   }));

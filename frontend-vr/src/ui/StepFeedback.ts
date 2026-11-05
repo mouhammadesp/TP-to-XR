@@ -61,6 +61,14 @@ export class StepFeedback {
     scene.onBeforeRenderObservable.add(() => this.animate());
   }
 
+  /**
+   * Moves the card (e.g. above a demo object far from the monitor), turned toward `viewer`.
+   */
+  public placeAt(position: Vector3, viewer: { x: number; z: number }): void {
+    this.mesh.position.copyFrom(position);
+    this.mesh.rotation.y = Math.PI + Math.atan2(viewer.x - position.x, viewer.z - position.z);
+  }
+
   /** Step confirmed by the validation engine. */
   public success(title: string, text: string, cue: Cue = "success"): void {
     this.show("success", title, text, cue);
@@ -144,9 +152,18 @@ export class StepFeedback {
     ctx.font = `bold 66px ${FONT}`;
     ctx.fillText(wrap(ctx, this.current.title, w - 250)[0], 200, 132);
     ctx.fillStyle = "#26323F";
-    ctx.font = `40px ${FONT}`;
-    wrap(ctx, this.current.text, w - 250)
-      .slice(0, 3)
-      .forEach((line, i) => ctx.fillText(line, 200, 200 + i * 50));
+    // Short texts: 3 lines at 40 px; longer ones shrink to 4 lines rather than being cut.
+    let lines: string[] = [];
+    let px = 40;
+    for (const [size, max] of [[40, 3], [34, 4], [30, 4]] as const) {
+      px = size;
+      ctx.font = `${px}px ${FONT}`;
+      lines = wrap(ctx, this.current.text, w - 250);
+      if (lines.length <= max) break;
+    }
+    const max = px === 40 ? 3 : 4;
+    if (lines.length > max) lines = [...lines.slice(0, max - 1), `${lines[max - 1].replace(/\s+\S*$/, "")} …`];
+    const lead = px === 40 ? 50 : px + 9;
+    lines.forEach((line, i) => ctx.fillText(line, 200, 200 + i * lead - (px === 40 ? 0 : 10)));
   }
 }

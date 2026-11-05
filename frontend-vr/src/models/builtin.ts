@@ -414,7 +414,45 @@ function isolator(k: Kit): void {
   padlock.setEnabled(false);
 }
 
+/* ================================================================== */
+/* Engine demo                                                          */
+/* ================================================================== */
+
+/** Top of the plinth (m) = base of the engine-bay scan (backend demoTps.ts: PLINTH_TOP). */
+const PLINTH = { width: 1.9, depth: 1.16, top: 0.68, rim: 0.2, wall: 0.03 };
+
+/**
+ * Display plinth of the engine-bay scan: anthracite pedestal with a brushed-aluminium
+ * rim that hides the cut underside of the scan, and an identification plate (front, +Z).
+ */
+function enginePlinth(k: Kit): void {
+  const { width: W, depth: D, top: T, rim: R, wall: t } = PLINTH;
+  const body = k.mat("body", "#2B2F33", 0.25, 0.55);
+  k.box(W - 0.06, 0.06, D - 0.06, [0, 0.03, 0], k.mat("kick", "#141618", 0, 0.8));
+  k.box(W, T - 0.06, D, [0, 0.06 + (T - 0.06) / 2, 0], body);
+  const rim = k.mat("rim", "#B9BEC3", 0.9, 0.35);
+  k.box(W, R, t, [0, T + R / 2, D / 2 - t / 2], rim);
+  k.box(W, R, t, [0, T + R / 2, -D / 2 + t / 2], rim);
+  k.box(t, R, D - 2 * t, [W / 2 - t / 2, T + R / 2, 0], rim);
+  k.box(t, R, D - 2 * t, [-W / 2 + t / 2, T + R / 2, 0], rim);
+  k.label("plate", 0.62, 0.13, [0, T - 0.12, D / 2 + 0.002], [1240, 260], (ctx, w, h) => {
+    ctx.fillStyle = "#1C1F22";
+    ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = "#B9BEC3";
+    ctx.lineWidth = 6;
+    ctx.strokeRect(8, 8, w - 16, h - 16);
+    ctx.fillStyle = "#F2F4F6";
+    ctx.textAlign = "center";
+    ctx.font = `bold 64px ${FONT}`;
+    ctx.fillText("COMPARTIMENT MOTEUR — AUDI A3 TFSI", w / 2, 110);
+    ctx.fillStyle = "#AEB6BE";
+    ctx.font = `38px ${FONT}`;
+    ctx.fillText("Scan 3D d'un véhicule réel · échelle 1", w / 2, 190);
+  });
+}
+
 const BUILDERS: Record<string, (k: Kit) => void> = {
+  engine_plinth: enginePlinth,
   breadboard,
   battery_12v: battery12v,
   toggle_switch: toggleSwitch,

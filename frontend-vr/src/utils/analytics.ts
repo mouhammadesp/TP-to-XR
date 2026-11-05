@@ -276,6 +276,32 @@ export class TPSession {
     return event;
   }
 
+  /**
+   * Records an answer of an identification quiz (component selected with the laser / a click):
+   * one attempt of the step, scored like a grab (accuracy, wrong objects of the step).
+   */
+  public recordAnswer(e: { hand: Hand; gesture: Gesture; target: string; correct: boolean }): HandInteractionEvent {
+    if (!this.finished) {
+      const p = this.perStep[this.current];
+      p.manipulations++;
+      this.scored++;
+      if (e.correct) this.correct++;
+      else p.wrong++;
+    }
+    const event: HandInteractionEvent = {
+      timestamp: this.now(),
+      event: "hand_interaction",
+      hand: e.hand,
+      gesture: e.gesture,
+      target_object: e.target,
+      duration_ms: 0,
+      step: this.current + 1,
+      correct: e.correct,
+    };
+    this.push(event);
+    return event;
+  }
+
   /** Records an interactive-TP event (validation, safety fault, snap, measure…). */
   public recordSim(kind: SimEventKind, detail: string): void {
     if (kind === "step_validated") {

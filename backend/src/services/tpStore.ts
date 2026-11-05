@@ -110,8 +110,11 @@ export type SimCondition =
   | { type: "state"; key: string; label: string };
 
 export interface SimulationSpec {
-  /** Behavior module of the viewer: electrical circuit, belt drive, or none ("generic": conditions only). */
-  kind: "circuit" | "belt_drive" | "generic";
+  /**
+   * Behavior module of the viewer: electrical circuit, belt drive, engine-bay identification
+   * quiz, or none ("generic": conditions only).
+   */
+  kind: "circuit" | "belt_drive" | "engine_quiz" | "generic";
   targets: SimTarget[];
   /** One list of conditions per step (all must hold to validate the step). */
   rules: SimCondition[][];

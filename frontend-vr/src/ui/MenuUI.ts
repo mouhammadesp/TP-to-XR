@@ -36,10 +36,10 @@ export class MenuUI {
     void this.renderDemos();
   }
 
-  /** "Démo mécanique / électrique" buttons, from GET /api/demo (no API key needed). */
+  /** "Démo mécanique / électrique / moteur automobile" buttons, from GET /api/demo (no API key needed). */
   private async renderDemos(): Promise<void> {
     try {
-      const { demos } = (await (await fetch("/api/demo")).json()) as { demos: { id: string; title: string; domain: string; steps: number }[] };
+      const { demos } = (await (await fetch("/api/demo")).json()) as { demos: { id: string; title: string; domain: string; label?: string | null; steps: number }[] };
       const box = this.byId("demo-buttons");
       box.replaceChildren();
       for (const d of demos) {
@@ -49,7 +49,7 @@ export class MenuUI {
         btn.dataset.tp = d.id;
         btn.style.setProperty("--accent", meta?.color ?? "#5F7380");
         btn.title = `${d.title} (${d.steps} étapes)`;
-        btn.textContent = `${meta?.icon ?? "🧪"} Démo ${meta?.label.toLowerCase() ?? d.domain}`;
+        btn.textContent = `${meta?.icon ?? "🧪"} ${d.label ?? `Démo ${meta?.label.toLowerCase() ?? d.domain}`}`;
         btn.addEventListener("click", () => this.onOpenTp(d.id, d.title));
         box.append(btn);
       }

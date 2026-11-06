@@ -276782,6 +276782,210 @@ var EngineQuizBehavior = class {
   }
 };
 
+// src/sim/instrumentQuiz.ts
+var INSTRUMENTS = [
+  {
+    id: "i_oscilloscope",
+    name: "Oscilloscope portable",
+    role: "Affiche la forme d'un signal \xE9lectrique et son \xE9volution dans le temps.",
+    example: "Observer le signal d'un capteur ou d'un g\xE9n\xE9rateur de fonctions.",
+    hints: [
+      "C'est le bo\xEEtier avec un \xE9cran rectangulaire qui peut afficher une courbe, pos\xE9 au centre de l'\xE9tabli.",
+      "C'est le seul appareil \xE0 montrer une forme d'onde qui varie avec le temps."
+    ]
+  },
+  {
+    id: "i_alim_dc",
+    name: "Alimentation stabilis\xE9e DC",
+    role: "Fournit une tension continue r\xE9glable et stabilis\xE9e pour alimenter un circuit.",
+    example: "Alimenter un montage \xE9lectronique \xE0 5 V ou 12 V.",
+    hints: [
+      "C'est le plus gros bo\xEEtier de l'\xE9tabli, \xE0 gauche, avec des boutons et des bornes de sortie + et -.",
+      "Il d\xE9livre du courant continu (DC), pas du secteur alternatif."
+    ]
+  },
+  {
+    id: "i_station_soudage",
+    name: "Station de soudage",
+    role: "R\xE9alise des connexions \xE9lectroniques permanentes en faisant fondre de l'\xE9tain (brasage).",
+    example: "Souder deux fils ou un composant sur un circuit imprim\xE9.",
+    hints: [
+      "C'est le poste avec un fer \xE0 souder pos\xE9 dans son support, \xE0 gauche de l'oscilloscope.",
+      "Le fer chauffe pour fondre l'\xE9tain entre deux composants."
+    ]
+  },
+  {
+    id: "i_multimetre_ana",
+    name: "Multim\xE8tre analogique",
+    role: "Affiche une mesure sur un cadran \xE0 aiguille avec une \xE9chelle gradu\xE9e.",
+    example: "Lire la r\xE9sistance d'une r\xE9sistance avec une aiguille qui se d\xE9place.",
+    hints: [
+      "C'est l'appareil avec un cadran circulaire et une aiguille, pos\xE9 \xE0 droite de l'oscilloscope.",
+      "Pas d'\xE9cran num\xE9rique : une aiguille indique la valeur sur une \xE9chelle gradu\xE9e."
+    ]
+  },
+  {
+    id: "i_multimetre_num",
+    name: "Multim\xE8tre num\xE9rique",
+    role: "Mesure plusieurs grandeurs \xE9lectriques : tension, courant et r\xE9sistance, selon le mode s\xE9lectionn\xE9.",
+    example: "V\xE9rifier la tension aux bornes d'une pile de 9 V.",
+    hints: [
+      "C'est le bo\xEEtier rectangulaire avec un \xE9cran LCD et un s\xE9lecteur rotatif, pos\xE9 tout \xE0 droite de l'\xE9tabli.",
+      "Il a deux fiches de mesure (rouge et noire) et un \xE9cran qui affiche la valeur en chiffres."
+    ]
+  }
+];
+var QUIZ2 = ["i_oscilloscope", "i_alim_dc", "i_station_soudage", "i_multimetre_ana", "i_multimetre_num"];
+var SITUATIONS = ["i_oscilloscope", "i_alim_dc", "i_multimetre_num", "i_station_soudage", "i_multimetre_ana"];
+var EXPLORE_GOAL2 = 5;
+var EXPLORE_DWELL2 = 0.4;
+var PULSE_AFTER_ERRORS2 = 3;
+function hintFor2(c, errors) {
+  if (errors <= 0) return "";
+  const hint = c.hints[Math.min(errors, 2) - 1];
+  return errors >= PULSE_AFTER_ERRORS2 ? `${hint} L'appareil est mis en \xE9vidence.` : hint;
+}
+function wrongAnswerText2(picked, asked, errors) {
+  return `Ceci est : ${picked.name}. ${hintFor2(asked, errors)}`.trim();
+}
+var TOTAL_QUESTIONS = QUIZ2.length + SITUATIONS.length;
+function askedFor(step) {
+  if (step <= QUIZ2.length) return QUIZ2[step - 1];
+  if (step <= TOTAL_QUESTIONS) return SITUATIONS[step - QUIZ2.length - 1];
+  return null;
+}
+var InstrumentQuizBehavior = class {
+  constructor(sim) {
+    this.sim = sim;
+    this.stateTargets = {};
+    /** instrument_id → asset + every mesh that can be pointed at (handle + model meshes). */
+    this.byId = /* @__PURE__ */ new Map();
+    /** Instrument currently pointed at (one pointer at a time in this demo). */
+    this.hovered = null;
+    this.explored = /* @__PURE__ */ new Set();
+    this.found = /* @__PURE__ */ new Set();
+    this.solved = /* @__PURE__ */ new Set();
+    this.attempts = Array(TOTAL_QUESTIONS).fill(0);
+    this.errors = Array(TOTAL_QUESTIONS).fill(0);
+    this.dwell = null;
+    this.time = 0;
+    let scene0 = null;
+    for (const id of [...QUIZ2, ...SITUATIONS]) {
+      const asset = sim.asset(id);
+      if (!asset) {
+        console.warn(`\u26A0\uFE0F instrument_quiz: asset missing ${id}`);
+        continue;
+      }
+      if (!scene0) scene0 = asset.handle.getScene();
+      const pickable = /* @__PURE__ */ new Set([asset.handle]);
+      for (const m of asset.meshes) if (m instanceof Mesh) pickable.add(m);
+      this.byId.set(id, { asset, pickable });
+    }
+    this.scene = scene0;
+    this.scene.onPointerObservable.add((pi) => this.onPointer(pi));
+    console.log(`\u{1F527} instrument_quiz: ${this.byId.size} instruments`);
+  }
+  get intro() {
+    return "D\xE9monstration : d\xE9couvrez les cinq instruments de mesure sur l'\xE9tabli, puis identifiez-les.";
+  }
+  update(dt) {
+    if (this.dwell && this.sim.step === 0) {
+      this.dwell.t += dt;
+      if (this.dwell.t >= EXPLORE_DWELL2) this.explore(this.dwell.id);
+    }
+  }
+  onStepChanged() {
+    this.dwell = null;
+  }
+  get step() {
+    return this.sim.step;
+  }
+  validationMessage(index) {
+    if (index === 0) {
+      return {
+        title: "D\xE9couverte termin\xE9e !",
+        text: "Les cinq instruments sont rep\xE9r\xE9s. Le quiz commence : 5 identifications, puis 5 situations."
+      };
+    }
+    const asked = askedFor(index);
+    if (!asked) return null;
+    const c = this.instrument(asked);
+    return c ? { title: "Bonne r\xE9ponse !", text: `${c.name} \u2014 ${c.role}` } : null;
+  }
+  summary() {
+    const tries = this.attempts.reduce((a, b) => a + b, 0);
+    const errs = this.errors.reduce((a, b) => a + b, 0);
+    return [
+      `\u2713 ${this.explored.size}/${INSTRUMENTS.length} instruments d\xE9couverts`,
+      `\u{1F3AF} ${this.foundAsked()}/${QUIZ2.length} identifi\xE9s \xB7 ${this.solvedAsked()}/${SITUATIONS.length} situations r\xE9solues`,
+      `\u270D ${tries} tentative${tries > 1 ? "s" : ""} (${errs} erreur${errs > 1 ? "s" : ""})`
+    ];
+  }
+  onPointer(pi) {
+    const picked = pi.pickInfo?.pickedMesh;
+    const instrumentId = picked ? this.instrumentOfMesh(picked) : null;
+    if (pi.type === PointerEventTypes.POINTERMOVE) this.setHover(instrumentId);
+    const select = pi.type === PointerEventTypes.POINTERDOWN || pi.type === PointerEventTypes.POINTERTAP;
+    if (select && instrumentId) {
+      this.setHover(instrumentId);
+      this.select(instrumentId);
+    }
+  }
+  setHover(id) {
+    if (this.hovered === id) return;
+    this.hovered = id;
+    this.dwell = id ? { id, t: 0 } : null;
+  }
+  select(id) {
+    const s = this.sim.session;
+    if (s.finished) return;
+    const step = this.step;
+    if (step === 0) {
+      this.explore(id);
+      const c = this.instrument(id);
+      if (c) this.sim.notify("info", c.name, `${c.role}. ${c.example}`);
+      return;
+    }
+    if (step < 1 || step > TOTAL_QUESTIONS || this.sim.stepValidated) return;
+    const asked = askedFor(step);
+    if (!asked) return;
+    const correct = id === asked;
+    const idx = step - 1;
+    this.attempts[idx]++;
+    s.recordAnswer({ hand: "none", gesture: "mouse", target: id, correct });
+    if (correct) {
+      if (step <= QUIZ2.length) this.found.add(asked);
+      else this.solved.add(asked);
+      this.sim.setFlag(step <= QUIZ2.length ? `found_${asked}` : `solved_${asked}`, true);
+    } else {
+      this.errors[idx]++;
+      const picked = this.instrument(id);
+      const askedC = this.instrument(asked);
+      if (picked && askedC) this.sim.notify("info", "Pas tout \xE0 fait\u2026", wrongAnswerText2(picked, askedC, this.errors[idx]));
+    }
+  }
+  explore(id) {
+    if (this.explored.has(id)) return;
+    this.explored.add(id);
+    if (this.explored.size >= EXPLORE_GOAL2) this.sim.setFlag("explored", true);
+  }
+  instrument(id) {
+    return INSTRUMENTS.find((c) => c.id === id);
+  }
+  instrumentOfMesh(mesh) {
+    for (const [id, { pickable }] of this.byId) {
+      if (pickable.has(mesh)) return id;
+    }
+    return null;
+  }
+  foundAsked() {
+    return QUIZ2.filter((id) => this.found.has(id)).length;
+  }
+  solvedAsked() {
+    return SITUATIONS.filter((id) => this.solved.has(id)).length;
+  }
+};
+
 // src/sim/behaviors.ts
 var GenericBehavior = class {
   constructor() {
@@ -276798,6 +277002,8 @@ function createBehavior(kind, sim) {
       return new BeltDriveBehavior(sim);
     case "engine_quiz":
       return new EngineQuizBehavior(sim);
+    case "instrument_quiz":
+      return new InstrumentQuizBehavior(sim);
     case "generic":
       return new GenericBehavior();
   }
@@ -281706,7 +281912,7 @@ var ConditionSchema = external_exports.discriminatedUnion("type", [
   external_exports.object({ type: external_exports.literal("state"), key: external_exports.string(), label: external_exports.string() })
 ]);
 var SimulationSchema = external_exports.object({
-  kind: external_exports.enum(["circuit", "belt_drive", "engine_quiz", "generic"]),
+  kind: external_exports.enum(["circuit", "belt_drive", "engine_quiz", "instrument_quiz", "generic"]),
   targets: external_exports.array(TargetSchema),
   rules: external_exports.array(external_exports.array(ConditionSchema)),
   completion: external_exports.string()

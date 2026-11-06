@@ -15,6 +15,7 @@ import { PlacedAsset } from "../scenes/TPScene";
 import { SimTarget } from "./conditions";
 import { computeCircuit, fr } from "./circuit";
 import { EngineQuizBehavior } from "./engineQuiz";
+import { InstrumentQuizBehavior } from "./instrumentQuiz";
 import type { Simulation } from "./Simulation";
 
 export interface Behavior {
@@ -46,7 +47,7 @@ export class GenericBehavior implements Behavior {
 }
 
 /** Behavior module for a simulation kind (demos: authored modules; generated TPs: generic). */
-export function createBehavior(kind: "circuit" | "belt_drive" | "engine_quiz" | "generic", sim: Simulation): Behavior {
+export function createBehavior(kind: "circuit" | "belt_drive" | "engine_quiz" | "instrument_quiz" | "generic", sim: Simulation): Behavior {
   switch (kind) {
     case "circuit":
       return new CircuitBehavior(sim);
@@ -54,6 +55,8 @@ export function createBehavior(kind: "circuit" | "belt_drive" | "engine_quiz" | 
       return new BeltDriveBehavior(sim);
     case "engine_quiz":
       return new EngineQuizBehavior(sim);
+    case "instrument_quiz":
+      return new InstrumentQuizBehavior(sim);
     case "generic":
       return new GenericBehavior();
   }

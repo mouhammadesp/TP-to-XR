@@ -28,7 +28,7 @@ export interface SimTarget {
 
 export interface SimulationSpec {
   /** "generic": no behavior module, the conditions alone decide (generated TPs). */
-  kind: "circuit" | "belt_drive" | "engine_quiz" | "generic";
+  kind: "circuit" | "belt_drive" | "engine_quiz" | "instrument_quiz" | "generic";
   targets: SimTarget[];
   rules: SimCondition[][];
   completion: string;

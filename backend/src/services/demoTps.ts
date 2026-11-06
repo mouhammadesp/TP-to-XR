@@ -59,6 +59,7 @@ const ELECTRICAL: DemoDefinition = {
   id: "tp_demo_electrical",
   title: "Câblage d'un circuit mixte série-parallèle",
   domain: "electrical",
+  menu_label: "Démo électrique — circuit",
   duration_minutes: 25,
   steps: [
     { order: 1, action: "Installer la plaque d'essai sur le poste et la batterie 12 V dans son logement.", safety: "Interrupteur ouvert (OFF) pendant tout le câblage" },
@@ -244,7 +245,220 @@ const ENGINE: DemoDefinition = {
   },
 };
 
-const DEMOS: DemoDefinition[] = [MECHANICAL, ELECTRICAL, ENGINE];
+/* ------------------------------------------------------------------ */
+/* Electrical: measurement instruments — discovery / identification /  */
+/* real situations (laser quiz on the bench, "instrument_quiz")         */
+/* ------------------------------------------------------------------ */
+/**
+ * Five real Sketchfab instruments on the workbench (converted GLBs, real scale,
+ * built by tools/instruments/build_instruments_glb.py). Each asset is fixed and
+ * clickable: the visitor selects it with the controller ray (or the mouse), the
+ * viewer's "instrument_quiz" behavior checks the answer. Steps:
+ *   1              discovery — all 5 instruments pointed at → "explored";
+ *   2..6  Phase 2  identification — one question per instrument (found_<id>);
+ *   7..11 Phase 3  situations — pick the right instrument for a real task
+ *                  (solved_<id>).
+ */
+const INSTRUMENTS: DemoDefinition = {
+  id: "tp_demo_instruments",
+  title: "Génie électrique — à la découverte des instruments de mesure",
+  domain: "electrical",
+  menu_label: "Démo génie électrique — Instruments de mesure",
+  duration_minutes: 10,
+  steps: [
+    {
+      order: 1,
+      action:
+        "Phase 1 — Découverte libre : cinq instruments essentiels sont posés sur l'établi. Pointez chaque appareil avec le laser (ou la souris) pour afficher son nom, puis sélectionnez-le (gâchette ou clic) pour découvrir sa fonction et un exemple d'utilisation.",
+      safety: null,
+    },
+    {
+      order: 2,
+      action:
+        "Phase 2 — Identification : quel appareil permet de visualiser la forme d'un signal électrique au cours du temps ? Pointez-le, puis appuyez sur la gâchette (ou cliquez).",
+      safety: null,
+    },
+    {
+      order: 3,
+      action:
+        "Quel équipement fournit une tension continue réglable pour alimenter un circuit ? Pointez-le, puis sélectionnez-le.",
+      safety: null,
+    },
+    {
+      order: 4,
+      action:
+        "Quel équipement est utilisé pour réaliser des connexions électroniques par brasage ? Pointez-le, puis sélectionnez-le.",
+      safety: null,
+    },
+    {
+      order: 5,
+      action:
+        "Quel appareil utilise une aiguille et une échelle graduée pour afficher une mesure ? Pointez-le, puis sélectionnez-le.",
+      safety: null,
+    },
+    {
+      order: 6,
+      action:
+        "Quel appareil numérique portable permet de mesurer plusieurs grandeurs électriques (tension, courant, résistance) ? Pointez-le, puis sélectionnez-le.",
+      safety: null,
+    },
+    {
+      order: 7,
+      action:
+        "Phase 3 — Mise en situation : vous voulez observer la forme d'une tension variable dans le temps. Quel instrument choisissez-vous ? Sélectionnez-le sur l'établi.",
+      safety: null,
+    },
+    {
+      order: 8,
+      action:
+        "Vous devez alimenter un montage électronique avec une tension continue réglable. Que choisissez-vous ? Sélectionnez-le.",
+      safety: null,
+    },
+    {
+      order: 9,
+      action:
+        "Vous souhaitez mesurer la résistance d'un composant isolé et hors tension, à l'aide d'un appareil numérique. Quel instrument choisissez-vous ? Sélectionnez-le.",
+      safety: null,
+    },
+    {
+      order: 10,
+      action:
+        "Vous souhaitez réaliser une connexion permanente entre deux composants électroniques par brasage. Quel équipement choisissez-vous ? Sélectionnez-le.",
+      safety: null,
+    },
+    {
+      order: 11,
+      action:
+        "Vous voulez interpréter une mesure sur un cadran à aiguille. Quel instrument utilisez-vous ? Sélectionnez-le.",
+      safety: null,
+    },
+  ],
+
+  safety_warnings: [
+    "Démonstration d'observation : aucun appareil n'est mis sous tension",
+    "Ne jamais mesurer une résistance sur un composant sous tension",
+  ],
+  signs: ["Observation uniquement", "Résistance : hors tension"],
+  key_light: "#FFFFFF",
+  objects: [
+    {
+      id: "i_alim_dc",
+      name: "Alimentation stabilisée DC",
+      model: "converted",
+      url: "/assets/models/converted/electrical_dc_power_supply.glb",
+      attribution: {
+        title: "DC Regulated Power Supply Unit",
+        author: "Eydeet",
+        author_url: "https://sketchfab.com/eydeet",
+        license: "CC Attribution 4.0",
+        license_url: "https://creativecommons.org/licenses/by/4.0/",
+        source_url: "https://sketchfab.com/3d-models/dc-regulated-power-supply-unit-dffccb9f1bc34c2e81e004729231f224",
+      },
+      at: { x: -1.05, z: -0.3 },
+      size_m: 0.4,
+      first_step: 1,
+      fixed: true,
+      clickable: true,
+    },
+    {
+      id: "i_station_soudage",
+      name: "Station de soudage",
+      model: "converted",
+      url: "/assets/models/converted/electrical_soldering_station.glb",
+      attribution: {
+        title: "[CC0] Generic Soldering Station",
+        author: "literallylara (Lara Sophie Schütt)",
+        author_url: "https://sketchfab.com/literallylara",
+        license: "CC Attribution 4.0",
+        license_url: "https://creativecommons.org/licenses/by/4.0/",
+        source_url: "https://sketchfab.com/3d-models/cc0-generic-soldering-station-87789d4f4c5b43069a5dd47819f4b4a8",
+      },
+      at: { x: -0.45, z: -0.3 },
+      size_m: 0.22,
+      first_step: 1,
+      fixed: true,
+      clickable: true,
+    },
+    {
+      id: "i_oscilloscope",
+      name: "Oscilloscope portable",
+      model: "converted",
+      url: "/assets/models/converted/electrical_oscilloscope_u1602b.glb",
+      attribution: {
+        title: "Oscilloscope U1602B",
+        author: "Tatyana Volkova",
+        author_url: "https://sketchfab.com/volkovatatyana",
+        license: "CC Attribution 4.0",
+        license_url: "https://creativecommons.org/licenses/by/4.0/",
+        source_url: "https://sketchfab.com/3d-models/oscilloscope-u1602b-ad4ed966c87e43c0b2358577d2ba9f73",
+      },
+      at: { x: 0.05, z: -0.25 },
+      size_m: 0.27,
+      first_step: 1,
+      fixed: true,
+      clickable: true,
+    },
+    {
+      id: "i_multimetre_ana",
+      name: "Multimètre analogique",
+      model: "converted",
+      url: "/assets/models/converted/electrical_multimeter_analog.glb",
+      attribution: {
+        title: "Analog Multimeter",
+        author: "berlinafebrianti.tw",
+        author_url: "https://sketchfab.com/berlinafebrianti.tw",
+        license: "CC Attribution 4.0",
+        license_url: "https://creativecommons.org/licenses/by/4.0/",
+        source_url: "https://sketchfab.com/3d-models/analog-multimeter-0ab4ed2dbd0740638efb51fc936b34c8",
+      },
+      at: { x: 0.55, z: -0.05 },
+      size_m: 0.19,
+      first_step: 1,
+      fixed: true,
+      clickable: true,
+    },
+    {
+      id: "i_multimetre_num",
+      name: "Multimètre numérique",
+      model: "converted",
+      url: "/assets/models/converted/electrical_multimeter_digital.glb",
+      attribution: {
+        title: "MultiMeter - FREE",
+        author: "Mathieu Godard",
+        author_url: "https://sketchfab.com/Mathieu.Godard",
+        license: "CC Attribution 4.0",
+        license_url: "https://creativecommons.org/licenses/by/4.0/",
+        source_url: "https://sketchfab.com/3d-models/multimeter-free-79ac684e66b34554ba869bd2fc3c2653",
+      },
+      at: { x: 1.05, z: 0.0 },
+      size_m: 0.175,
+      first_step: 1,
+      fixed: true,
+      clickable: true,
+    },
+  ],
+  simulation: {
+    kind: "instrument_quiz",
+    targets: [],
+    rules: [
+      [{ type: "state", key: "explored", label: "5 instruments découverts (nom + fonction affichés)" }],
+      [{ type: "state", key: "found_oscilloscope", label: "Le bon instrument est sélectionné" }],
+      [{ type: "state", key: "found_alim_dc", label: "Le bon instrument est sélectionné" }],
+      [{ type: "state", key: "found_station_soudage", label: "Le bon instrument est sélectionné" }],
+      [{ type: "state", key: "found_multimetre_ana", label: "Le bon instrument est sélectionné" }],
+      [{ type: "state", key: "found_multimetre_num", label: "Le bon instrument est sélectionné" }],
+      [{ type: "state", key: "solved_oscilloscope", label: "La situation est résolue (bon instrument choisi)" }],
+      [{ type: "state", key: "solved_alim_dc", label: "La situation est résolue (bon instrument choisi)" }],
+      [{ type: "state", key: "solved_multimetre_num", label: "La situation est résolue (bon instrument choisi)" }],
+      [{ type: "state", key: "solved_station_soudage", label: "La situation est résolue (bon instrument choisi)" }],
+      [{ type: "state", key: "solved_multimetre_ana", label: "La situation est résolue (bon instrument choisi)" }],
+    ],
+    completion:
+      "Vous savez maintenant reconnaître les cinq instruments de mesure et choisir le bon selon la situation : observer un signal, alimenter un montage, mesurer une grandeur, souder ou lire un cadran à aiguille.",
+  },
+};
+
+const DEMOS: DemoDefinition[] = [MECHANICAL, ELECTRICAL, ENGINE, INSTRUMENTS];
 
 /** Builds the manifest of one demo. */
 function buildDemo(def: DemoDefinition): TPSceneManifest {

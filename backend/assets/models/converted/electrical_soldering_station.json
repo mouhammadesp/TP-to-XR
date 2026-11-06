@@ -1,0 +1,15 @@
+{
+  "slug": "electrical_soldering_station",
+  "url": "/assets/models/converted/electrical_soldering_station.glb",
+  "bytes": 3279432,
+  "triangles": 14127,
+  "dimensions_m": { "x": 0.175, "y": 0.22, "z": 0.188 },
+  "attribution": {
+    "title": "[CC0] Generic Soldering Station",
+    "author": "literallylara (Lara Sophie Schütt)",
+    "license": "CC Attribution 4.0",
+    "source_url": "https://sketchfab.com/3d-models/cc0-generic-soldering-station-87789d4f4c5b43069a5dd47819f4b4a8"
+  },
+  "source_file": "cc0_generic_soldering_station.glb (Sketchfab) — tools/instruments/build_instruments_glb.py",
+  "converted_at": "2026-11-06T00:20:00.000000Z"
+}

@@ -1,0 +1,15 @@
+{
+  "slug": "electrical_multimeter_analog",
+  "url": "/assets/models/converted/electrical_multimeter_analog.glb",
+  "bytes": 2272404,
+  "triangles": 4539,
+  "dimensions_m": { "x": 0.13, "y": 0.19, "z": 0.064 },
+  "attribution": {
+    "title": "Analog Multimeter",
+    "author": "berlinafebrianti.tw",
+    "license": "CC Attribution",
+    "source_url": "https://sketchfab.com/3d-models/analog-multimeter-0ab4ed2dbd0740638efb51fc936b34c8"
+  },
+  "source_file": "analog_multimeter.blend (analog-multimeter.zip, Sketchfab) — tools/instruments/build_instruments_glb.py",
+  "converted_at": "2026-11-06T00:25:00.000000Z"
+}

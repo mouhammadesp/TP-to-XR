@@ -126,7 +126,7 @@ export function buildReport(s: SessionRecord, m: ReportManifest): Report {
   const difficulties: string[] = [];
   const recommendations: string[] = [];
   /** Identification quiz: a wrong "object" is a wrong answer (component selected with the laser). */
-  const quiz = m.simulation?.kind === "engine_quiz";
+  const quiz = m.simulation?.kind === "engine_quiz" || m.simulation?.kind === "instrument_quiz";
 
   if (s.interactive) {
     const ok = steps.filter((x) => x.status === "validated").map((x) => x.n);

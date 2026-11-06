@@ -4798,7 +4798,7 @@ var ConditionSchema = external_exports.discriminatedUnion("type", [
   external_exports.object({ type: external_exports.literal("state"), key: external_exports.string(), label: external_exports.string() })
 ]);
 var SimulationSchema = external_exports.object({
-  kind: external_exports.enum(["circuit", "belt_drive", "engine_quiz", "generic"]),
+  kind: external_exports.enum(["circuit", "belt_drive", "engine_quiz", "instrument_quiz", "generic"]),
   targets: external_exports.array(TargetSchema),
   rules: external_exports.array(external_exports.array(ConditionSchema)),
   completion: external_exports.string()

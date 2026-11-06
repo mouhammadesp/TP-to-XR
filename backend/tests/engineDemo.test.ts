@@ -48,6 +48,6 @@ test("engine demo: every asked component has its selection zone in the GLB", () 
 
 test("engine demo: existing demos unchanged (belt drive stays the mechanical demo by domain)", () => {
   assert.equal(getDemoByDomain("mechanical")?.id, "tp_demo_mechanical");
-  assert.deepEqual(listDemos().map((d) => d.id), ["tp_demo_mechanical", "tp_demo_electrical", "tp_demo_engine"]);
+  assert.deepEqual(listDemos().map((d) => d.id), ["tp_demo_mechanical", "tp_demo_electrical", "tp_demo_engine", "tp_demo_instruments"]);
   assert.equal(listDemos().find((d) => d.id === "tp_demo_engine")?.label, "Démo moteur automobile");
 });

@@ -1,0 +1,15 @@
+{
+  "slug": "electrical_oscilloscope_u1602b",
+  "url": "/assets/models/converted/electrical_oscilloscope_u1602b.glb",
+  "bytes": 1112176,
+  "triangles": 1986,
+  "dimensions_m": { "x": 0.27, "y": 0.15, "z": 0.114 },
+  "attribution": {
+    "title": "Oscilloscope U1602B",
+    "author": "Tatyana Volkova",
+    "license": "CC Attribution",
+    "source_url": "https://sketchfab.com/3d-models/oscilloscope-u1602b-ad4ed966c87e43c0b2358577d2ba9f73"
+  },
+  "source_file": "осциллограф_done .fbx (oscilloscope-u1602b.zip, Sketchfab) — tools/instruments/build_instruments_glb.py",
+  "converted_at": "2026-11-05T23:45:00.000000Z"
+}

@@ -1,0 +1,15 @@
+{
+  "slug": "electrical_multimeter_digital",
+  "url": "/assets/models/converted/electrical_multimeter_digital.glb",
+  "bytes": 734508,
+  "triangles": 2066,
+  "dimensions_m": { "x": 0.175, "y": 0.033, "z": 0.083 },
+  "attribution": {
+    "title": "MultiMeter - FREE",
+    "author": "Mathieu Godard",
+    "license": "CC Attribution",
+    "source_url": "https://sketchfab.com/3d-models/multimeter-free-79ac684e66b34554ba869bd2fc3c2653"
+  },
+  "source_file": "MutliMeter.obj (multimeter-free.zip, Sketchfab) — tools/instruments/build_instruments_glb.py",
+  "converted_at": "2026-11-05T23:40:00.000000Z"
+}

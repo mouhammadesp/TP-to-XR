@@ -1,0 +1,15 @@
+{
+  "slug": "electrical_dc_power_supply",
+  "url": "/assets/models/converted/electrical_dc_power_supply.glb",
+  "bytes": 2754320,
+  "triangles": 100000,
+  "dimensions_m": { "x": 0.191, "y": 0.279, "z": 0.4 },
+  "attribution": {
+    "title": "DC Regulated Power Supply Unit",
+    "author": "Eydeet",
+    "license": "CC Attribution",
+    "source_url": "https://sketchfab.com/3d-models/dc-regulated-power-supply-unit-dffccb9f1bc34c2e81e004729231f224"
+  },
+  "source_file": "DC_Regulated_Power_Supply.fbx (dc-regulated-power-supply-unit.zip, Sketchfab) — tools/instruments/build_instruments_glb.py",
+  "converted_at": "2026-11-05T23:50:00.000000Z"
+}

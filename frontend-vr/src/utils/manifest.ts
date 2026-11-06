@@ -80,7 +80,7 @@ const ConditionSchema = z.discriminatedUnion("type", [
 
 /** Interactive TP description (demo TPs: authored behaviors; generated TPs: "generic" = conditions only). */
 export const SimulationSchema = z.object({
-  kind: z.enum(["circuit", "belt_drive", "engine_quiz", "generic"]),
+  kind: z.enum(["circuit", "belt_drive", "engine_quiz", "instrument_quiz", "generic"]),
   targets: z.array(TargetSchema),
   rules: z.array(z.array(ConditionSchema)),
   completion: z.string(),

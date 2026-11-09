@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync } from "fs";
 import path from "path";
-import { DEMO_QUESTION_COUNT, drawQuiz } from "../src/services/quiz";
+import { DEMO_QUESTION_COUNT, DEMO_QUESTION_COUNT_MAX, demoQuestionCount, drawQuiz } from "../src/services/quiz";
 import { ENGINE_QUESTION_BANK, INSTRUMENT_QUESTION_BANK } from "../src/services/quizBank";
 import { getDemo, getDemoByDomain, listDemos } from "../src/services/demoTps";
 
@@ -42,7 +42,7 @@ test("quiz draw: successive seeds vary selection, wording and order without sess
 });
 
 test("quiz banks: more authored questions than displayed, all targets valid", () => {
-  assert.equal(ENGINE_QUESTION_BANK.length, 9);
+  assert.equal(ENGINE_QUESTION_BANK.length, 10);
   assert.ok(ENGINE_QUESTION_BANK.flatMap((t) => t.variants).length > DEMO_QUESTION_COUNT);
   assert.ok(INSTRUMENT_QUESTION_BANK.flatMap((t) => t.variants).length > DEMO_QUESTION_COUNT);
   const instrumentAssets = new Set(getDemo("tp_demo_instruments", "assets_seed")!.assets.map((a) => a.asset_id));
@@ -53,18 +53,45 @@ test("quiz banks: more authored questions than displayed, all targets valid", ()
 
 test("quiz draw rejects invalid counts, seeds and duplicate target ids", () => {
   assert.throws(() => drawQuiz(ENGINE_QUESTION_BANK, 0, "valid"), /count/);
-  assert.throws(() => drawQuiz(ENGINE_QUESTION_BANK, 10, "valid"), /count/);
+  // The bank holds 20 questions: 10 targets × 2 formulations each.
+  assert.throws(() => drawQuiz(ENGINE_QUESTION_BANK, 21, "valid"), /count/);
+  // A session may draw more targets than the bank has, revisiting with
+  // different formulations — but never more than the bank holds.
+  assert.doesNotThrow(() => drawQuiz(ENGINE_QUESTION_BANK, 10, "valid"));
   assert.throws(() => drawQuiz(ENGINE_QUESTION_BANK, 5, "bad seed!"), /seed/);
   const duplicate = [ENGINE_QUESTION_BANK[0], ENGINE_QUESTION_BANK[0]];
   assert.throws(() => drawQuiz(duplicate, 1, "valid"), /Duplicate/);
+});
+
+test("quiz draw: session of 7 may revisit an instrument, never the same question", () => {
+  const plan = drawQuiz(INSTRUMENT_QUESTION_BANK, 7, "revisit_seed");
+  assert.equal(plan.questions.length, 7);
+  assert.deepEqual(drawQuiz(INSTRUMENT_QUESTION_BANK, 7, "revisit_seed"), plan, "reproducible");
+  assert.equal(new Set(plan.questions.map((q) => q.id)).size, 7, "no duplicate question");
+  assert.equal(new Set(plan.questions.map((q) => q.flag)).size, 7, "unique validation flags");
+  // five instruments, seven questions: exactly two instruments are asked twice
+  const perTarget = new Map<string, number>();
+  for (const q of plan.questions) perTarget.set(q.answer, (perTarget.get(q.answer) ?? 0) + 1);
+  assert.equal(new Set(perTarget.keys()).size, 5, "all five instruments asked");
+  assert.deepEqual([...perTarget.values()].sort(), [1, 1, 1, 2, 2], "two revisits with distinct formulations");
+});
+
+test("session length varies between 5 and 7 and is fixed per seed", () => {
+  for (const seed of ["manifest_fixed_seed", "session_a", "session_b", "vary_seed"]) {
+    const count = demoQuestionCount(seed);
+    assert.ok(count >= 5 && count <= 7, `count for ${seed}`);
+    assert.equal(count, demoQuestionCount(seed), "reproducible");
+  }
+  assert.ok(new Set(Array.from({ length: 12 }, (_, i) => demoQuestionCount(`count_seed_${String.fromCharCode(97 + i)}`))).size >= 2);
 });
 
 test("seeded manifests: displayed steps and validation rules describe the exact selected questions", () => {
   for (const id of ["tp_demo_engine", "tp_demo_instruments"]) {
     const m = getDemo(id, "manifest_fixed_seed")!;
     const quiz = m.simulation!.quiz!;
-    assert.equal(m.tp.steps.length, 6);
-    assert.equal(m.simulation!.rules.length, 6);
+    assert.equal(m.tp.steps.length, 1 + demoQuestionCount("manifest_fixed_seed"));
+    assert.ok(m.tp.steps.length >= 6 && m.tp.steps.length <= 8);
+    assert.equal(m.simulation!.rules.length, 1 + demoQuestionCount("manifest_fixed_seed"));
     assert.deepEqual(getDemo(id, "manifest_fixed_seed"), m, "report reconstruction must be exact");
     quiz.questions.forEach((q, i) => {
       assert.ok(m.tp.steps[i + 1].action.startsWith(q.prompt));
@@ -80,7 +107,7 @@ test("home menu exposes exactly two demos; former simulations and legacy reports
     "Démo mécanique — Moteur automobile",
     "Démo génie électrique — Instruments de mesure",
   ]);
-  assert.ok(listDemos().every((d) => d.steps === 6));
+  assert.ok(listDemos().every((d) => d.steps === DEMO_QUESTION_COUNT_MAX + 1));
   assert.equal(getDemoByDomain("mechanical")?.id, "tp_demo_mechanical");
   assert.equal(getDemoByDomain("electrical")?.id, "tp_demo_electrical");
   assert.equal(getDemo("tp_demo_engine", null)!.simulation!.quiz, undefined);

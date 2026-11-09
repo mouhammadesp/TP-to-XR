@@ -47,6 +47,10 @@ export const ENGINE_QUESTION_BANK: readonly QuizTarget[] = [
     ["brake_fluid_location", "Quel petit réservoir contient le liquide du système de freinage ? Il se trouve dans le compartiment, mais hors du moteur."],
     ["brake_fluid_role", "Repérez le réservoir de liquide de frein, sans le confondre avec celui du liquide de refroidissement."]
   ),
+  target("radiator",
+    ["radiator_location", "Quel grand échangeur à nid d'abeille occupe toute la largeur, tout au fond du compartiment côté avant de la voiture ?"],
+    ["radiator_role", "Repérez le radiateur du circuit de refroidissement, là où l'air du déplacement refroidit le liquide."]
+  ),
 ];
 
 /** Five real instruments on the workbench; no absent equipment is questioned. */
@@ -54,12 +58,14 @@ export const INSTRUMENT_QUESTION_BANK: readonly QuizTarget[] = [
   target("i_oscilloscope",
     ["oscilloscope_identification", "Quel instrument affiche la forme d'un signal électrique et son évolution dans le temps ?"],
     ["oscilloscope_measurement", "Vous voulez observer une tension variable et mesurer ses variations temporelles. Quel appareil choisissez-vous ?"],
-    ["oscilloscope_situation", "Un signal semble déformé. Quel équipement permet d'en visualiser la forme d'onde pour analyser le problème ?"]
+    ["oscilloscope_situation", "Un signal semble déformé. Quel équipement permet d'en visualiser la forme d'onde pour analyser le problème ?"],
+    ["oscilloscope_period", "Vous devez mesurer la période et l'amplitude d'un signal qui se répète. Quel appareil affiche sa forme d'onde ?"]
   ),
   target("i_alim_dc",
     ["dc_supply_identification", "Quel équipement fournit une tension continue réglable et stabilisée à un montage ?"],
     ["dc_supply_situation", "Vous devez alimenter un circuit électronique sous 5 V continu. Quel appareil utilisez-vous ?"],
-    ["dc_supply_function", "Quel boîtier faut-il régler pour obtenir une source de tension continue de 12 V ?"]
+    ["dc_supply_function", "Quel boîtier faut-il régler pour obtenir une source de tension continue de 12 V ?"],
+    ["dc_supply_current", "Vous voulez limiter le courant délivré pendant les essais d'un montage. Quel équipement réglable le permet ?"]
   ),
   target("i_station_soudage",
     ["soldering_identification", "Quel équipement utilise un fer chauffant pour réaliser un assemblage à l'étain ?"],
@@ -74,6 +80,7 @@ export const INSTRUMENT_QUESTION_BANK: readonly QuizTarget[] = [
   target("i_multimetre_num",
     ["digital_meter_identification", "Quel instrument affiche numériquement une tension, un courant ou une résistance selon son mode ?"],
     ["digital_meter_voltage", "Vous voulez vérifier la tension aux bornes d'une pile avec une valeur affichée en chiffres. Quel appareil choisissez-vous ?"],
-    ["digital_meter_resistance", "Quel multimètre numérique utilisez-vous pour mesurer la valeur d'une résistance isolée et hors tension ?"]
+    ["digital_meter_resistance", "Quel multimètre numérique utilisez-vous pour mesurer la valeur d'une résistance isolée et hors tension ?"],
+    ["digital_meter_current", "Vous voulez mesurer l'intensité du courant qui traverse un circuit. Quel appareil portable choisissez-vous ?"]
   ),
 ];

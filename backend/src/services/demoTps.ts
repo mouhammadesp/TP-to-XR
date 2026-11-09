@@ -16,7 +16,7 @@ import { randomBytes } from "crypto";
 import { Domain } from "../schemas/tp";
 import { Attribution, SceneAsset, SimulationSpec, TEMPLATE_REF, TPSceneManifest } from "./tpStore";
 import { PANELS } from "../config/workshopLayout";
-import { DEMO_QUESTION_COUNT, drawQuiz } from "./quiz";
+import { DEMO_QUESTION_COUNT_MAX, demoQuestionCount, drawQuiz } from "./quiz";
 import type { QuizTarget, QuizVariant } from "./quiz";
 import { ENGINE_QUESTION_BANK, INSTRUMENT_QUESTION_BANK } from "./quizBank";
 
@@ -49,7 +49,8 @@ interface DemoDefinition {
   /** Authored quiz: one seeded draw per session, rebuilt identically for the report. */
   quiz?: {
     bank: readonly QuizTarget[];
-    count: number;
+    /** Fixed draw size; when omitted, the session draws demoQuestionCount(seed) ∈ [5…7] questions. */
+    count?: number;
     flagFor?: (target: QuizTarget, variant: QuizVariant) => string;
   };
   duration_minutes: number;
@@ -200,6 +201,7 @@ const MECHANICAL: DemoDefinition = {
  * them into laser targets. Each step validates when its flag is set:
  *   explored        — at least 3 components pointed at during the discovery phase;
  *   found_<zone id> — the right component selected with the trigger / a click.
+ * A session draws 5 to 7 questions out of the (seeded) bank, discovery included.
  */
 const ENGINE_AT = { x: 0, z: 2.3 };
 /** Top of the display plinth = base of the (cropped) scan; puts the parts at ≈ 1 m. */
@@ -212,7 +214,6 @@ const ENGINE: DemoDefinition = {
   menu_label: "Démo mécanique — Moteur automobile",
   quiz: {
     bank: ENGINE_QUESTION_BANK,
-    count: DEMO_QUESTION_COUNT,
     flagFor: (target) => `found_${target.answer}`,
   },
   duration_minutes: 5,
@@ -274,16 +275,17 @@ const ENGINE: DemoDefinition = {
  * clickable: the visitor selects it with the controller ray (or the mouse), the
  * viewer's "instrument_quiz" behavior checks the answer. Steps:
  *   1              discovery — all 5 instruments pointed at → "explored";
- *   2..6  Phase 2  identification — one question per instrument (found_<id>);
- *   7..11 Phase 3  situations — pick the right instrument for a real task
- *                  (solved_<id>).
+ *   2..N   quiz     — a seeded draw of 5 to 7 varied questions (identification,
+ *                    function, situations); a small bank may revisit an
+ *                    instrument with another formulation, never the same one.
+ *   legacy manifests (no seed) keep their original ten-question path.
  */
 const INSTRUMENTS: DemoDefinition = {
   id: "tp_demo_instruments",
   title: "Génie électrique — à la découverte des instruments de mesure",
   domain: "electrical",
   menu_label: "Démo génie électrique — Instruments de mesure",
-  quiz: { bank: INSTRUMENT_QUESTION_BANK, count: DEMO_QUESTION_COUNT },
+  quiz: { bank: INSTRUMENT_QUESTION_BANK },
   duration_minutes: 5,
   steps: [
     {
@@ -482,7 +484,7 @@ const DEMOS: DemoDefinition[] = [MECHANICAL, ELECTRICAL, ENGINE, INSTRUMENTS];
 
 /** Builds one manifest; quiz demos get a fresh, deterministic plan when a seed is supplied. */
 function buildDemo(def: DemoDefinition, quizSeed?: string): TPSceneManifest {
-  const quiz = def.quiz && quizSeed ? drawQuiz(def.quiz.bank, def.quiz.count, quizSeed, def.quiz.flagFor) : undefined;
+  const quiz = def.quiz && quizSeed ? drawQuiz(def.quiz.bank, def.quiz.count ?? demoQuestionCount(quizSeed), quizSeed, def.quiz.flagFor) : undefined;
   const steps = quiz
     ? [
         def.steps[0],
@@ -577,7 +579,7 @@ export function listDemos(): { id: string; title: string; domain: Domain; label:
       domain: m.tp.domain,
       label: d.menu_label ?? null,
       assets: m.assets.length,
-      steps: d.quiz ? d.quiz.count + 1 : m.tp.steps.length,
+      steps: d.quiz ? (d.quiz.count ?? DEMO_QUESTION_COUNT_MAX) + 1 : m.tp.steps.length,
     };
   });
 }

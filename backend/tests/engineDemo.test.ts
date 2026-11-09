@@ -8,6 +8,7 @@ import { readFileSync } from "fs";
 import path from "path";
 import { getDemo, getDemoByDomain, listDemos } from "../src/services/demoTps";
 import { ENGINE_QUESTION_BANK } from "../src/services/quizBank";
+import { demoQuestionCount } from "../src/services/quiz";
 
 const GLB = path.join(__dirname, "..", "assets", "models", "converted", "audi_tfsi_engine.glb");
 
@@ -20,16 +21,17 @@ function glbNodeNames(file: string): string[] {
   return json.nodes.map((n) => n.name ?? "");
 }
 
-test("engine demo: discovery step, then the exact five questions of the seeded draw", () => {
+test("engine demo: discovery step, then the exact drawn questions of the seeded session", () => {
   const m = getDemo("tp_demo_engine", "engine_demo_test_seed")!;
   assert.ok(m.simulation);
   assert.equal(m.simulation.kind, "engine_quiz");
   const questions = m.simulation.quiz!.questions;
-  assert.equal(questions.length, 5);
+  assert.ok(questions.length >= 5 && questions.length <= 7);
+  assert.equal(questions.length, demoQuestionCount("engine_demo_test_seed"));
   assert.equal(m.tp.steps.length, 1 + questions.length);
   const keys = m.simulation.rules.map((r) => (r[0]?.type === "state" ? r[0].key : null));
   assert.deepEqual(keys, ["explored", ...questions.map((q) => q.flag)]);
-  assert.equal(new Set(questions.map((q) => q.answer)).size, questions.length);
+  assert.equal(new Set(questions.map((q) => q.answer)).size, questions.length, "no target asked twice: one exact zone per question");
 });
 
 test("engine demo: real-scale scan with its CC-BY attribution", () => {
@@ -45,7 +47,7 @@ test("engine demo: real-scale scan with its CC-BY attribution", () => {
 test("engine demo: every possible answer has exactly one selection zone in the GLB", () => {
   const zones = glbNodeNames(GLB).filter((n) => n.startsWith("zone__")).map((n) => n.slice(6));
   for (const target of ENGINE_QUESTION_BANK) assert.ok(zones.includes(target.answer), `zone__${target.answer} missing`);
-  assert.equal(zones.length, 9);
+  assert.equal(zones.length, 10);
   assert.equal(new Set(zones).size, zones.length);
   assert.ok(!zones.includes("coolant_cap"), "no invented coolant-cap zone");
 });

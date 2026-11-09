@@ -1,9 +1,11 @@
 /**
  * Reusable, deterministic quiz-session draw for the authored demonstrations.
  *
- * A session contains at most one question per answer target. Each target owns
- * several accurate formulations; the draw never mixes a prompt with another
- * target's answer, flag, hints or 3D selection zone.
+ * A session of 5 to 7 questions (fixed per seed, identical on replay) draws
+ * distinct targets first; a session may then revisit a target with a DIFFERENT
+ * formulation when the bank allows it (the five physical instruments). Every
+ * formulation is used at most once and the draw never mixes a prompt with
+ * another target's answer, flag, hints or 3D selection zone.
  */
 
 export interface QuizVariant {
@@ -30,11 +32,23 @@ export interface QuizPlan {
 }
 
 export const QUIZ_SEED_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
+/** Fixed count of the historical (pre-variety) sessions and of the legacy draw tests. */
 export const DEMO_QUESTION_COUNT = 5;
+export const DEMO_QUESTION_COUNT_MIN = 5;
+export const DEMO_QUESTION_COUNT_MAX = 7;
 
 /**
- * Draws `count` distinct targets, then one formulation per target.
- * The same seed always returns the same plan (including prompts and flags).
+ * Number of questions of a demo session: 5 to 7, deterministic per seed, so a
+ * replayed seed always produces the same session while sessions genuinely vary.
+ */
+export function demoQuestionCount(seed: string): number {
+  return DEMO_QUESTION_COUNT_MIN + Math.floor(seededRandom(`${seed}#count`)() * (DEMO_QUESTION_COUNT_MAX - DEMO_QUESTION_COUNT_MIN + 1));
+}
+
+/**
+ * Draws `count` distinct targets first (one formulation per target), then — if
+ * the bank is smaller than the session — revisits shuffled targets with a
+ * different, unused formulation. The same seed always returns the same plan.
  */
 export function drawQuiz(
   targets: readonly QuizTarget[],
@@ -43,8 +57,9 @@ export function drawQuiz(
   flagFor: (target: QuizTarget, variant: QuizVariant) => string = (_target, variant) => `answered_${variant.id}`
 ): QuizPlan {
   if (!QUIZ_SEED_PATTERN.test(seed)) throw new Error(`Invalid quiz seed: ${seed}`);
-  if (!Number.isInteger(count) || count < 1 || count > targets.length) {
-    throw new Error(`Quiz count must be between 1 and ${targets.length}`);
+  const capacity = targets.reduce((n, t) => n + t.variants.length, 0);
+  if (!Number.isInteger(count) || count < 1 || count > capacity) {
+    throw new Error(`Quiz count must be between 1 and ${capacity}`);
   }
   const answers = new Set<string>();
   const variantIds = new Set<string>();
@@ -59,11 +74,24 @@ export function drawQuiz(
   }
 
   const random = seededRandom(seed);
-  const selected = shuffle([...targets], random).slice(0, count);
-  const questions = selected.map((target) => {
-    const variant = target.variants[Math.floor(random() * target.variants.length)];
-    return { id: variant.id, prompt: variant.prompt, answer: target.answer, flag: flagFor(target, variant) };
-  });
+  const questions: QuizQuestion[] = [];
+  const usedVariants = new Set<string>();
+  const drawTarget = (target: QuizTarget): void => {
+    // Each formulation is asked at most once during a session (no duplicates).
+    const free = target.variants.filter((v) => !usedVariants.has(v.id));
+    if (!free.length) return; // revisit only from another target
+    const variant = free[Math.floor(random() * free.length)];
+    usedVariants.add(variant.id);
+    questions.push({ id: variant.id, prompt: variant.prompt, answer: target.answer, flag: flagFor(target, variant) });
+  };
+  for (const target of shuffle([...targets], random).slice(0, Math.min(count, targets.length))) drawTarget(target);
+  if (questions.length < count) {
+    for (const target of shuffle([...targets], random)) {
+      if (questions.length >= count) break;
+      drawTarget(target);
+    }
+  }
+  if (questions.length !== count) throw new Error(`Quiz bank too small for ${count} questions`);
   if (new Set(questions.map((q) => q.flag)).size !== questions.length) throw new Error("Duplicate validation flag in quiz session");
   return { seed, questions };
 }

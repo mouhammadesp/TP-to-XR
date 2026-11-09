@@ -135,6 +135,17 @@ export const COMPONENTS: EngineComponent[] = [
       "C'est le petit réservoir clair avec un bouchon noir, entre le cache moteur et le couvercle de batterie.",
     ],
   },
+  {
+    id: "radiator",
+    name: "Radiateur du circuit de refroidissement",
+    tag: "Radiateur",
+    system: "Refroidissement du moteur",
+    role: "Grand échangeur de chaleur : le liquide chaud du moteur y circule et l'air du déplacement le refroidit ; le motoventilateur fait tourner l'air à l'arrêt.",
+    hints: [
+      "C'est le grand panneau à nid d'abeille, sur toute la largeur, tout au fond du compartiment du côté avant de la voiture.",
+      "Le petit réservoir translucide posé à côté lui fournit son liquide — la pièce demandée, elle, est pleine de fines ailettes.",
+    ],
+  },
 ];
 
 /** Legacy fixed order, retained only for manifests and reports created before seeded sessions. */

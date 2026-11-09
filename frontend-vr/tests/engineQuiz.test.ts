@@ -18,7 +18,7 @@ const byId = (id: string) => COMPONENTS.find((c) => c.id === id)!;
 
 test("engine quiz: every selectable component has a role and two progressive hints", () => {
   assert.equal(QUIZ.length, 5, "the legacy fallback remains available");
-  assert.equal(COMPONENTS.length, 9);
+  assert.equal(COMPONENTS.length, 10);
   for (const c of COMPONENTS) {
     assert.ok(c.hints[0].length > 20 && c.hints[1].length > 20, `${c.id}: hints`);
     assert.notEqual(c.hints[0], c.hints[1]);

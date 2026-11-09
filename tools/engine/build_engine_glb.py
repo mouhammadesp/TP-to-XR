@@ -40,6 +40,10 @@ ZONES = {
     "intake_duct":   {"x": (-0.318, -0.182), "y": (-0.370, -0.125), "min_size": 0.10},
     "battery":       {"x": (-0.079, 0.295),  "y": (-0.617, -0.373), "min_size": 0.10},
     "brake_fluid":   {"x": (0.181, 0.291),   "y": (-0.361, -0.236), "min_size": 0.10, "max_depth": 0.12},
+    # Added to the shipped GLB by tools/engine/add_zones.mjs (no Blender there):
+    # honeycomb heat exchanger across the whole front edge, seen face-on, from
+    # both sides and from above. Kept here so a full rebuild reproduces it.
+    "radiator":      {"x": (-0.530, -0.400), "y": (-0.450, 0.500), "min_size": 0.10, "max_depth": 0.30},
 }
 
 bpy.ops.wm.read_factory_settings(use_empty=True)

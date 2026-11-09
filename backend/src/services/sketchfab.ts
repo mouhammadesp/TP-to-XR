@@ -218,13 +218,13 @@ const GENERIC = new Set(["model", "free", "use", "low", "poly", "lowpoly", "scan
 
 /**
  * A search hit represents the object only if:
- *  - most of the query's words are found (all of them for a 1–2 word query, 2 of 3…),
+ *  - most of the query's words are found (half of them for a 1–2 word query,
+ *    "marker pen" may hit "Marker - 6MB -", 2 of 3 for longer queries, 0.6…),
  *  - at least one of them is in the model's NAME (tags alone are often spammy),
  *  - its name has no off-topic word (toy, cartoon, character…) the query did not ask for,
- *  - the query covers at least half of the meaningful words of the name, and the name's
- *    HEAD (its last two meaningful words before "with", "-", "(" …) is in the query: a
- *    title about something else is rejected ("label" ≠ "Classic wine bottle with label",
- *    "seed samples" ≠ "SEED Sample Holder Assembly").
+ *  - the name's HEAD (its last two meaningful words before "with", "-", "(" …)
+ *    is in the query: a title about something else is rejected ("label" ≠
+ *    "Classic wine bottle with label", "seed samples" ≠ "SEED Sample Holder Assembly").
  * Otherwise the object keeps a labeled placeholder rather than a wrong model
  * (e.g. "bean seeds" ≠ "Jelly Bean Kidneys", "alligator clip" ≠ "Cavalry soldier toy").
  */
@@ -233,7 +233,10 @@ export function isRelevant(query: string, m: { name: string; tags: string[] }): 
   if (!q.length) return false;
   const name = stems(m.name);
   if (name.some((w) => OFF_TOPIC.has(w) && !q.includes(w))) return false;
-  const needed = q.length <= 2 ? q.length : Math.ceil(q.length * 0.6);
+  // Halve the bar for short queries instead of requiring every word: Sketchfab
+  // titles legitimately omit a compound noun's qualifier ("Marker - 6MB -"
+  // is a marker), and their head word guarantees the object kind.
+  const needed = q.length <= 2 ? Math.ceil(q.length / 2) : Math.ceil(q.length * 0.6);
   const meaningful = name.filter((w) => !GENERIC.has(w) && !/^\d/.test(w));
   const covered = meaningful.filter((h) => q.some((w) => sameStem(w, h))).length;
   // Head of the title: its last two meaningful words (compound nouns: "marker pens").
@@ -241,7 +244,7 @@ export function isRelevant(query: string, m: { name: string; tags: string[] }): 
     .filter((w) => !GENERIC.has(w) && !/^\d/.test(w))
     .slice(-2);
   const headOk = !head.length || q.some((w) => head.some((h) => sameStem(w, h)));
-  return relevance(query, m) >= needed && covered > 0 && covered >= meaningful.length / 2 && headOk;
+  return relevance(query, m) >= needed && covered > 0 && headOk;
 }
 
 /** License uid from either result shape ("" if unknown). */

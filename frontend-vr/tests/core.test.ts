@@ -103,6 +103,13 @@ test("score: wrong objects lower accuracy; finish only on last step", () => {
   assert.equal(s.finish(), true);
 });
 
+test("session summary: only seeded quizzes upload their reconstruction seed", () => {
+  const s = new TPSession("tp_demo_engine", "test", [new Set()]);
+  assert.equal(s.summary().quiz_seed, undefined);
+  s.quizSeed = "fixed_test_seed";
+  assert.equal(s.summary().quiz_seed, "fixed_test_seed");
+});
+
 test("gesture: pinch hysteresis + cooldown", () => {
   const p = new PinchDetector({ startM: 0.018, endM: 0.035, cooldownMs: 600 });
   assert.equal(p.update(0.05, 0), null);

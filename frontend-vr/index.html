@@ -71,6 +71,9 @@
     .inbox-row.selected { border-color: #5fd394; background: rgba(46,139,87,0.28); }
     #upload-hint { margin-top: 10px; font-size: 15px; }
     .demo-block { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); display: grid; gap: 12px; font-size: 15px; }
+    #demo-buttons { display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 14px; }
+    #demo-buttons .demo { flex: 1 1 260px; max-width: 340px; min-height: 58px; padding: 10px 20px; line-height: 1.35; text-wrap: balance; }
+    @media (max-width: 620px) { #demo-buttons { flex-direction: column; align-items: center; } #demo-buttons .demo { flex: 0 1 auto; width: min(100%, 340px); } }
     .demo { min-height: 46px; padding: 0 18px; border-radius: 10px; font-size: 16px; font-weight: 600; border: 1px solid var(--line);
       background: color-mix(in srgb, var(--accent) 22%, transparent); }
     .demo:hover { background: color-mix(in srgb, var(--accent) 40%, transparent); }
@@ -152,7 +155,7 @@
         <button id="btn-library" class="secondary">TPs déjà générés</button>
       </div>
       <div id="demo-block" class="demo-block" hidden>
-        <div class="muted">Tester sans clé API (TP de démonstration, objets provisoires) :</div>
+        <div class="muted">Tester sans clé API (démonstrations guidées) :</div>
         <div id="demo-buttons" class="actions"></div>
       </div>
     </section>

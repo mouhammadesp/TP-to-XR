@@ -15,6 +15,7 @@ import express, { Router } from "express";
 import { DomainSchema, ParseTPBodySchema } from "../schemas/tp";
 import { getDemo } from "../services/demoTps";
 import { getPreview } from "../services/previewTps";
+import { QUIZ_SEED_PATTERN } from "../services/quiz";
 import { PipelineInput, getJob, jobProgress, startPipeline } from "../services/pipeline";
 import { assertTpId, listManifests, loadManifest } from "../services/tpStore";
 import { HttpError, asyncHandler } from "../utils/http";
@@ -133,6 +134,10 @@ tpRouter.get(
 tpRouter.get(
   "/:id",
   asyncHandler(async (req, res) => {
-    res.json(getDemo(req.params.id) ?? (await getPreview(req.params.id)) ?? (await loadManifest(req.params.id)));
+    const rawSeed = req.query.quiz_seed;
+    if (rawSeed !== undefined && (typeof rawSeed !== "string" || !QUIZ_SEED_PATTERN.test(rawSeed))) {
+      throw new HttpError(400, "Invalid quiz_seed (1–64 letters, digits, _ or -)");
+    }
+    res.json(getDemo(req.params.id, rawSeed as string | undefined) ?? (await getPreview(req.params.id)) ?? (await loadManifest(req.params.id)));
   })
 );

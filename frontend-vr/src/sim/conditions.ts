@@ -26,9 +26,23 @@ export interface SimTarget {
   anchor?: { asset: string; mode: "top" | "base" };
 }
 
+export interface QuizQuestion {
+  id: string;
+  answer: string;
+  prompt: string;
+  flag: string;
+}
+
+export interface QuizPlan {
+  seed: string;
+  questions: QuizQuestion[];
+}
+
 export interface SimulationSpec {
   /** "generic": no behavior module, the conditions alone decide (generated TPs). */
   kind: "circuit" | "belt_drive" | "engine_quiz" | "instrument_quiz" | "generic";
+  /** Seeded draw shared by the displayed steps, behavior and report. */
+  quiz?: QuizPlan;
   targets: SimTarget[];
   rules: SimCondition[][];
   completion: string;

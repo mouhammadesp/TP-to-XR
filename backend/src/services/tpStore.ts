@@ -15,6 +15,7 @@ import { ColorScheme, Domain } from "../schemas/tp";
 import { SafetySignContent } from "./placement";
 import { TEMPLATE_VERSION } from "./workshop";
 import { HttpError } from "../utils/http";
+import type { QuizPlan } from "./quiz";
 
 export const TP_DATA_DIR = path.resolve(__dirname, "..", "..", "data", "tps");
 const ID_RE = /^tp_[a-z0-9_-]{1,64}$/;
@@ -116,6 +117,8 @@ export interface SimulationSpec {
    * none ("generic": conditions only).
    */
   kind: "circuit" | "belt_drive" | "engine_quiz" | "instrument_quiz" | "generic";
+  /** Exact question draw for quiz demos; the seed is stored with the session. */
+  quiz?: QuizPlan;
   targets: SimTarget[];
   /** One list of conditions per step (all must hold to validate the step). */
   rules: SimCondition[][];

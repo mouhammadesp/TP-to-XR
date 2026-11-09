@@ -97,6 +97,8 @@ export interface SessionSummary {
   student_id: string;
   /** Name entered by the student (report only), null when not identified. */
   student: StudentIdentity | null;
+  /** Rebuilds the exact selected quiz questions in the individual report. */
+  quiz_seed?: string;
   /** The TP has a validation engine (interactive simulation). */
   interactive: boolean;
   started_at: number;
@@ -140,6 +142,8 @@ export class TPSession {
   public handTrackingUsed = false;
   /** Student identity entered before the TP (null: not identified). */
   public identity: StudentIdentity | null = null;
+  /** Seed of the exact quiz draw, uploaded for report reconstruction. */
+  public quizSeed: string | null = null;
   /** Set when the TP has a validation engine: steps are then "validated", not just "done". */
   public interactive = false;
   /**
@@ -374,6 +378,7 @@ export class TPSession {
       tp_id: this.tpId,
       student_id: this.studentId,
       student: this.identity,
+      ...(this.quizSeed ? { quiz_seed: this.quizSeed } : {}),
       interactive: this.interactive,
       started_at: this.startedAt,
       duration_sec: this.elapsedSec(),

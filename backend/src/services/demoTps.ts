@@ -12,9 +12,13 @@
  * - pulley_small / pulley_large: radius 0.05 / 0.07, axis along Z, base = bottom of the rim;
  * - breadboard: 0.18 × 0.009 × 0.11 m (top at y = 0.009).
  */
+import { randomBytes } from "crypto";
 import { Domain } from "../schemas/tp";
 import { Attribution, SceneAsset, SimulationSpec, TEMPLATE_REF, TPSceneManifest } from "./tpStore";
 import { PANELS } from "../config/workshopLayout";
+import { DEMO_QUESTION_COUNT, drawQuiz } from "./quiz";
+import type { QuizTarget, QuizVariant } from "./quiz";
+import { ENGINE_QUESTION_BANK, INSTRUMENT_QUESTION_BANK } from "./quizBank";
 
 const BENCH_Y = 0.9;
 
@@ -40,6 +44,14 @@ interface DemoDefinition {
   domain: Domain;
   /** Menu button text, when the domain alone is ambiguous (several demos of one domain). */
   menu_label?: string;
+  /** false keeps the demo available by id while hiding its former home-menu button. */
+  in_menu?: boolean;
+  /** Authored quiz: one seeded draw per session, rebuilt identically for the report. */
+  quiz?: {
+    bank: readonly QuizTarget[];
+    count: number;
+    flagFor?: (target: QuizTarget, variant: QuizVariant) => string;
+  };
   duration_minutes: number;
   steps: { order: number; action: string; safety: string | null }[];
   safety_warnings: string[];
@@ -60,6 +72,7 @@ const ELECTRICAL: DemoDefinition = {
   title: "Câblage d'un circuit mixte série-parallèle",
   domain: "electrical",
   menu_label: "Démo électrique — circuit",
+  in_menu: false,
   duration_minutes: 25,
   steps: [
     { order: 1, action: "Installer la plaque d'essai sur le poste et la batterie 12 V dans son logement.", safety: "Interrupteur ouvert (OFF) pendant tout le câblage" },
@@ -121,6 +134,7 @@ const MECHANICAL: DemoDefinition = {
   id: "tp_demo_mechanical",
   title: "Montage d'une courroie trapézoïdale (V)",
   domain: "mechanical",
+  in_menu: false,
   duration_minutes: 30,
   steps: [
     { order: 1, action: "Consigner le moteur au sectionneur (OFF + cadenas), puis inspecter les deux poulies en les prenant en main.", safety: "Aucune intervention avant consignation" },
@@ -195,7 +209,12 @@ const ENGINE: DemoDefinition = {
   id: "tp_demo_engine",
   title: "À la découverte d'un moteur automobile — identifiez ses composants en réalité virtuelle",
   domain: "mechanical",
-  menu_label: "Démo moteur automobile",
+  menu_label: "Démo mécanique — Moteur automobile",
+  quiz: {
+    bank: ENGINE_QUESTION_BANK,
+    count: DEMO_QUESTION_COUNT,
+    flagFor: (target) => `found_${target.answer}`,
+  },
   duration_minutes: 5,
   steps: [
     { order: 1, action: "Découverte libre : observez le compartiment moteur, approchez-vous, et pointez au moins 3 composants avec le laser (ou la souris) pour afficher leur nom.", safety: null },
@@ -241,7 +260,7 @@ const ENGINE: DemoDefinition = {
       [{ type: "state", key: "found_air_filter", label: "Boîtier du filtre à air identifié" }],
       [{ type: "state", key: "found_battery", label: "Batterie identifiée" }],
     ],
-    completion: "Vous avez identifié les 5 composants : lubrification, refroidissement, admission d'air et alimentation électrique n'ont plus de secret pour vous !",
+    completion: "Vous avez correctement identifié les 5 composants demandés dans cette séance, en distinguant le moteur des autres équipements du compartiment moteur.",
   },
 };
 
@@ -264,7 +283,8 @@ const INSTRUMENTS: DemoDefinition = {
   title: "Génie électrique — à la découverte des instruments de mesure",
   domain: "electrical",
   menu_label: "Démo génie électrique — Instruments de mesure",
-  duration_minutes: 10,
+  quiz: { bank: INSTRUMENT_QUESTION_BANK, count: DEMO_QUESTION_COUNT },
+  duration_minutes: 5,
   steps: [
     {
       order: 1,
@@ -460,8 +480,33 @@ const INSTRUMENTS: DemoDefinition = {
 
 const DEMOS: DemoDefinition[] = [MECHANICAL, ELECTRICAL, ENGINE, INSTRUMENTS];
 
-/** Builds the manifest of one demo. */
-function buildDemo(def: DemoDefinition): TPSceneManifest {
+/** Builds one manifest; quiz demos get a fresh, deterministic plan when a seed is supplied. */
+function buildDemo(def: DemoDefinition, quizSeed?: string): TPSceneManifest {
+  const quiz = def.quiz && quizSeed ? drawQuiz(def.quiz.bank, def.quiz.count, quizSeed, def.quiz.flagFor) : undefined;
+  const steps = quiz
+    ? [
+        def.steps[0],
+        ...quiz.questions.map((q, i) => ({
+          order: i + 2,
+          action: `${q.prompt} Utilisez le laser (gâchette) ou la souris (clic) pour répondre.`,
+          safety: null,
+        })),
+      ]
+    : def.steps;
+  const simulation = quiz
+    ? {
+        ...def.simulation,
+        quiz,
+        rules: [
+          def.simulation.rules[0],
+          ...quiz.questions.map((q) => [{
+            type: "state" as const,
+            key: q.flag,
+            label: def.simulation.kind === "engine_quiz" ? "Le bon composant est sélectionné" : "Le bon équipement est sélectionné",
+          }]),
+        ],
+      }
+    : def.simulation;
   const assets: SceneAsset[] = def.objects.map((o) => ({
     asset_id: o.id,
     name: o.name,
@@ -486,7 +531,7 @@ function buildDemo(def: DemoDefinition): TPSceneManifest {
       title: def.title,
       domain: def.domain,
       duration_minutes: def.duration_minutes,
-      steps: def.steps,
+      steps,
       safety_warnings: def.safety_warnings,
     },
     color_scheme: { ambient: "#404040", key_light: def.key_light, material_base: "#808080" },
@@ -495,35 +540,44 @@ function buildDemo(def: DemoDefinition): TPSceneManifest {
     unplaced: [],
     warnings: [],
     reasoning: "TP de démonstration interactif (objets générés, étapes validées par l'action, simulation).",
-    simulation: def.simulation,
+    simulation,
   };
 }
 
 let cache: Map<string, TPSceneManifest> | null = null;
 
+/** Legacy manifests stay available for old direct links and reports without a quiz seed. */
 function demos(): Map<string, TPSceneManifest> {
   cache ??= new Map(DEMOS.map((d) => [d.id, buildDemo(d)]));
   return cache;
 }
 
-/** Demo manifest by id (e.g. "tp_demo_mechanical"), or undefined. */
-export function getDemo(id: string): TPSceneManifest | undefined {
-  return demos().get(id);
+/**
+ * Demo manifest by id. Omitting the seed starts a new quiz session; passing one
+ * reproduces it exactly. `null` explicitly requests the pre-quiz legacy manifest.
+ */
+export function getDemo(id: string, quizSeed?: string | null): TPSceneManifest | undefined {
+  const def = DEMOS.find((d) => d.id === id);
+  if (!def?.quiz || quizSeed === null) return demos().get(id);
+  return buildDemo(def, quizSeed ?? randomBytes(12).toString("hex"));
 }
 
-/** Demo manifest by domain (e.g. "electrical"), or undefined. */
+/** Demo manifest by domain (legacy domain entries remain internally available). */
 export function getDemoByDomain(domain: string): TPSceneManifest | undefined {
   return [...demos().values()].find((m) => m.tp.domain === domain);
 }
 
-/** Short list for the menu. */
+/** Only current entries are listed; hidden demos remain reachable by their id. */
 export function listDemos(): { id: string; title: string; domain: Domain; label: string | null; assets: number; steps: number }[] {
-  return [...demos().values()].map((m) => ({
-    id: m.id,
-    title: m.tp.title,
-    domain: m.tp.domain,
-    label: DEMOS.find((d) => d.id === m.id)?.menu_label ?? null,
-    assets: m.assets.length,
-    steps: m.tp.steps.length,
-  }));
+  return DEMOS.filter((d) => d.in_menu !== false).map((d) => {
+    const m = demos().get(d.id)!;
+    return {
+      id: m.id,
+      title: m.tp.title,
+      domain: m.tp.domain,
+      label: d.menu_label ?? null,
+      assets: m.assets.length,
+      steps: d.quiz ? d.quiz.count + 1 : m.tp.steps.length,
+    };
+  });
 }

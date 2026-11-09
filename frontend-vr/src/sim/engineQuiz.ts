@@ -18,8 +18,9 @@
  */
 import { Color3, Mesh, MeshBuilder, PointerEventTypes, PointerInfo, Scene, StandardMaterial, TransformNode, Vector3 } from "@babylonjs/core";
 import { PlacedAsset } from "../scenes/TPScene";
-import { FONT, PaintedSurface, paintMesh, roundRect, wrap } from "../ui/textCanvas";
+import { FONT, PaintedSurface, paintMesh, roundRect } from "../ui/textCanvas";
 import type { Behavior } from "./behaviors";
+import type { QuizQuestion } from "./conditions";
 import type { Simulation } from "./Simulation";
 
 /** A component of the scan the visitor can point at. */
@@ -96,7 +97,10 @@ export const COMPONENTS: EngineComponent[] = [
     name: "Cache moteur",
     system: "Moteur",
     role: "Capot en plastique qui protège le dessus du moteur et atténue le bruit. TFSI : moteur essence à turbocompresseur et injection directe.",
-    hints: ["", ""],
+    hints: [
+      "Il occupe le centre du moteur, entre la jauge orange et le conduit d'admission.",
+      "C'est le large cache noir marqué des quatre anneaux Audi et du sigle TFSI.",
+    ],
   },
   {
     id: "intake_duct",
@@ -104,7 +108,10 @@ export const COMPONENTS: EngineComponent[] = [
     tag: "Conduit d'admission",
     system: "Admission d'air du moteur",
     role: "Ce tuyau annelé amène l'air filtré du boîtier de filtre vers le turbocompresseur, puis le moteur.",
-    hints: ["", ""],
+    hints: [
+      "Suivez le gros tuyau qui part du boîtier de filtre à air et rejoint le moteur.",
+      "C'est le conduit noir annelé et coudé, à droite du cache moteur vu depuis l'avant.",
+    ],
   },
   {
     id: "washer_cap",
@@ -112,7 +119,10 @@ export const COMPONENTS: EngineComponent[] = [
     tag: "Bouchon de lave-glace",
     system: "Nettoyage du pare-brise (ne fait pas partie du moteur)",
     role: "On y verse le liquide qui nettoie le pare-brise. Son bouchon bleu porte le symbole d'un pare-brise.",
-    hints: ["", ""],
+    hints: [
+      "Cherchez près du vase d'expansion, à l'avant du compartiment, hors du moteur.",
+      "C'est le petit bouchon bleu avec un symbole de pare-brise, en contrebas du gros bouchon du vase d'expansion.",
+    ],
   },
   {
     id: "brake_fluid",
@@ -120,12 +130,21 @@ export const COMPONENTS: EngineComponent[] = [
     tag: "Liquide de frein",
     system: "Freinage (ne fait pas partie du moteur)",
     role: "Il contient le liquide qui transmet l'effort de la pédale de frein jusqu'aux freins des roues.",
-    hints: ["", ""],
+    hints: [
+      "Il est fixé côté pare-brise, près du maître-cylindre, et ne fait pas partie du moteur.",
+      "C'est le petit réservoir clair avec un bouchon noir, entre le cache moteur et le couvercle de batterie.",
+    ],
   },
 ];
 
-/** Components asked, in step order (steps 2..6). Must match the rules of tp_demo_engine. */
+/** Legacy fixed order, retained only for manifests and reports created before seeded sessions. */
 export const QUIZ = ["oil_cap", "dipstick", "coolant_tank", "air_filter", "battery"] as const;
+const LEGACY_QUESTIONS: QuizQuestion[] = QUIZ.map((answer) => ({
+  id: `legacy_${answer}`,
+  answer,
+  prompt: "",
+  flag: `found_${answer}`,
+}));
 
 /** Different components to point at during the discovery step. */
 export const EXPLORE_GOAL = 3;
@@ -137,8 +156,6 @@ export const PULSE_AFTER_ERRORS = 3;
 const ENGINE_ASSET = "x_moteur";
 /** Height of the name tag above the top of its part (m). */
 const LABEL_RISE = 0.12;
-/** Question board: centered behind the plinth, below the eye line toward the monitor. */
-const PANEL = { y: 1.36, back: 0.66, width: 1.1, height: 0.42 };
 const COLORS = {
   hover: new Color3(0.35, 0.8, 1),
   found: new Color3(0.25, 0.95, 0.5),
@@ -172,7 +189,6 @@ interface Zone {
 
 export class EngineQuizBehavior implements Behavior {
   public readonly stateTargets: Record<string, string> = {};
-  public readonly feedbackPose?: { position: Vector3; viewer: { x: number; z: number } };
   private readonly scene: Scene;
   private readonly zones = new Map<string, Zone>();
   private readonly byBox = new Map<Mesh, Zone>();
@@ -180,16 +196,18 @@ export class EngineQuizBehavior implements Behavior {
   private readonly hoveredBy = new Map<number, Zone>();
   private readonly explored = new Set<string>();
   private readonly found = new Set<string>();
-  /** Per question: attempts and wrong answers. */
-  private readonly attempts = QUIZ.map(() => 0);
-  private readonly errors = QUIZ.map(() => 0);
+  private readonly questions: readonly QuizQuestion[];
+  /** Per selected question: attempts and wrong answers. */
+  private readonly attempts: number[];
+  private readonly errors: number[];
   private dwell: { zone: Zone; t: number } | null = null;
   private justFound: { zone: Zone; t: number } | null = null;
   private time = 0;
-  private panel: PaintedSurface | null = null;
-  private panelKey = "";
 
   constructor(private readonly sim: Simulation) {
+    this.questions = sim.spec.quiz?.questions ?? LEGACY_QUESTIONS;
+    this.attempts = this.questions.map(() => 0);
+    this.errors = this.questions.map(() => 0);
     const engine = sim.asset(ENGINE_ASSET);
     this.scene = (engine?.handle.getScene() ?? null) as Scene;
     if (!engine || !this.scene) {
@@ -197,18 +215,14 @@ export class EngineQuizBehavior implements Behavior {
       return;
     }
     this.buildZones(engine);
-    const at = engine.handle.position;
-    // Notification card beside the question board, on the visitor's right (−X when facing −Z).
-    this.feedbackPose = { position: new Vector3(at.x - (PANEL.width / 2 + 0.45), PANEL.y, at.z - PANEL.back + 0.06), viewer: { x: at.x, z: at.z + 1.4 } };
-    this.buildPanel(engine);
     this.scene.onPointerObservable.add((pi) => this.onPointer(pi));
-    console.log(`🔧 engine_quiz: ${this.zones.size} zones`);
+    console.log(`🔧 engine_quiz: ${this.zones.size} zones, ${this.questions.length} questions (seed ${sim.spec.quiz?.seed ?? "legacy"})`);
   }
 
   /* ---------------------------------------------------------------- hooks */
 
   public get intro(): string {
-    return "Démonstration : pointez les composants du moteur avec le laser (ou la souris) pour les découvrir.";
+    return `Démonstration : explorez le compartiment moteur, puis répondez à ${this.questions.length} questions avec le laser ou la souris.`;
   }
 
   public update(dt: number): void {
@@ -219,7 +233,6 @@ export class EngineQuizBehavior implements Behavior {
       if (this.dwell.t >= EXPLORE_DWELL) this.explore(this.dwell.zone);
     }
     this.paintZones();
-    this.redrawPanel();
   }
 
   public onStepChanged(): void {
@@ -228,8 +241,9 @@ export class EngineQuizBehavior implements Behavior {
   }
 
   public validationMessage(index: number): { title: string; text: string } | null {
-    if (index === 0) return { title: "Découverte terminée !", text: `Le quiz commence : ${QUIZ.length} composants à retrouver. Les noms ne s'affichent plus au survol.` };
-    const c = this.component(QUIZ[index - 1]);
+    if (index === 0) return { title: "Découverte terminée !", text: `Le quiz commence : ${this.questions.length} composants à retrouver. Les noms ne s'affichent plus au survol.` };
+    const question = this.questions[index - 1];
+    const c = question ? this.component(question.answer) : undefined;
     return c ? { title: "Bonne réponse !", text: `${c.name} — ${c.role}` } : null;
   }
 
@@ -237,7 +251,7 @@ export class EngineQuizBehavior implements Behavior {
     const tries = this.attempts.reduce((a, b) => a + b, 0);
     const errs = this.errors.reduce((a, b) => a + b, 0);
     return [
-      `✓ ${this.foundAsked()}/${QUIZ.length} composants identifiés`,
+      `✓ ${this.foundAsked()}/${this.questions.length} composants identifiés`,
       `🎯 ${tries} tentative${tries > 1 ? "s" : ""} (${errs} erreur${errs > 1 ? "s" : ""})`,
     ];
   }
@@ -249,10 +263,10 @@ export class EngineQuizBehavior implements Behavior {
   }
 
   private onPointer(pi: PointerInfo): void {
-    const ev = pi.event as PointerEvent;
-    const id = ev.pointerId ?? 0;
+    const ev = pi.event as PointerEvent | undefined;
+    const id = ev?.pointerId ?? 0;
     const zone = pi.pickInfo?.hit && pi.pickInfo.pickedMesh ? this.byBox.get(pi.pickInfo.pickedMesh as Mesh) ?? null : null;
-    const xr = String(ev.pointerType ?? "").startsWith("xr");
+    const xr = String(ev?.pointerType ?? "").startsWith("xr");
     if (pi.type === PointerEventTypes.POINTERMOVE) this.setHover(id, zone);
     // Controllers select on trigger press; the mouse on a click (a drag only turns the view).
     const select = (xr && pi.type === PointerEventTypes.POINTERDOWN) || (!xr && pi.type === PointerEventTypes.POINTERTAP);
@@ -283,8 +297,9 @@ export class EngineQuizBehavior implements Behavior {
       return;
     }
     const q = this.step - 1;
-    const asked = this.component(QUIZ[q]);
-    if (!asked || this.sim.stepValidated) return; // already answered: the next question is coming
+    const question = this.questions[q];
+    const asked = question ? this.component(question.answer) : undefined;
+    if (!question || !asked || this.sim.stepValidated) return; // already answered: the next question is coming
     const correct = zone.component.id === asked.id;
     this.attempts[q]++;
     s.recordAnswer({ ...src, target: zone.component.id, correct });
@@ -292,19 +307,17 @@ export class EngineQuizBehavior implements Behavior {
       this.found.add(asked.id);
       this.justFound = { zone, t: this.time };
       this.setLabel(zone, "found");
-      // Validates the step: the session shows "Bonne réponse !" (validationMessage) with sound + vibration.
-      this.sim.setFlag(`found_${asked.id}`, true);
+      // The flag belongs to this exact drawn question and matches its manifest rule.
+      this.sim.setFlag(question.flag, true);
     } else {
       this.errors[q]++;
       this.sim.notify("info", "Pas tout à fait…", wrongAnswerText(zone.component, asked, this.errors[q]));
     }
-    this.panelKey = "";
   }
 
   private explore(zone: Zone): void {
     if (this.explored.has(zone.component.id)) return;
     this.explored.add(zone.component.id);
-    this.panelKey = "";
     if (this.explored.size >= EXPLORE_GOAL) this.sim.setFlag("explored", true);
   }
 
@@ -314,7 +327,7 @@ export class EngineQuizBehavior implements Behavior {
   private paintZones(): void {
     const hovered = new Set(this.hoveredBy.values());
     const q = this.step - 1;
-    const pulseId = q >= 0 && q < QUIZ.length && this.errors[q] >= PULSE_AFTER_ERRORS && !this.sim.stepValidated ? QUIZ[q] : null;
+    const pulseId = q >= 0 && q < this.questions.length && this.errors[q] >= PULSE_AFTER_ERRORS && !this.sim.stepValidated ? this.questions[q].answer : null;
     const wave = 0.5 + 0.5 * Math.sin(this.time * 5);
     for (const z of this.zones.values()) {
       let color: Color3 | null = null;
@@ -349,7 +362,7 @@ export class EngineQuizBehavior implements Behavior {
   }
 
   private foundAsked(): number {
-    return QUIZ.filter((id) => this.found.has(id)).length;
+    return this.questions.filter((q) => this.found.has(q.answer)).length;
   }
 
   /** One invisible, pickable box per "zone__<id>" node of the GLB, plus its name tag. */
@@ -414,80 +427,4 @@ export class EngineQuizBehavior implements Behavior {
     return { label, labelSurface };
   }
 
-  /** Question board behind the plinth, facing the visitor (readable in the headset). */
-  private buildPanel(engine: PlacedAsset): void {
-    const at = engine.handle.position;
-    const plane = MeshBuilder.CreatePlane("engine_quiz_panel", { width: PANEL.width, height: PANEL.height }, this.scene);
-    plane.position = new Vector3(at.x, PANEL.y, at.z - PANEL.back);
-    plane.rotation.y = Math.PI; // faces +Z (the visitor)
-    plane.isPickable = false;
-    this.panel = paintMesh(this.scene, plane, 1100, 420, (ctx, w, h) => this.drawPanel(ctx, w, h));
-    this.panel.texture.hasAlpha = true;
-  }
-
-  private redrawPanel(): void {
-    const s = this.sim.session;
-    const q = this.step - 1;
-    const key = [this.step, s.finished, this.explored.size, this.foundAsked(), q >= 0 ? this.errors[q] : 0, this.sim.stepValidated].join("|");
-    if (key === this.panelKey) return;
-    this.panelKey = key;
-    this.panel?.redraw();
-  }
-
-  private drawPanel(ctx: CanvasRenderingContext2D, w: number, h: number): void {
-    const s = this.sim.session;
-    ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "rgba(18,24,32,0.9)";
-    roundRect(ctx, 4, 4, w - 8, h - 8, 28);
-    ctx.fill();
-    ctx.fillStyle = "#7B4FB0";
-    ctx.fillRect(4, 26, 10, h - 52);
-    const pad = 44;
-    const head = (text: string, color = "#B9C4CF") => {
-      ctx.fillStyle = color;
-      ctx.font = `bold 30px ${FONT}`;
-      ctx.textAlign = "left";
-      ctx.fillText(text, pad, 62);
-    };
-    const body = (text: string, y: number, px: number, color: string, max: number): number => {
-      ctx.fillStyle = color;
-      ctx.font = `${px === 44 ? "bold " : ""}${px}px ${FONT}`;
-      const lines = wrap(ctx, text, w - 2 * pad).slice(0, max);
-      lines.forEach((l, i) => ctx.fillText(l, pad, y + i * px * 1.22));
-      return y + lines.length * px * 1.22;
-    };
-
-    if (s.finished) {
-      const mins = Math.floor(s.elapsedSec() / 60);
-      const secs = String(s.elapsedSec() % 60).padStart(2, "0");
-      const tries = this.attempts.reduce((a, b) => a + b, 0);
-      head("BILAN DE LA DÉMONSTRATION", "#7FE0A6");
-      let y = body(`Bravo ! ${this.foundAsked()}/${QUIZ.length} composants identifiés en ${tries} tentative${tries > 1 ? "s" : ""} · ${mins} min ${secs} s`, 122, 40, "#FFFFFF", 2);
-      y = body("Fonctions découvertes :", y + 14, 32, "#B9C4CF", 1);
-      const systems = new Map<string, string[]>();
-      for (const id of QUIZ) {
-        const c = this.component(id)!;
-        if (!this.found.has(id)) continue;
-        const sys = c.system.replace(/ \(.*\)$/, "");
-        systems.set(sys, [...(systems.get(sys) ?? []), (c.tag ?? c.name).toLowerCase()]);
-      }
-      for (const [sys, names] of systems) y = body(`• ${sys} : ${names.join(", ")}`, y + 4, 30, "#E3E8ED", 1);
-      return;
-    }
-    if (this.step === 0) {
-      head(`DÉCOUVERTE LIBRE · ${Math.min(this.explored.size, EXPLORE_GOAL)}/${EXPLORE_GOAL} composants pointés`);
-      const y = body("Observez le moteur, approchez-vous et pointez les composants avec le laser (ou la souris) : leur nom s'affiche.", 122, 40, "#FFFFFF", 3);
-      body("Gâchette / clic sur un composant : sa fonction.", y + 16, 30, "#9FB0C0", 1);
-      return;
-    }
-    const q = this.step - 1;
-    const asked = this.component(QUIZ[q]);
-    if (!asked) return;
-    head(`QUESTION ${q + 1}/${QUIZ.length} · ${this.foundAsked()} trouvé${this.foundAsked() > 1 ? "s" : ""}`);
-    const question = this.sim.stepValidated ? `✓ ${asked.name}` : `Où se trouve : ${asked.name.toLowerCase().replace(/ \(.*\)$/, "")} ?`;
-    let y = body(question, 128, 44, this.sim.stepValidated ? "#7FE0A6" : "#FFFFFF", 2);
-    if (!this.sim.stepValidated) y = body("Pointez-le, puis gâchette (ou clic).", y + 6, 30, "#9FB0C0", 1);
-    const hint = hintFor(asked, this.errors[q]);
-    if (hint && !this.sim.stepValidated) body(`💡 ${hint}`, y + 18, 32, "#FFD27A", 3);
-  }
 }

@@ -49,7 +49,7 @@ export class MenuUI {
         btn.dataset.tp = d.id;
         btn.style.setProperty("--accent", meta?.color ?? "#5F7380");
         btn.title = `${d.title} (${d.steps} étapes)`;
-        btn.textContent = `${meta?.icon ?? "🧪"} ${d.label ?? `Démo ${meta?.label.toLowerCase() ?? d.domain}`}`;
+        btn.textContent = d.label ?? `Démo ${meta?.label.toLowerCase() ?? d.domain}`;
         btn.addEventListener("click", () => this.onOpenTp(d.id, d.title));
         box.append(btn);
       }

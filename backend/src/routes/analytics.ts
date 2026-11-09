@@ -84,6 +84,8 @@ export const SessionSchema = z.object({
   tp_id: z.string(),
   student_id: Id,
   student: StudentSchema.nullable().default(null),
+  /** Rebuilds the exact seeded quiz manifest in the individual report. */
+  quiz_seed: Id.optional(),
   interactive: z.boolean().default(false),
   started_at: Ts,
   duration_sec: z.number().nonnegative(),

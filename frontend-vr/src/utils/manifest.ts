@@ -81,6 +81,12 @@ const ConditionSchema = z.discriminatedUnion("type", [
 /** Interactive TP description (demo TPs: authored behaviors; generated TPs: "generic" = conditions only). */
 export const SimulationSchema = z.object({
   kind: z.enum(["circuit", "belt_drive", "engine_quiz", "instrument_quiz", "generic"]),
+  quiz: z
+    .object({
+      seed: z.string().regex(/^[A-Za-z0-9_-]{1,64}$/),
+      questions: z.array(z.object({ id: z.string().min(1), answer: z.string().min(1), prompt: z.string().min(1), flag: z.string().min(1) })).min(1),
+    })
+    .optional(),
   targets: z.array(TargetSchema),
   rules: z.array(z.array(ConditionSchema)),
   completion: z.string(),
@@ -154,8 +160,9 @@ export function parseManifest(raw: unknown): ManifestResult {
 /**
  * Fetches and validates a manifest from the backend.
  */
-export async function fetchManifest(tpId: string): Promise<ManifestResult> {
-  const res = await fetch(`/api/tp/${encodeURIComponent(tpId)}`);
+export async function fetchManifest(tpId: string, quizSeed: string | null = null): Promise<ManifestResult> {
+  const query = quizSeed ? `?quiz_seed=${encodeURIComponent(quizSeed)}` : "";
+  const res = await fetch(`/api/tp/${encodeURIComponent(tpId)}${query}`);
   const body: unknown = await res.json().catch(() => null);
   if (!res.ok) {
     const msg = (body as { error?: string } | null)?.error ?? `HTTP ${res.status}`;

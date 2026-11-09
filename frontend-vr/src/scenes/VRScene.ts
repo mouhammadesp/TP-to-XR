@@ -43,7 +43,7 @@ export async function startTP(world: World, tpId: string, params: URLSearchParam
   applyDebugCamera(world.camera, params.get("cam"));
 
   status("chargement du TP…");
-  const { manifest, errors } = await fetchManifest(tpId);
+  const { manifest, errors } = await fetchManifest(tpId, params.get("quiz_seed"));
   errors.forEach((e) => {
     console.error("❌ manifest:", e);
     hudWarn(e);
@@ -71,6 +71,7 @@ function startSession(world: World, manifest: Manifest, assets: PlacedAsset[], p
   const session = new TPSession(manifest.id, resolveStudentId(params.get("student")), stepAssets);
   // Identity entered in the menu for this TP (null for a deep link without the form).
   session.identity = loadIdentity();
+  session.quizSeed = manifest.simulation?.quiz?.seed ?? null;
   session.interactive = !!manifest.simulation;
   // Generated TPs: steps without any checkable action can only be "terminées (non vérifiées)".
   session.verifiable = manifest.simulation ? manifest.tp.steps.map((_, i) => (manifest.simulation!.rules[i]?.length ?? 0) > 0) : null;

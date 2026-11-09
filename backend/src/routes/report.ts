@@ -43,7 +43,8 @@ router.get(
       throw new HttpError(404, "Session not found");
     }
     const id = req.params.tpId;
-    const manifest = (getDemo(id) ?? (await getPreview(id)) ?? (await loadManifest(id))) as unknown as ReportManifest;
+    // A stored seed rebuilds the exact questions. Reports predating seeded quizzes keep the legacy manifest.
+    const manifest = (getDemo(id, session.quiz_seed ?? null) ?? (await getPreview(id)) ?? (await loadManifest(id))) as unknown as ReportManifest;
 
     const report = buildReport(session, manifest);
     if (req.query.ai !== "0") report.ai = await aiPart(report, session, path.join(dir, `${sessionId.data}.feedback.json`));

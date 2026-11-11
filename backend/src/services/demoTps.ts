@@ -18,7 +18,7 @@ import { Attribution, SceneAsset, SimulationSpec, TEMPLATE_REF, TPSceneManifest 
 import { PANELS } from "../config/workshopLayout";
 import { DEMO_QUESTION_COUNT_MAX, demoQuestionCount, drawQuiz } from "./quiz";
 import type { QuizTarget, QuizVariant } from "./quiz";
-import { ENGINE_QUESTION_BANK, INSTRUMENT_QUESTION_BANK } from "./quizBank";
+import { BIOLOGY_QUESTION_BANK, ENGINE_QUESTION_BANK, INSTRUMENT_QUESTION_BANK } from "./quizBank";
 
 const BENCH_Y = 0.9;
 
@@ -36,6 +36,10 @@ interface DemoObject {
   first_step: number | null;
   fixed?: boolean;
   clickable?: boolean;
+  /** Demo identification content, shown to the visitor on discovery / wrong answers. */
+  role?: string;
+  example?: string;
+  hints?: string[];
 }
 
 interface DemoDefinition {
@@ -480,7 +484,174 @@ const INSTRUMENTS: DemoDefinition = {
   },
 };
 
-const DEMOS: DemoDefinition[] = [MECHANICAL, ELECTRICAL, ENGINE, INSTRUMENTS];
+/* ------------------------------------------------------------------ */
+/* Biology: laboratory equipment — discovery / identification / real    */
+/* situations (laser quiz on the bench and in the room, "bio_quiz")     */
+/* ------------------------------------------------------------------ */
+/**
+ * Four laboratory-equipment models on the bench (converted GLBs) + the
+ * microbiological safety cabinet as a room element at the back. The same
+ * click-to-identify behavior as the electrical instruments demo
+ * ("instrument_quiz", generalized front side: the per-object role/example/
+ * hints live in the manifest, the legacy electrical table stays a fallback).
+ * Sources from the teacher's Sketchfab downloads (see sidecar files
+ * backend/assets/models/converted/bio_*.json — attributions TO CONFIRM,
+ * docs/AUDIT_DEMO_BIOLOGIE.md §5). Steps:
+ *   1     discovery — all 4 items pointed at → "explored";
+ *   2..N  quiz      — seeded draw of 5 to 7 varied questions.
+ */
+const BIOLOGY: DemoDefinition = {
+  id: "tp_demo_biology",
+  title: "Génie biologique — à la découverte du matériel de laboratoire",
+  domain: "biological",
+  menu_label: "Démo génie biologique — Matériel de laboratoire",
+  quiz: { bank: BIOLOGY_QUESTION_BANK },
+  duration_minutes: 5,
+  steps: [
+    {
+      order: 1,
+      action: "Phase 1 — Découverte libre : quatre équipements essentiels sont posés sur l'établi (et un poste au fond de la pièce). Pointez chaque appareil avec le laser (ou la souris) pour afficher son nom, puis sélectionnez-le (gâchette ou clic) pour découvrir sa fonction et un exemple d'utilisation.",
+      safety: null,
+    },
+    { order: 2, action: "Où se trouve le microscope, l'appareil d'observation par lequel on regarde une lame ? Pointez-le, puis sélectionnez-le.", safety: null },
+    { order: 3, action: "Où se trouve la centrifugeuse, l'appareil qui sépare les constituants d'un mélange en tournant ? Pointez-la, puis sélectionnez-la.", safety: null },
+    { order: 4, action: "Où se trouve la micropipette, qui prélève un volume exact de liquide ? Pointez-la, puis sélectionnez-la.", safety: null },
+    { order: 5, action: "Où se trouve le poste de sécurité microbiologique, d'où l'on manipule sous flux filtré ? Pointez-le, puis sélectionnez-le.", safety: null },
+    { order: 6, action: "Phase 2 — Mise en situation : vous devez observer une cellule au grossissement ×40. Quel appareil choisissez-vous ? Sélectionnez-le.", safety: null },
+    { order: 7, action: "Vous devez séparer le plasma des globules rouges d'un tube de sang. Que choisissez-vous ? Sélectionnez-le.", safety: null },
+    { order: 8, action: "Vous devez prélever 100 microlitres de tampon dans un microtube. Quel appareil utilisez-vous ? Sélectionnez-le.", safety: null },
+    { order: 9, action: "Vous devez ensemencer une gélose en limitant la contamination. Quel poste choisissez-vous ? Sélectionnez-le.", safety: null },
+  ],
+  safety_warnings: [
+    "Démonstration d'observation : aucune manipulation biologique réelle",
+    "Matériel de laboratoire : fragile, ne rien saisir inutilement",
+  ],
+  signs: ["Observation uniquement", "Matériel fragile"],
+  key_light: "#FFFFFF",
+  objects: [
+    {
+      id: "b_micro",
+      name: "Microscope optique",
+      model: "converted",
+      url: "/assets/models/converted/bio_microscope.glb",
+      attribution: {
+        title: "Binocular Microscope",
+        author: "à confirmer (Sketchfab)",
+        author_url: null,
+        license: "CC Attribution (à confirmer)",
+        license_url: "",
+        source_url: "",
+      },
+      role: "Agrandit l'image d'échantillons minuscules (cellules, tissus) grâce à un système de lentilles.",
+      example: "Observer une cellule épithéliale à l'objectif ×40 (grossissement ×400 avec l'oculaire).",
+      hints: [
+        "C'est le plus grand appareil de l'établi, avec une colonne et deux oculaires côte à côte.",
+        "On y pose une lame sur la platine et on regarde et ajuste la netteté avec la vis de mise au point.",
+      ],
+      at: { x: -0.95, z: -0.05 },
+      rotation_y: -Math.PI / 2,
+      size_m: 0.45,
+      first_step: 1,
+      fixed: true,
+      clickable: true,
+    },
+    {
+      id: "b_centrifugeuse",
+      name: "Centrifugeuse de paillasse",
+      model: "converted",
+      url: "/assets/models/converted/bio_centrifugeuse.glb",
+      attribution: {
+        title: "Laboratory Centrifuge",
+        author: "à confirmer (Sketchfab)",
+        author_url: null,
+        license: "CC Attribution (à confirmer)",
+        license_url: "",
+        source_url: "",
+      },
+      role: "Sépare les constituants d'un mélange en les entraînant à grande vitesse : la force centrifuge classe les particules selon leur densité.",
+      example: "Séparer le plasma des globules rouges dans un tube de sang.",
+      hints: [
+        "C'est le boîtier au couvercle relevé, posé entre le microscope et la micropipette.",
+        "On y place des tubes équilibrés dans des godets opposés du rotor.",
+      ],
+      at: { x: -0.3, z: -0.35 },
+      rotation_y: Math.PI / 2,
+      size_m: 0.38,
+      first_step: 1,
+      fixed: true,
+      clickable: true,
+    },
+    {
+      id: "b_micropipette",
+      name: "Micropipette",
+      model: "converted",
+      url: "/assets/models/converted/bio_micropipette.glb",
+      attribution: {
+        title: "Micropipette",
+        author: "à confirmer (Sketchfab)",
+        author_url: null,
+        license: "CC Attribution (à confirmer)",
+        license_url: "",
+        source_url: "",
+      },
+      role: "Prélève et dose un volume très précis de liquide grâce à un piston et une pointe jetable.",
+      example: "Prélever 100 µL de tampon dans un microtube.",
+      hints: [
+        "C'est l'instrument portatif allongé sur son support, à gauche des deux gros appareils de l'établi.",
+        "On la chiffre en microlitres (µL) au moyen de son bouton poussoir et de sa pointe graduée.",
+      ],
+      at: { x: 0.35, z: -0.2 },
+      size_m: 0.19,
+      first_step: 1,
+      fixed: true,
+      clickable: true,
+    },
+    {
+      id: "b_psm",
+      name: "Poste de sécurité microbiologique",
+      model: "converted",
+      url: "/assets/models/converted/bio_psm.glb",
+      attribution: {
+        title: "Biosafety cabinet",
+        author: "à confirmer (source hors Sketchfab)",
+        author_url: null,
+        license: "CC Attribution (à confirmer)",
+        license_url: "",
+        source_url: "",
+      },
+      role: "Poste de sécurité microbiologique : confine les manipulations d'agents biologiques sous un flux d'air filtré (HEPA) et protège l'opérateur.",
+      example: "Ensemencer une gélose en stries en limitant la contamination croisée.",
+      hints: [
+        "C'est le grand volume de travail au fond de la pièce, plus haut qu'une personne.",
+        "On y glisse les mains derrière une vitre verticale, sous un flux d'air filtré.",
+      ],
+      at: { x: -2.3, y: 0, z: -1.55 },
+      size_m: 2.2,
+      first_step: 1,
+      fixed: true,
+      clickable: true,
+    },
+  ],
+  simulation: {
+    kind: "instrument_quiz",
+    targets: [],
+    rules: [
+      [{ type: "state", key: "explored", label: "4 équipements découverts (nom + fonction affichés)" }],
+      [{ type: "state", key: "found_b_micro", label: "Le bon équipement est sélectionné" }],
+      [{ type: "state", key: "found_b_centrifugeuse", label: "Le bon équipement est sélectionné" }],
+      [{ type: "state", key: "found_b_micropipette", label: "Le bon équipement est sélectionné" }],
+      [{ type: "state", key: "found_b_psm", label: "Le bon équipement est sélectionné" }],
+      [{ type: "state", key: "solved_b_micro", label: "La situation est résolue (bon équipement choisi)" }],
+      [{ type: "state", key: "solved_b_centrifugeuse", label: "La situation est résolue (bon équipement choisi)" }],
+      [{ type: "state", key: "solved_b_micropipette", label: "La situation est résolue (bon équipement choisi)" }],
+      [{ type: "state", key: "solved_b_psm", label: "La situation est résolue (bon équipement choisi)" }],
+    ],
+    completion:
+      "Vous savez maintenant reconnaître le matériel de laboratoire de biologie et choisir le bon selon la situation : observer, séparer, doser ou travailler en asepsie.",
+  },
+};
+
+const DEMOS: DemoDefinition[] = [MECHANICAL, ELECTRICAL, ENGINE, INSTRUMENTS, BIOLOGY];
 
 /** Builds one manifest; quiz demos get a fresh, deterministic plan when a seed is supplied. */
 function buildDemo(def: DemoDefinition, quizSeed?: string): TPSceneManifest {
@@ -522,6 +693,9 @@ function buildDemo(def: DemoDefinition, quizSeed?: string): TPSceneManifest {
     position: { x: o.at.x, y: o.at.y ?? BENCH_Y, z: o.at.z },
     rotation_y: o.rotation_y ?? 0,
     target_size_m: o.size_m,
+    ...(o.role ? { role: o.role } : {}),
+    ...(o.example ? { example: o.example } : {}),
+    ...(o.hints ? { hints: o.hints } : {}),
     color_override: null,
     first_step: o.first_step,
   }));

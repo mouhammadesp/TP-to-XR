@@ -21,6 +21,9 @@ export interface Instrument {
   hints: [string, string];
 }
 
+/** Electrical-instruments table of tp_demo_instruments; other demos (biology…) ship
+ *  the same fields in their manifest (SceneAsset role/example/hints). This table is
+ *  the fallback that keeps legacy electrical manifests and the existing tests exact. */
 export const INSTRUMENTS: Instrument[] = [
   {
     id: "i_oscilloscope",
@@ -82,9 +85,42 @@ const LEGACY_QUESTIONS: QuizQuestion[] = [
   ...SITUATIONS.map((answer) => ({ id: `legacy_solved_${answer}`, answer, prompt: "", flag: `solved_${answer.replace(/^i_/, "")}` })),
 ];
 
+/** Generic legacy path (no quiz in the manifest) for demo benches other than the
+ *  legacy electrical one: a found block then a solved block, in participants order. */
+function legacyQuestionsFor(ids: string[]): QuizQuestion[] {
+  const strip = (id: string): string => id.replace(/^i_/, "");
+  return [
+    ...ids.map((answer) => ({ id: `legacy_found_${answer}`, answer, prompt: "", flag: `found_${strip(answer)}` })),
+    ...ids.map((answer) => ({ id: `legacy_solved_${answer}`, answer, prompt: "", flag: `solved_${strip(answer)}` })),
+  ];
+}
+
 export const EXPLORE_GOAL = 5;
 const EXPLORE_DWELL = 0.4;
 export const PULSE_AFTER_ERRORS = 3;
+
+const COUNT_WORDS: Record<number, string> = { 2: "deux", 3: "trois", 4: "quatre", 5: "cinq", 6: "six", 7: "sept" };
+function countWord(n: number): string {
+  return COUNT_WORDS[n] ?? String(n);
+}
+
+/** Per-id demo content (role/example/hints) for behaviors other than the legacy
+ *  electrical table: the manifest ships nothing else, this keeps discovery and
+ *  wrong answers working with sensible defaults. */
+function resolveInstrument(id: string, asset: PlacedAsset | undefined): Instrument {
+  const a = asset?.asset;
+  if (a?.role) {
+    const hints = (a.hints ?? []) as string[];
+    return { id, name: a.name, role: a.role, example: a.example ?? "", hints: [hints[0] ?? "", hints[1] ?? ""] as [string, string] };
+  }
+  return INSTRUMENTS.find((c) => c.id === id) ?? {
+    id,
+    name: a?.name ?? id,
+    role: "Équipement de la démonstration : il n'est pas interrogé par le quiz.",
+    example: "",
+    hints: ["", ""],
+  };
+}
 
 export function hintFor(c: Instrument, errors: number): string {
   if (errors <= 0) return "";
@@ -115,13 +151,25 @@ export class InstrumentQuizBehavior implements Behavior {
   private dwell: { id: string; t: number } | null = null;
   private time = 0;
   private readonly baseScales = new Map<string, Vector3>();
+  /** Demo content per participant id (manifest role/example/hints or legacy table). */
+  private readonly infoById = new Map<string, Instrument>();
+  /** Discovery stops when so many participants were dwell-identified (min(5, bench size)). */
+  private readonly exploreGoal = EXPLORE_GOAL;
 
   constructor(private readonly sim: Simulation) {
-    this.questions = sim.spec.quiz?.questions ?? LEGACY_QUESTIONS;
+    // Participants = every asset of the demo bench (the behavior kind is demo-only).
+    // Information comes from the manifest (role/example/hints — biology demo) with
+    // the electrical legacy table as fallback (instruments demo).
+    const ids = sim.ids().filter((id) => !!sim.asset(id));
+    this.exploreGoal = Math.min(EXPLORE_GOAL, ids.length);
+    const legacyTableIds = new Set(INSTRUMENTS.map((c) => c.id));
+    const electricalLegacy = ids.every((id) => legacyTableIds.has(id));
+    this.questions = sim.spec.quiz?.questions ?? (electricalLegacy ? LEGACY_QUESTIONS : legacyQuestionsFor(ids));
+    this.infoById = new Map(ids.map((id) => [id, resolveInstrument(id, sim.asset(id))]));
     this.attempts = this.questions.map(() => 0);
     this.errors = this.questions.map(() => 0);
     let scene0: Scene | null = null;
-    for (const { id } of INSTRUMENTS) {
+    for (const id of ids) {
       const asset = sim.asset(id);
       if (!asset) {
         console.warn(`⚠️ instrument_quiz: asset missing ${id}`);
@@ -142,7 +190,7 @@ export class InstrumentQuizBehavior implements Behavior {
 
   public get intro(): string {
     return this.sim.spec.quiz
-      ? `Démonstration : découvrez les cinq équipements, puis répondez à ${this.questions.length} questions variées.`
+      ? `Démonstration : découvrez les ${countWord(this.byId.size)} équipements, puis répondez à ${this.questions.length} questions variées.`
       : "Démonstration : découvrez les cinq instruments de mesure sur l'établi, puis identifiez-les.";
   }
 
@@ -180,7 +228,7 @@ export class InstrumentQuizBehavior implements Behavior {
       return {
         title: "Découverte terminée !",
         text: this.sim.spec.quiz
-          ? `Les cinq équipements sont repérés. Le quiz commence : ${this.questions.length} questions.`
+          ? `Les ${countWord(this.byId.size)} équipements sont repérés. Le quiz commence : ${this.questions.length} questions.`
           : "Les cinq instruments sont repérés. Le quiz commence : 5 identifications, puis 5 situations.",
       };
     }
@@ -195,14 +243,13 @@ export class InstrumentQuizBehavior implements Behavior {
     const errs = this.errors.reduce((a, b) => a + b, 0);
     const result = this.sim.spec.quiz
       ? `🎯 ${this.answeredAsked()}/${this.questions.length} questions réussies`
-      : `🎯 ${this.foundAsked()}/${QUIZ.length} identifiés · ${this.solvedAsked()}/${SITUATIONS.length} situations résolues`;
+      : `🎯 ${this.foundAsked()}/${this.byId.size} identifiés · ${this.solvedAsked()}/${this.byId.size} situations résolues`;
     return [
-      `✓ ${this.explored.size}/${INSTRUMENTS.length} instruments découverts`,
+      `✓ ${this.explored.size}/${this.byId.size} instruments découverts`,
       result,
       `✍ ${tries} tentative${tries > 1 ? "s" : ""} (${errs} erreur${errs > 1 ? "s" : ""})`,
     ];
   }
-
   private onPointer(pi: PointerInfo): void {
     const picked = pi.pickInfo?.pickedMesh as Mesh | null;
     const instrumentId = picked ? this.instrumentOfMesh(picked) : null;
@@ -213,8 +260,7 @@ export class InstrumentQuizBehavior implements Behavior {
     const select = (xr && pi.type === PointerEventTypes.POINTERDOWN) || (!xr && pi.type === PointerEventTypes.POINTERTAP);
     if (select && instrumentId) {
       this.setHover(instrumentId);
-      this.select(instrumentId, xr ? { hand: "none", gesture: "grab" } : { hand: "none", gesture: "mouse" });
-    }
+      this.select(instrumentId, xr ? { hand: "none", gesture: "grab" } : { hand: "none", gesture: "mouse" });    }
   }
 
   private setHover(id: string | null): void {
@@ -241,7 +287,7 @@ export class InstrumentQuizBehavior implements Behavior {
     this.attempts[idx]++;
     s.recordAnswer({ ...src, target: id, correct });
     if (correct) {
-      if (this.sim.spec.quiz || step <= QUIZ.length) this.found.add(asked);
+      if (this.sim.spec.quiz || question.flag.startsWith("found_")) this.found.add(asked);
       else this.solved.add(asked);
       this.sim.setFlag(question.flag, true);
     } else {
@@ -255,11 +301,11 @@ export class InstrumentQuizBehavior implements Behavior {
   private explore(id: string): void {
     if (this.explored.has(id)) return;
     this.explored.add(id);
-    if (this.explored.size >= EXPLORE_GOAL) this.sim.setFlag("explored", true);
+    if (this.explored.size >= this.exploreGoal) this.sim.setFlag("explored", true);
   }
 
   private instrument(id: string): Instrument | undefined {
-    return INSTRUMENTS.find((c) => c.id === id);
+    return this.infoById.get(id) ?? INSTRUMENTS.find((c) => c.id === id);
   }
 
   private instrumentOfMesh(mesh: Mesh): string | null {
@@ -270,7 +316,7 @@ export class InstrumentQuizBehavior implements Behavior {
   }
 
   private foundAsked(): number {
-    return QUIZ.filter((id) => this.found.has(id)).length;
+    return this.found.size;
   }
 
   private answeredAsked(): number {
@@ -278,7 +324,7 @@ export class InstrumentQuizBehavior implements Behavior {
   }
 
   private solvedAsked(): number {
-    return SITUATIONS.filter((id) => this.solved.has(id)).length;
+    return this.solved.size;
   }
 }
 

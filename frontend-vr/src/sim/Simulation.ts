@@ -84,6 +84,11 @@ export class Simulation implements WorldView {
     return this.byId.get(id);
   }
 
+  /** Asset ids in manifest order (demo behaviors enumerate the participants). */
+  public ids(): string[] {
+    return [...this.byId.keys()];
+  }
+
   public target(id: string): SimTarget | undefined {
     return this.targets.get(id);
   }

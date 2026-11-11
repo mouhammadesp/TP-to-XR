@@ -216,3 +216,85 @@ test("instrument quiz: seeded questions, progressive highlight and XR/mouse sele
     engine.dispose();
   }
 });
+
+test("biology demo: four manifest-driven items, discovery goal 4, question bank from the manifest", () => {
+  const items = [
+    { id: "b_micro", name: "Microscope optique", role: "Agrandit l'image d'échantillons minuscules.", example: "Observer une cellule.", hints: ["Deux oculaires.", "Platine + vis de mise au point."] },
+    { id: "b_centrifugeuse", name: "Centrifugeuse de paillasse", role: "Sépare les constituants en tournant.", example: "Séparer le plasma.", hints: ["Couvercle bombé.", "Tubes équilibrés."] },
+    { id: "b_micropipette", name: "Micropipette", role: "Dose un volume précis.", example: "Prélever 100 µL.", hints: ["Instrument portatif.", "Pointe jetable."] },
+    { id: "b_psm", name: "Poste de sécurité microbiologique", role: "Confinement sous flux filtré.", example: "Ensemencement en stries.", hints: ["Grand volume au fond.", "Vitre verticale."] },
+  ];
+  const questions = [
+    { id: "bio_q1", answer: "b_micro", prompt: "Quel instrument fait l'observation ?", flag: "answered_bio_q1" },
+    { id: "bio_q2", answer: "b_centrifugeuse", prompt: "Quel appareil sépare par rotation ?", flag: "answered_bio_q2" },
+    { id: "bio_q3", answer: "b_micropipette", prompt: "Quel appareil dose 100 µL ?", flag: "answered_bio_q3" },
+    { id: "bio_q4", answer: "b_psm", prompt: "Quel poste permet l'asepsie ?", flag: "answered_bio_q4" },
+  ];
+  const stateRule = (key: string): SimulationSpec["rules"][number] => [{ type: "state", key, label: key }];
+  const spec: SimulationSpec = {
+    kind: "instrument_quiz",
+    quiz: { seed: "biology_frontend_seed", questions },
+    targets: [],
+    rules: [stateRule("explored"), ...questions.map((q) => stateRule(q.flag))],
+    completion: "Terminé",
+  };
+  const engine = new NullEngine();
+  try {
+    const scene = new Scene(engine);
+    const assets: PlacedAsset[] = items.map(({ id, name, role, example, hints }) => {
+      const handle = MeshBuilder.CreateBox(`grab_${id}`, { size: 0.1 }, scene);
+      return {
+        asset: { asset_id: id, name, role, example, hints } as SceneAsset,
+        handle,
+        meshes: [handle],
+        label: MeshBuilder.CreatePlane(`label_${id}`, {}, scene),
+        loaded: true,
+        error: null,
+        builtin: null,
+      };
+    });
+    const session = new TPSession("tp_demo_biology", "test", spec.rules.map(() => new Set<string>()));
+    session.interactive = true;
+    session.quizSeed = spec.quiz!.seed;
+    const validated: number[] = [];
+    const sim = new Simulation(scene, spec, assets, {
+      session,
+      onChecklistChanged: () => {},
+      onStepValidated: (index) => validated.push(index),
+      toast: () => {},
+      notify: () => {},
+      refreshShadows: () => {},
+    });
+    assert.match(sim.behavior.intro!, /quatre/); // discovery goal adapts to the 4-item bench
+    const point = (id: string, type: PointerEventTypes) => {
+      const pickedMesh = assets.find((a) => a.asset.asset_id === id)!.handle;
+      scene.onPointerObservable.notifyObservers({ type, pickInfo: { pickedMesh }, event: { pointerType: "mouse" } } as unknown as PointerInfo);
+    };
+    for (const item of items) {
+      point(item.id, PointerEventTypes.POINTERMOVE);
+      sim.tick(0.5);
+    }
+    assert.deepEqual(validated, [0], "4 dwells complete the discovery step");
+    session.goTo(1, "auto");
+    sim.onStepChanged();
+    // A wrong answer names what was picked, using the manifest-provided text; hints come from the manifest.
+    point("b_centrifugeuse", PointerEventTypes.POINTERTAP);
+    assert.equal(sim.stepValidated, false, "centrifugeuse is not the microscope");
+    sim.tick(0.2);
+    point("b_micro", PointerEventTypes.POINTERTAP);
+    assert.equal(sim.stepValidated, true, "centrifugeuse wrong, microscope right");
+    assert.match(sim.behavior.summary!()[1], /1\/4 questions réussies/);
+    for (const q of questions.slice(1)) {
+      const step = questions.findIndex((x) => x.id === q.id) + 1;
+      session.goTo(step, "auto");
+      sim.onStepChanged();
+      point(q.answer, PointerEventTypes.POINTERTAP);
+      assert.equal(sim.stepValidated, true, `${q.id} selects its own item`);
+    }
+    assert.deepEqual(validated, [0, 1, 2, 3, 4]);
+    assert.equal(sim.completed, true);
+    assert.ok(sim.behavior.validationMessage!(1)!.text.includes("Microscope optique"), "manifest role flows into the validation message");
+  } finally {
+    engine.dispose();
+  }
+});

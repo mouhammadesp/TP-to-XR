@@ -1,0 +1,21 @@
+{
+  "slug": "bio_centrifugeuse",
+  "url": "/assets/models/converted/bio_centrifugeuse.glb",
+  "bytes": 10750992,
+  "triangles": 8122,
+  "dimensions_m": {
+    "x": 0.23,
+    "y": 0.39,
+    "z": 0.32
+  },
+  "real_size_note": "real largest dimension ≈ 0.38 m",
+  "target_size_m": 0.38,
+  "attribution": {
+    "title": "Laboratory Centrifuge (à confirmer)",
+    "author": "à confirmer",
+    "license": "à confirmer (règle CC-BY du dépôt)",
+    "source_url": ""
+  },
+  "source_file": "sources/centrifuge.glb",
+  "converted_at": "2026-11-10T00:00:00.000Z"
+}

@@ -5,6 +5,8 @@ const target = (answer: string, ...variants: [string, string][]): QuizTarget => 
   variants: variants.map(([id, prompt]) => ({ id, prompt })),
 });
 
+/** Question banks of the veterinary authored demonstrations (one bank per demo). */
+
 /**
  * Audi A3 8P engine bay: only the nine zones embedded in audi_tfsi_engine.glb.
  * Questions about the battery, washer and brake fluid explicitly concern the
@@ -81,6 +83,31 @@ export const INSTRUMENT_QUESTION_BANK: readonly QuizTarget[] = [
     ["digital_meter_identification", "Quel instrument affiche numériquement une tension, un courant ou une résistance selon son mode ?"],
     ["digital_meter_voltage", "Vous voulez vérifier la tension aux bornes d'une pile avec une valeur affichée en chiffres. Quel appareil choisissez-vous ?"],
     ["digital_meter_resistance", "Quel multimètre numérique utilisez-vous pour mesurer la valeur d'une résistance isolée et hors tension ?"],
-    ["digital_meter_current", "Vous voulez mesurer l'intensité du courant qui traverse un circuit. Quel appareil portable choisissez-vous ?"]
+    ["digital_meter_current", "Vous voulez mesurer l'intensité du courant qui traverse un circuit. Quel appareil portable choisissez-vous ?"],
+  ),
+];
+
+/** Four laboratory-equipment items of the biology demo bench; no absent equipment is questioned. */
+export const BIOLOGY_QUESTION_BANK: readonly QuizTarget[] = [
+  target("b_micro",
+    ["micro_identification", "Quel instrument agrandit l'image d'un échantillon minuscule grâce à un système de lentilles ?"],
+    ["micro_reperage", "Repérez l'appareil d'observation du laboratoire : celui dont on regarde l'image par les deux oculaires."],
+    ["micro_usage", "Pour observer une cellule épithéliale à l'objectif ×40, quel équipement utilisez-vous ?"],
+    ["micro_reglage", "Quel appareil comporte une platine sur laquelle on pose une lame, et une vis de mise au point pour régler la netteté ?"]
+  ),
+  target("b_centrifugeuse",
+    ["centrifuge_identification", "Quel appareil sépare les constituants d'un mélange en tournant à grande vitesse ?"],
+    ["centrifuge_principe", "Repérez l'équipement destiné à séparer le plasma des cellules d'un tube de sang grâce à la force centrifuge."],
+    ["centrifuge_securite", "Avant la mise en marche de quel appareil faut-il équilibrer les tubes opposés dans son rotor ?"]
+  ),
+  target("b_micropipette",
+    ["pipette_identification", "Quel instrument de précision prélève un volume exact de liquide grâce à un piston et une pointe jetable ?"],
+    ["pipette_usage", "Pour prélever 100 microlitres de tampon dans un microtube, quel appareil utilisez-vous ?"],
+    ["pipette_usage2", "Repérez l'instrument portatif qu'on équipe d'une pointe graduée pour doser des volumes en microlitres."]
+  ),
+  target("b_psm",
+    ["psm_identification", "Quel équipement confine la manipulation de microorganismes sous un flux d'air filtré (HEPA) ?"],
+    ["psm_usage", "Sur quel poste de travail réalise-t-on un ensemencement en stries sur une boîte de Pétri en limitant la contamination ?"],
+    ["psm_protection", "Repérez le grand volume de travail, centré sur une paillasse, dans lequel l'opérateur glisse les mains sous la vitre verticale."]
   ),
 ];

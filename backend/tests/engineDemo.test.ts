@@ -54,7 +54,7 @@ test("engine demo: every possible answer has exactly one selection zone in the G
 
 test("engine demo: hidden legacy demos remain available internally, not in the home menu", () => {
   assert.equal(getDemoByDomain("mechanical")?.id, "tp_demo_mechanical");
-  assert.deepEqual(listDemos().map((d) => d.id), ["tp_demo_engine", "tp_demo_instruments"]);
+  assert.deepEqual(listDemos().map((d) => d.id), ["tp_demo_engine", "tp_demo_instruments", "tp_demo_biology"]);
   assert.equal(listDemos().find((d) => d.id === "tp_demo_engine")?.label, "Démo mécanique — Moteur automobile");
   assert.ok(getDemo("tp_demo_mechanical"));
   assert.ok(getDemo("tp_demo_electrical"));

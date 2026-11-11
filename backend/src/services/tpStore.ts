@@ -56,6 +56,10 @@ export interface SceneAsset {
   /** Origin of target_size_m (absent in TPs generated before the real-size rules). */
   size_source?: SizeSource;
   size_note?: string;
+  /** Demo identification content (instrument_quiz and siblings), authoring side only. */
+  role?: string;
+  example?: string;
+  hints?: string[];
   color_override: string | null;
   first_step: number | null;
 }

@@ -1,0 +1,21 @@
+{
+  "slug": "bio_microscope",
+  "url": "/assets/models/converted/bio_microscope.glb",
+  "bytes": 1366548,
+  "triangles": 6044,
+  "dimensions_m": {
+    "x": 0.145,
+    "y": 0.33,
+    "z": 0.227
+  },
+  "largest_dim_scene_units": 0.33,
+  "real_size_note": "real largest dimension ≈ 0.45 m; the viewer normalizes (target_size_m 0.45 in demoTps.ts)",
+  "attribution": {
+    "title": "Binocular Microscope",
+    "author": "à confirmer",
+    "license": "à confirmer (règle CC-BY du dépôt)",
+    "source_url": ""
+  },
+  "source_file": "binocular-microscope.zip (Sketchfab « original », Unity2Skfb) — tools/biology/convert_bio_microscope.py",
+  "converted_at": "2026-11-10T19:05:00.167387+00:00"
+}

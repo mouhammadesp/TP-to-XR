@@ -8,7 +8,7 @@
  * student view opens them like any generated TP: /vr/?tp=tp_demo_mechanical
  */
 import { Router } from "express";
-import { getDemoByDomain, listDemos } from "../services/demoTps";
+import { getDemo, getDemoByDomain, listDemos } from "../services/demoTps";
 import { HttpError } from "../utils/http";
 
 const router = Router();
@@ -29,8 +29,11 @@ router.get("/:domain", (req, res) => {
     const available = listDemos().map((d) => d.domain).join(", ");
     throw new HttpError(404, `Pas de TP de démonstration pour « ${req.params.domain} » (disponibles : ${available})`);
   }
-  console.log(`🧪 Demo TP served: ${manifest.id}`);
-  res.json(manifest);
+  // Quiz demos served directly (domain shorthand) must carry a seeded plan,
+  // otherwise the viewer would fall back to its legacy fixed questions.
+  const seeded = manifest.simulation?.quiz ? manifest : getDemo(manifest.id) ?? manifest;
+  console.log(`🧪 Demo TP served: ${seeded.id}${seeded.simulation?.quiz ? ` (quiz seed ${seeded.simulation.quiz.seed})` : " (legacy)"}`);
+  res.json(seeded);
 });
 
 export default router;

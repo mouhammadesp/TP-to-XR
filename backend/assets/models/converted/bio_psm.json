@@ -1,0 +1,21 @@
+{
+  "slug": "bio_psm",
+  "url": "/assets/models/converted/bio_psm.glb",
+  "bytes": 61400,
+  "triangles": 498,
+  "dimensions_m": {
+    "x": 1.5,
+    "y": 2.2,
+    "z": 1.2
+  },
+  "real_size_note": "low-poly, untextured placeholder — quality gap, see docs/AUDIT_DEMO_BIOLOGIE.md",
+  "target_size_m": 2.2,
+  "attribution": {
+    "title": "Biosafety cabinet (à confirmer)",
+    "author": "à confirmer",
+    "license": "à confirmer (règle CC-BY du dépôt)",
+    "source_url": ""
+  },
+  "source_file": "sources/biosafety-cabinet-a46204.glb",
+  "converted_at": "2026-11-10T00:00:00.000Z"
+}

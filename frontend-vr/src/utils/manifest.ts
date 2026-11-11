@@ -47,6 +47,10 @@ export const SceneAssetSchema = z.object({
   /** Origin of the size: TP text, standard, typical range or AI estimate (backend config/realSizes.ts). */
   size_source: z.enum(["tp_text", "standard", "typical_range", "estimate"]).optional(),
   size_note: z.string().max(300).optional(),
+  /** Demo identification content (behaviors "instrument_quiz" and siblings). */
+  role: z.string().max(400).optional(),
+  example: z.string().max(400).optional(),
+  hints: z.array(z.string().max(300)).max(3).optional(),
   color_override: HexSchema.nullable(),
   first_step: z.number().int().positive().nullable(),
 });

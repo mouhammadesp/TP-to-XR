@@ -1,0 +1,21 @@
+{
+  "slug": "bio_micropipette",
+  "url": "/assets/models/converted/bio_micropipette.glb",
+  "bytes": 5485512,
+  "triangles": 17988,
+  "dimensions_m": {
+    "x": 0.24,
+    "y": 0.3,
+    "z": 0.14
+  },
+  "real_size_note": "raw model's largest dim 0.30 m exceeds a real micropipette (~0.19 m): scaled down in scene (target_size_m)",
+  "target_size_m": 0.19,
+  "attribution": {
+    "title": "Micropipette (à confirmer)",
+    "author": "à confirmer",
+    "license": "à confirmer (règle CC-BY du dépôt)",
+    "source_url": ""
+  },
+  "source_file": "sources/micropipette.glb",
+  "converted_at": "2026-11-10T00:00:00.000Z"
+}

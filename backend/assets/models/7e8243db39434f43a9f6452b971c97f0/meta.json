@@ -1,0 +1,28 @@
+{
+  "uid": "7e8243db39434f43a9f6452b971c97f0",
+  "entry": "model.glb",
+  "url": "/assets/models/7e8243db39434f43a9f6452b971c97f0/model.glb",
+  "bytes": 4269376,
+  "model": {
+    "uid": "7e8243db39434f43a9f6452b971c97f0",
+    "name": "Male victim test#1",
+    "author": "GilleanJofre",
+    "author_url": "https://sketchfab.com/GilleanJofre",
+    "license": {
+      "slug": "by",
+      "label": "CC Attribution",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "viewer_url": "https://sketchfab.com/3d-models/7e8243db39434f43a9f6452b971c97f0",
+    "thumbnail_url": "https://media.sketchfab.com/models/7e8243db39434f43a9f6452b971c97f0/thumbnails/50b8ab303d464f5aa8c5a06b150ede65/8491258fd8e14406b5ae990b1478ea28.jpeg",
+    "face_count": 25132,
+    "download_size": 4269376,
+    "tags": [
+      "substancepainter",
+      "substance",
+      "horror",
+      "scorn"
+    ]
+  },
+  "downloaded_at": "2026-11-18T18:27:29.326Z"
+}

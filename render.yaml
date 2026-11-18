@@ -17,6 +17,9 @@ services:
       - key: NODE_ENV
         value: production
       # Only needed to generate TPs from a PDF; set them in the Render dashboard.
+      # LLM: OpenRouter if OPENROUTER_API_KEY is set, Together AI otherwise.
+      - key: OPENROUTER_API_KEY
+        sync: false
       - key: TOGETHER_API_KEY
         sync: false
       - key: SKETCHFAB_API_KEY

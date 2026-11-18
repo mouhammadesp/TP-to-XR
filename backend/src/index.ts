@@ -15,6 +15,7 @@ import { pipelineRouter, tpRouter } from "./routes/pipeline";
 import sketchfabRoutes from "./routes/sketchfab";
 import { ASSETS_DIR, ASSETS_URL_PREFIX } from "./services/assetManager";
 import workshopRoutes from "./routes/workshop";
+import { hasLLMKey } from "./services/togetherAi";
 import { HttpError, errorMessage } from "./utils/http";
 
 const app = express();
@@ -78,7 +79,7 @@ app.listen(PORT, () => {
   console.log(`🥽 Student VR app:        http://localhost:${PORT}/vr/?tp=<id>`);
   console.log(`🔧 Debug viewer:          http://localhost:${PORT}/viewer.html`);
   console.log(`📊 Analytics API:         http://localhost:${PORT}/api/analytics/<tp_id>`);
-  if (!process.env.TOGETHER_API_KEY) console.warn("⚠️  TOGETHER_API_KEY not set — LLM routes and the pipeline will answer 503");
+  if (!hasLLMKey()) console.warn("⚠️  No LLM key (OPENROUTER_API_KEY or TOGETHER_API_KEY) — LLM routes and the pipeline will answer 503");
   if (!process.env.SKETCHFAB_API_KEY) console.warn("⚠️  SKETCHFAB_API_KEY not set — search works, models will be placeholders");
 });
 

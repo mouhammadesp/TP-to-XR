@@ -36,8 +36,26 @@ import {
 } from "../schemas/tp";
 import { HttpError, errorMessage } from "../utils/http";
 
-const API_URL = "https://api.together.xyz/v1/chat/completions";
-const DEFAULT_MODEL = "meta-llama/Llama-3.3-70B-Instruct-Turbo";
+/**
+ * OpenAI-compatible providers. OpenRouter is used when OPENROUTER_API_KEY is set
+ * (model: OPENROUTER_MODEL), Together AI otherwise (model: LLM_MODEL).
+ */
+const PROVIDERS = {
+  openrouter: { name: "OpenRouter", url: "https://openrouter.ai/api/v1/chat/completions", keyVar: "OPENROUTER_API_KEY", modelVar: "OPENROUTER_MODEL", defaultModel: "meta-llama/llama-3.3-70b-instruct" },
+  together: { name: "Together AI", url: "https://api.together.xyz/v1/chat/completions", keyVar: "TOGETHER_API_KEY", modelVar: "LLM_MODEL", defaultModel: "meta-llama/Llama-3.3-70B-Instruct-Turbo" },
+} as const;
+type Provider = (typeof PROVIDERS)[keyof typeof PROVIDERS];
+
+/** Usable key (placeholders like "your_…" from .env.example do not count). */
+function envKey(env: NodeJS.ProcessEnv, name: string): string | null {
+  const key = env[name]?.trim();
+  return key && !key.startsWith("your_") ? key : null;
+}
+
+/** True if an LLM API key is configured (OpenRouter or Together AI). */
+export function hasLLMKey(env: NodeJS.ProcessEnv = process.env): boolean {
+  return Object.values(PROVIDERS).some((p) => envKey(env, p.keyVar) !== null);
+}
 const REQUEST_TIMEOUT_MS = 90_000;
 const MAX_ATTEMPTS = 2;
 /** Attempts per HTTP call for transient errors (network, 429, 5xx). */
@@ -70,6 +88,7 @@ export interface LLMResult<T> {
 }
 
 export class TogetherAIService {
+  private readonly provider: Provider;
   private readonly apiKey: string;
   private readonly model: string;
   private readonly temperature: number;
@@ -78,19 +97,20 @@ export class TogetherAIService {
 
   /**
    * Reads configuration from the environment.
-   * @throws HttpError 503 if TOGETHER_API_KEY is missing
+   * @throws HttpError 503 if neither OPENROUTER_API_KEY nor TOGETHER_API_KEY is set
    */
   constructor(env: NodeJS.ProcessEnv = process.env) {
-    const key = env.TOGETHER_API_KEY?.trim();
-    if (!key || key.startsWith("your_")) {
-      throw new HttpError(503, "TOGETHER_API_KEY is not set in backend/.env");
+    const provider = [PROVIDERS.openrouter, PROVIDERS.together].find((p) => envKey(env, p.keyVar));
+    if (!provider) {
+      throw new HttpError(503, "No LLM API key: set OPENROUTER_API_KEY or TOGETHER_API_KEY in backend/.env");
     }
-    this.apiKey = key;
-    this.model = env.LLM_MODEL?.trim() || DEFAULT_MODEL;
+    this.provider = provider;
+    this.apiKey = envKey(env, provider.keyVar)!;
+    this.model = env[provider.modelVar]?.trim() || provider.defaultModel;
     this.temperature = parseNumber(env.LLM_TEMPERATURE, 0.2);
     this.priceInPerM = parseNumber(env.LLM_PRICE_INPUT_PER_M, 1.04);
     this.priceOutPerM = parseNumber(env.LLM_PRICE_OUTPUT_PER_M, 1.04);
-    console.log(`✅ TogetherAIService initialized (model: ${this.model})`);
+    console.log(`✅ LLM service initialized (${provider.name}, model: ${this.model})`);
   }
 
   /**
@@ -281,25 +301,25 @@ export class TogetherAIService {
     for (let attempt = 1; attempt <= HTTP_ATTEMPTS; attempt++) {
       let res: globalThis.Response;
       try {
-        res = await fetch(API_URL, {
+        res = await fetch(this.provider.url, {
           method: "POST",
-          headers: { Authorization: `Bearer ${this.apiKey}`, "Content-Type": "application/json" },
+          headers: { Authorization: `Bearer ${this.apiKey}`, "Content-Type": "application/json", "X-Title": "TP-to-XR" },
           body: JSON.stringify({ model: this.model, messages, max_tokens: maxTokens, temperature }),
           signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
         });
       } catch (err) {
-        lastError = new HttpError(502, `Together AI unreachable: ${errorMessage(err)}`);
+        lastError = new HttpError(502, `${this.provider.name} unreachable: ${errorMessage(err)}`);
         await this.backoff(attempt, null, lastError.message);
         continue;
       }
       if (res.ok) return (await res.json()) as ChatCompletionResponse;
       const body = (await res.text()).slice(0, 500);
       const status = res.status === 401 || res.status === 403 ? 503 : 502;
-      lastError = new HttpError(status, `Together AI error ${res.status}`, body);
+      lastError = new HttpError(status, `${this.provider.name} error ${res.status}`, body);
       if (!isTransient(res.status)) throw lastError;
       await this.backoff(attempt, res.headers.get("retry-after"), `HTTP ${res.status}`);
     }
-    throw lastError ?? new HttpError(502, "Together AI: no response");
+    throw lastError ?? new HttpError(502, `${this.provider.name}: no response`);
   }
 
   /** Waits before the next attempt (no wait after the last one). */
@@ -307,7 +327,7 @@ export class TogetherAIService {
     if (attempt >= HTTP_ATTEMPTS) return;
     const header = Number(retryAfter);
     const ms = Number.isFinite(header) && header > 0 ? Math.min(header * 1000, 15_000) : BACKOFF_MS[attempt - 1];
-    console.warn(`⚠️  Together AI ${why} → retry ${attempt + 1}/${HTTP_ATTEMPTS} in ${ms} ms`);
+    console.warn(`⚠️  ${this.provider.name} ${why} → retry ${attempt + 1}/${HTTP_ATTEMPTS} in ${ms} ms`);
     await new Promise((r) => setTimeout(r, ms));
   }
 }

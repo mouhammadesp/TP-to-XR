@@ -1,0 +1,23 @@
+# Render Blueprint — free test deployment (https://render.com).
+# The Node backend serves everything: student WebXR app (/vr/), API and 3D models.
+# Free plan: the service sleeps after 15 min idle, and its disk is wiped on every
+# restart (generated TPs and analytics are not kept). Demos need no API key.
+services:
+  - type: web
+    name: tp-to-xr
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/demo
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      # Only needed to generate TPs from a PDF; set them in the Render dashboard.
+      - key: TOGETHER_API_KEY
+        sync: false
+      - key: SKETCHFAB_API_KEY
+        sync: false

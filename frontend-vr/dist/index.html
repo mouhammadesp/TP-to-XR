@@ -42,7 +42,7 @@
     #boot { position: fixed; inset: 0; display: grid; place-items: center; background: #14181d; color: var(--muted); font-size: 15px; z-index: 5; }
 
     /* ---------- menu overlay ---------- */
-    #menu { position: fixed; inset: 0; display: grid; place-items: center; padding: 24px 16px;
+    #menu { position: fixed; inset: 0; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; padding: 24px 16px;
       background: radial-gradient(ellipse at center, rgba(10,14,20,0.25), rgba(10,14,20,0.7)); overflow: auto; }
     body.mode-vr #menu { display: none; }
     .view { width: min(760px, 100%); background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
@@ -51,8 +51,46 @@
     .view h1 small { display: block; font-size: 0.42em; font-weight: 500; color: var(--muted); letter-spacing: 0; margin-top: 6px; }
     .view h2 { font-size: clamp(22px, 3.5vw, 30px); margin: 4px 0 18px; }
     .lead { color: var(--muted); font-size: 17px; line-height: 1.5; margin: 0 0 28px; max-width: 52ch; }
-    .brand { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .brand { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
     .brand img { height: 44px; width: auto; }
+
+    /* ---------- home ---------- */
+    .view.home { width: min(880px, 100%); padding: 0; overflow: hidden;
+      background: linear-gradient(160deg, rgba(30,40,52,0.94), rgba(14,18,25,0.95)); }
+    .home > * { padding-inline: clamp(20px, 4.5vw, 44px); }
+    .home .brand { padding-block: 18px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,0.025); }
+    .hero { padding-block: clamp(22px, 4vw, 36px) clamp(22px, 3.5vw, 30px); }
+    .hero h1 { margin-top: 0; }
+    .hero h1 .arrow { background: linear-gradient(90deg, #3aa86b, #7fc8ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero .lead { margin-bottom: 20px; }
+    .how { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 22px; padding: 0; margin: 0 0 26px; font-size: 15px; color: var(--text); }
+    .how li { display: flex; align-items: center; gap: 9px; }
+    .how .num { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; font-size: 13px; font-weight: 700;
+      background: rgba(58,168,107,0.18); color: #7fe0a8; border: 1px solid rgba(58,168,107,0.45); }
+    .home .primary { box-shadow: 0 6px 18px rgba(46,139,87,0.35); }
+    .home .primary span { display: inline-block; margin-left: 6px; transition: transform 0.15s; }
+    .home .primary:hover span { transform: translateX(3px); }
+
+    .demo-block { padding-block: 22px 26px; border-top: 1px solid var(--line); background: rgba(0,0,0,0.18); }
+    .section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .section-title { margin: 0 !important; font-size: 18px !important; font-weight: 650; }
+    .badge { padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+      color: #7fe0a8; background: rgba(58,168,107,0.14); border: 1px solid rgba(58,168,107,0.35); }
+    .demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+    .demo-card { position: relative; display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 14px; row-gap: 2px;
+      text-align: left; padding: 16px 16px 16px 18px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+      background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 24%, transparent), color-mix(in srgb, var(--accent) 8%, transparent));
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s; }
+    .demo-card:hover, .demo-card:focus-visible { transform: translateY(-2px); border-color: var(--accent);
+      box-shadow: 0 10px 26px color-mix(in srgb, var(--accent) 30%, transparent); }
+    .demo-card .icon { grid-row: span 3; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 12px; font-size: 24px;
+      background: color-mix(in srgb, var(--accent) 35%, transparent); }
+    .demo-card .kicker { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      color: color-mix(in srgb, var(--accent) 45%, #fff); }
+    .demo-card .name { font-size: 17px; font-weight: 650; line-height: 1.25; }
+    .demo-card .meta { font-size: 13px; color: var(--muted); }
+    .home-foot { padding-block: 12px 14px; border-top: 1px solid var(--line); font-size: 13px; text-align: center; }
+    @media (prefers-reduced-motion: reduce) { .demo-card, .home .primary span { transition: none; } }
     .actions { display: flex; flex-wrap: wrap; gap: 12px; }
     .primary, .secondary, .back { min-height: 52px; padding: 0 26px; border-radius: 10px; font-size: 18px; font-weight: 600; border: 1px solid transparent; }
     .primary { background: var(--accent); color: #fff; }
@@ -70,13 +108,6 @@
     .inbox-row:hover { background: rgba(255,255,255,0.1); }
     .inbox-row.selected { border-color: #5fd394; background: rgba(46,139,87,0.28); }
     #upload-hint { margin-top: 10px; font-size: 15px; }
-    .demo-block { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); display: grid; gap: 12px; font-size: 15px; }
-    #demo-buttons { display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 14px; }
-    #demo-buttons .demo { flex: 1 1 260px; max-width: 340px; min-height: 58px; padding: 10px 20px; line-height: 1.35; text-wrap: balance; }
-    @media (max-width: 620px) { #demo-buttons { flex-direction: column; align-items: center; } #demo-buttons .demo { flex: 0 1 auto; width: min(100%, 340px); } }
-    .demo { min-height: 46px; padding: 0 18px; border-radius: 10px; font-size: 16px; font-weight: 600; border: 1px solid var(--line);
-      background: color-mix(in srgb, var(--accent) 22%, transparent); }
-    .demo:hover { background: color-mix(in srgb, var(--accent) 40%, transparent); }
     .error { color: var(--danger); }
     .chip { display: inline-block; padding: 4px 12px; border-radius: 999px; background: rgba(255,255,255,0.08); font-size: 15px; margin-left: 8px; vertical-align: middle; }
 
@@ -142,22 +173,35 @@
 
   <!-- ===== Menu (2D overlay: works in the Quest browser before entering VR) ===== -->
   <div id="menu">
-    <section id="view-home" class="view" aria-labelledby="home-title">
-      <div class="brand">
+    <section id="view-home" class="view home" aria-labelledby="home-title">
+      <header class="brand">
         <img src="logos/ucad.png" alt="Université Cheikh Anta Diop" />
-        <img src="logos/curi.png" alt="CURI" />
-        <span>UCAD · CURI — Dakar</span>
+        <span>Université Cheikh Anta Diop · Dakar</span>
+      </header>
+
+      <div class="hero">
+        <h1 id="home-title">TP <span class="arrow" aria-label="vers">→</span> XR <small>Learning Platform</small></h1>
+        <p class="lead">Importez un énoncé de TP en PDF : l'atelier virtuel est préparé automatiquement, puis réalisez le TP en réalité virtuelle.</p>
+        <ol class="how" aria-label="Fonctionnement">
+          <li><span class="num">1</span>Importez le PDF</li>
+          <li><span class="num">2</span>L'atelier se prépare</li>
+          <li><span class="num">3</span>Pratiquez en VR</li>
+        </ol>
+        <div class="actions">
+          <button id="btn-start" class="primary" data-autofocus>Démarrer un TP <span aria-hidden="true">→</span></button>
+          <button id="btn-library" class="secondary">TPs déjà générés</button>
+        </div>
       </div>
-      <h1 id="home-title">TP → XR <small>Learning Platform</small></h1>
-      <p class="lead">Importez un énoncé de TP en PDF : l'atelier virtuel est préparé automatiquement, puis réalisez le TP en réalité virtuelle.</p>
-      <div class="actions">
-        <button id="btn-start" class="primary" data-autofocus>Démarrer</button>
-        <button id="btn-library" class="secondary">TPs déjà générés</button>
-      </div>
+
       <div id="demo-block" class="demo-block" hidden>
-        <div class="muted">Tester sans clé API (démonstrations guidées) :</div>
-        <div id="demo-buttons" class="actions"></div>
+        <div class="section-head">
+          <h2 class="section-title">Démonstrations guidées</h2>
+          <span class="badge">Sans clé API</span>
+        </div>
+        <div id="demo-buttons" class="demo-grid"></div>
       </div>
+
+      <footer class="home-foot muted">Casque VR (manettes) ou ordinateur (souris et clavier)</footer>
     </section>
 
     <section id="view-domain" class="view" hidden aria-labelledby="domain-title">

@@ -44,12 +44,22 @@ export class MenuUI {
       box.replaceChildren();
       for (const d of demos) {
         const meta = DOMAINS.find((x) => x.value === d.domain);
+        // "Démo génie électrique — Instruments de mesure" → kicker "Génie électrique", name "Instruments de mesure".
+        const label = d.label ?? `Démo ${meta?.label.toLowerCase() ?? d.domain}`;
+        const [head, name] = label.includes(" — ") ? label.split(" — ", 2) : [label, d.title];
+        const field = head.replace(/^Démo\s+/i, "");
+        const kicker = /^génie\b/i.test(field) ? field : `Génie ${field}`;
         const btn = document.createElement("button");
-        btn.className = "demo";
+        btn.className = "demo-card";
         btn.dataset.tp = d.id;
         btn.style.setProperty("--accent", meta?.color ?? "#5F7380");
-        btn.title = `${d.title} (${d.steps} étapes)`;
-        btn.textContent = d.label ?? `Démo ${meta?.label.toLowerCase() ?? d.domain}`;
+        btn.title = d.title;
+        btn.append(
+          Object.assign(document.createElement("span"), { className: "icon", textContent: meta?.icon ?? "🎓", ariaHidden: "true" }),
+          Object.assign(document.createElement("span"), { className: "kicker", textContent: kicker.charAt(0).toUpperCase() + kicker.slice(1) }),
+          Object.assign(document.createElement("span"), { className: "name", textContent: name }),
+          Object.assign(document.createElement("span"), { className: "meta", textContent: "Découverte puis quiz" })
+        );
         btn.addEventListener("click", () => this.onOpenTp(d.id, d.title));
         box.append(btn);
       }

@@ -100,12 +100,14 @@ export class TogetherAIService {
    * @throws HttpError 503 if neither OPENROUTER_API_KEY nor TOGETHER_API_KEY is set
    */
   constructor(env: NodeJS.ProcessEnv = process.env) {
-    const provider = [PROVIDERS.openrouter, PROVIDERS.together].find((p) => envKey(env, p.keyVar));
-    if (!provider) {
+    const declared = [PROVIDERS.openrouter, PROVIDERS.together].find((p) => envKey(env, p.keyVar));
+    if (!declared) {
       throw new HttpError(503, "No LLM API key: set OPENROUTER_API_KEY or TOGETHER_API_KEY in backend/.env");
     }
+    this.apiKey = envKey(env, declared.keyVar)!;
+    // An OpenRouter key ("sk-or-…") pasted into TOGETHER_API_KEY still goes to OpenRouter.
+    const provider = this.apiKey.startsWith("sk-or-") ? PROVIDERS.openrouter : declared;
     this.provider = provider;
-    this.apiKey = envKey(env, provider.keyVar)!;
     this.model = env[provider.modelVar]?.trim() || provider.defaultModel;
     this.temperature = parseNumber(env.LLM_TEMPERATURE, 0.2);
     this.priceInPerM = parseNumber(env.LLM_PRICE_INPUT_PER_M, 1.04);
